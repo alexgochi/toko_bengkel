@@ -1,5 +1,210 @@
-{% extends 'base.html' %}
-{% block title %}Login{% endblock %}
-{% block content %}
-<h1>Username</h1>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>OTP Input</title>
+    <link rel="stylesheedt" type="text/css" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block tittle %}{% endblock %}</title>
+    <link rel="shortcut icon" type="image/png"
+        href="{{ url_for('static', filename='assets/images/icon/favicon.ico') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/font-awesome.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/themify-icons.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/metisMenu.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/owl.carousel.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/slicknav.min.css') }}" />
+    <!-- amchart css -->
+    <link rel="stylesheet" type="text/css" href="https://www.amcharts.com/lib/3/plugins/export/export.css"
+        media="all" />
+    <!-- others css -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/typography.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/default-css.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/styles.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/responsive.css') }}" />
+    <!-- modernizr css -->
+    <script src="{{ url_for('static', filename='assets/js/vendor/modernizr-2.8.3.min.js') }}"></script>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .gradient-custom {
+            /* fallback for old browsers */
+            background: #6a11cb;
+
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+        }
+
+        .otp-input {
+            border: none;
+            border-bottom: 2px solid transparent;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            padding: 5px;
+            outline: none !important;
+            font-weight: 600;
+            text-align: center;
+
+
+        }
+
+        input:active,
+        input:focus {
+            outline: 0px !important;
+            box-shadow: none !important;
+            border-bottom: 2px solid red !important;
+            outline: none !important;
+        }
+
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+            -webkit-text-security: disc;
+        }
+
+
+        #OTP_Div {
+            display: grid;
+            grid-template-columns: repeat(6, 17%);
+            grid-gap: 10px;
+            padding: 5%;
+        }
+
+        .center {
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
+
+                            <div class="mb-md-5 mt-md-4 pb-5">
+
+                                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                                <p class="text-light mb-5">Please enter your login and password!</p>
+
+                                <select class="custom-select">
+                                    <option selected><i class="fa fa-angle-double-right"></i>Select User</option>
+                                    <option value="1">Livia Margaretha</option>
+                                    <option value="2">Alex Gochi</option>
+                                    <option value="3">Sukijan</option>
+                                </select>
+
+                                <div class="alert alert-danger" role="alert" style="display: none" id='alert_box'>
+                                    All fields are required!
+                                </div>
+                                <div id="OTP_Div" class="col-lg-10 col-sm-12 col-md-10">
+                                    <input autofocus class="form-control otp-input" onkeyup="alter_box(this.id)"
+                                        maxlength="1" required type="number" id="o1" />
+                                    <input class="form-control otp-input" required maxlength="1" type="number" id="o2"
+                                        onkeyup="alter_box(this.id)" />
+                                    <input class="form-control otp-input" required maxlength="1" type="number" id="o3"
+                                        onkeyup="alter_box(this.id)" />
+                                    <input class="form-control otp-input" required maxlength="1" type="number" id="o4"
+                                        onkeyup="alter_box(this.id)" />
+                                    <input class="form-control otp-input" required maxlength="1" type="number" id="o5"
+                                        onkeyup="alter_box(this.id)" />
+                                    <input class="form-control otp-input" required maxlength="1" type="number" id="o6"
+                                        onkeyup="alter_box(this.id)" />
+                                </div>
+
+                                <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a>
+                                </p>
+
+                                <div>
+                                    <p class="text-light mb-0">Don't have an account? <a href="#!"
+                                            class="text-white-50 fw-bold">Sign
+                                            Up</a>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <script type="text/javascript">
+        function alter_box(id) {
+            var id_num = parseInt(id.split('')[1]);
+            var key = event.keyCode || event.charCode;
+            if (key === 8 || key === 46) {
+                if (id_num != 1) {
+                    var prev = 'o' + (id_num - 1).toString();
+                    document.getElementById(prev).focus();
+                }
+            } else {
+                var id_num = parseInt(id.split('')[1]);
+                if (id_num == 6) {
+                    verifyOTP()
+                } else {
+                    var next = 'o' + (id_num + 1).toString();
+                    document.getElementById(next).focus();
+                }
+            }
+
+            if (key > 31 && (key < 48 || key > 57)) {
+                event.preventDefault()
+            }
+        }
+
+        function verifyOTP() {
+            var o1 = document.getElementById('o1').value;
+            var o2 = document.getElementById('o2').value;
+            var o3 = document.getElementById('o3').value;
+            var o4 = document.getElementById('o4').value;
+            var o5 = document.getElementById('o5').value;
+            var o6 = document.getElementById('o6').value;
+
+            var alert_box = document.getElementById('alert_box');
+            if (o1 != "" && o2 != "" && o3 != "" && o4 != "" && o5 != "" && o6 != "") {
+                var otp = parseInt(o1 + o2 + o3 + o4 + o5 + o6);
+                alert_box.style.display = 'none';
+                alert(otp);
+            } else {
+                alert_box.style.display = 'block';
+            }
+        }
+    </script>
+    <script src="{{ url_for('static', filename='assets/js/vendor/jquery-2.2.4.min.js') }}"></script>
+    <!-- bootstrap 4 js -->
+    <script src="{{ url_for('static', filename='assets/js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/owl.carousel.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/metisMenu.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/jquery.slicknav.min.js') }}"></script>
+
+
+    <!-- all line chart activation -->
+    <script src="{{ url_for('static', filename='assets/js/line-chart.js') }}"></script>
+    <!-- all pie chart -->
+    <script src="{{ url_for('static', filename='assets/js/pie-chart.js') }}"></script>
+    <!-- others plugins -->
+    <script src="{{ url_for('static', filename='assets/js/plugins.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/scripts.js') }}"></script>
+</body>
+
+</html>
