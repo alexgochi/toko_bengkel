@@ -14,13 +14,15 @@ import uuid
 from flask import current_app as app
 from flask import request, render_template, make_response, request, jsonify, redirect, Blueprint, url_for, session
 from flask import flash
+from applications.model.user import DbUser
 
 
 @login_manager.user_loader
 def load_user(user_id):
     """Check if user is logged-in upon page load."""
     if user_id is not None:
-        return loginDao.select_req(id=user_id)
+        user = loginDao.select_req(id=user_id)
+
     return None
 
 
@@ -31,7 +33,7 @@ def unauthorized():
     return redirect(url_for('login'))
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     # Bypass if user is logged in
     print(" curr_user " + current_user.absen +
@@ -41,21 +43,25 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     else:
+        print(request.method)
         if request.method == 'POST':
             d = request.form.to_dict()
             absen = d["username"]
-            password = d["password"]
+            pin = d["pin"]
             api = {"status": True, "msg": "Login Sukses"}
-            test = loginDao.findById(absen, password)
-            print(test)
-            # if api["status"] == True:
-            #     user = AmuEmplyTab.query.filter_by(absen=absen).first()
-            #     print(" curr_user " + current_user.absen + " user_login " + absen)
-            #     login_user(user)
-            #     session["role"] = None
+            user = loginDao.findById(absen, pin)
+            print(user)
+
+            if not user:
+                api = {'status': False, "msg": "User atau Password salah"}
+
+            if api["status"] == True:
+                login_user(DbUser(user))
+                print(" curr_user " + current_user.absen + " user_login " + absen)
+                session["role"] = None
             return jsonify(api)
 
-    return render_template("index.html")
+    return render_template("login.html")
 
 
 @app.route('/')

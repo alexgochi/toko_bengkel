@@ -147,6 +147,7 @@
     </section>
 
     <script type="text/javascript">
+        var pin = 0
         function alter_box(id) {
             var id_num = parseInt(id.split('')[1]);
             var key = event.keyCode || event.charCode;
@@ -180,13 +181,38 @@
 
             var alert_box = document.getElementById('alert_box');
             if (o1 != "" && o2 != "" && o3 != "" && o4 != "" && o5 != "" && o6 != "") {
-                var otp = parseInt(o1 + o2 + o3 + o4 + o5 + o6);
+                pin = parseInt(o1 + o2 + o3 + o4 + o5 + o6);
                 alert_box.style.display = 'none';
-                window.location.href = "./home"
+                login()
             } else {
                 alert_box.style.display = 'block';
             }
 
+        }
+
+        var login = () => {
+            $.ajax
+                ({
+                    type: "POST",
+                    data: {
+                        username: 'A001',
+                        pin: pin
+                    },
+                    url: "/login",
+                    success: (e) => {
+                        console.log(e.status)
+                        if (e.status) {
+                            window.location.href = "./"
+                        } else {
+                            alert(e.msg)
+                        }
+
+                    },
+                    error: function (xhr, status, err) {
+                        alert(xhr.responseText);
+
+                    }
+                });
         }
     </script>
     <script src="{{ url_for('static', filename='assets/js/vendor/jquery-2.2.4.min.js') }}"></script>
