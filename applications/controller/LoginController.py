@@ -15,24 +15,24 @@ from flask import current_app as app
 from flask import request, render_template, make_response, jsonify, redirect, Blueprint, url_for, session
 from flask import flash
 from applications.model.user import User
-from applications.dao.LoginDao import dt_data_user
+from applications.dao.LoginDao import dt_data_user,get_user_by_id
 from applications.lib import dataTableError
 
-@app.route("/dt/user", methods=["get"])
-def dt_user():
-    res = dt_data_user(
-        request.args.get("search"),
-        request.args.get('start')
-    )
-    if res.is_error:
-        return dataTableError()
+# @app.route("/dt/user", methods=["get"])
+# def dt_user():
+#     res = dt_data_user(
+#         request.args.get("search"),
+#         request.args.get('start')
+#     )
+#     if res.is_error:
+#         return dataTableError()
 
 
     
-    return jsonify({
-        "data": res.result,
-        "recordsFiltered": res.dt_total
-    })
+#     return jsonify({
+#         "data": res.result,
+#         "recordsFiltered": res.dt_total
+#     })
 
 
 @login_manager.user_loader
@@ -40,9 +40,19 @@ def load_user(user_id):
     """Check if user is logged-in upon page load."""
     if user_id is None:
         return None
-    user = User()
-    user.id = user_id
-    return user
+    
+    db_res = get_user_by_id(user_id)
+    if db_res.is_error:
+        return db_res.pgerror
+    elif db_res.is_empty:
+        print("error bos..")
+    user = db_res.result[0]
+
+    obj = User()
+    obj.id = user['user_id']
+    obj.name = user['name']
+    obj.level = user['level']
+    return obj
 
 
 @login_manager.unauthorized_handler
@@ -55,16 +65,16 @@ def unauthorized():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     # contoh pakai 
-    from applications.dao.LoginDao import get_user_by_id
-    user_id = "A001"
-    db_res = get_user_by_id(user_id)
-    if db_res.is_error:
-        return db_res.pgerror
-    elif db_res.is_empty:
-        print("error bos..")
-    # kalau hasilnya cuma 1 (ambil index ke-0)
-    index_0 = db_res.first.get("user_name")
-    index_1 = db_res.result[0]
+    # from applications.dao.LoginDao import get_user_by_id
+    # user_id = "A001"
+    # db_res = get_user_by_id(user_id)
+    # if db_res.is_error:
+    #     return db_res.pgerror
+    # elif db_res.is_empty:
+    #     print("error bos..")
+    # # kalau hasilnya cuma 1 (ambil index ke-0)
+    # index_0 = db_res.first.get("user_name")
+    # index_1 = db_res.result[0]
 
     # Bypass if user is logged in
     if current_user.is_authenticated:
@@ -76,7 +86,6 @@ def login():
             pin = d["pin"]
             api = {"status": True, "msg": "Login Sukses"}
             user = loginDao.getLogin(absen, pin)
-            print(user)
 
             if not user:
                 api = {'status': False, "msg": "User atau Password salah"}
@@ -87,12 +96,10 @@ def login():
                 obj.name = user[0]['name']
                 obj.level = user[0]['level']
                 login_user(obj)
-                print(" curr_user " + current_user.id + " user_login " + absen)
-                session["role"] = None
+                # session["level"] = user[0]['level']
             return jsonify(api)
+        
         list_user = loginDao.findUser()
-        print(list_user)
-
     return render_template("login.html",list_user=list_user)
 
 

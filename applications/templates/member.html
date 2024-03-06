@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block tittle %}Daftar Pelanggan{% endblock %}
+{% block menu %}Daftar Pelanggan{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-right mt-5">
+    <div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="cari user..." id="search_table_member">
+            <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">
+                    <i class="fa fa-search"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table id="table_member" class="table table-hover table-bordered w-100">
+        <thead>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Telepon</th>
+            <th>Email</th>
+            <th>Alamat</th>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(() => {
+        fill_table_member();
+        dt_search("search_table_member", fill_table_member);
+    });
+
+    function fill_table_member() {
+        const idTabel = "table_member";
+        const dt_options = {
+            columns: [
+                { data: "member_id" },
+                { data: "member_name" },
+                { data: "phone" },
+                { data: "email" },
+                { data: "address" },
+            ]
+        }
+        const ajax_options = {
+            url: "/dt/member",
+            data: {
+                "search": $('#search_table_member').val().trim()
+            }
+        }
+
+        dt_server(idTabel, ajax_options, dt_options);
+    }
+</script>
+{% endblock %}

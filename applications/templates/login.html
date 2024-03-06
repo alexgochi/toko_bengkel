@@ -20,7 +20,7 @@
     <!-- others plugins -->
     <script src="{{ url_for('static', filename='assets/js/plugins.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/scripts.js') }}"></script>
-    <title>OTP Input</title>
+    <title>Login</title>
     <link rel="stylesheedt" type="text/css" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -46,9 +46,10 @@
     <!-- modernizr css -->
     <script src="{{ url_for('static', filename='assets/js/vendor/modernizr-2.8.3.min.js') }}"></script>
 
-    <link href="https://cdn.datatables.net/v/dt/dt-2.0.1/datatables.min.css" rel="stylesheet">
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/datatables.min.css') }}">
+    <script src="{{ url_for('static', filename='assets/js/datatables.min.js') }}"></script>
 
-    <script src="https://cdn.datatables.net/v/dt/dt-2.0.1/datatables.min.js"></script>
     <style>
         * {
             margin: 0px;
@@ -168,7 +169,7 @@
                     </div>
                 </div>
             </div>
-
+<!-- 
             <div class="d-flex justify-content-center">
                 <div>
                     <div class="input-group mb-3">
@@ -193,32 +194,32 @@
                     </thead>
                     <tbody></tbody>
                 </table>
-            </div>
-    </section>
+            </div> -->
+    </section> 
 
     <script type="text/javascript">
-        $(() => {
-            fill_table_user();
-            dt_search("search_table_user", fill_table_user);
-        });
+        // $(() => {
+        //     fill_table_user();
+        //     dt_search("search_table_user", fill_table_user);
+        // });
 
-        function fill_table_user() {
-            const idTabel = "table_user";
-            const dt_options = {
-                columns: [
-                    { data: "user_id" },
-                    { data: "name" }
-                ]
-            }
-            const ajax_options = {
-                url: "/dt/user",
-                data: {
-                    "search": $('#search_table_user').val().trim()
-                }
-            }
+        // function fill_table_user() {
+        //     const idTabel = "table_user";
+        //     const dt_options = {
+        //         columns: [
+        //             { data: "user_id" },
+        //             { data: "name" }
+        //         ]
+        //     }
+        //     const ajax_options = {
+        //         url: "/dt/user",
+        //         data: {
+        //             "search": $('#search_table_user').val().trim()
+        //         }
+        //     }
 
-            dt_server(idTabel, ajax_options, dt_options);
-        }
+        //     dt_server(idTabel, ajax_options, dt_options);
+        // }
         var pin = 0
         function alter_box(id) {
             var id_num = parseInt(id.split('')[1]);
