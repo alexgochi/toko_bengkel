@@ -2,6 +2,24 @@
 <html>
 
 <head>
+
+    <script src="{{ url_for('static', filename='assets/js/vendor/jquery-2.2.4.min.js') }}"></script>
+    <!-- bootstrap 4 js -->
+    <script src="{{ url_for('static', filename='assets/js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/owl.carousel.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/metisMenu.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/jquery.slicknav.min.js') }}"></script>
+
+
+    <!-- all line chart activation -->
+    <script src="{{ url_for('static', filename='assets/js/line-chart.js') }}"></script>
+    <!-- all pie chart -->
+    <script src="{{ url_for('static', filename='assets/js/pie-chart.js') }}"></script>
+    <!-- others plugins -->
+    <script src="{{ url_for('static', filename='assets/js/plugins.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/scripts.js') }}"></script>
     <title>OTP Input</title>
     <link rel="stylesheedt" type="text/css" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" />
     <meta charset="UTF-8" />
@@ -23,8 +41,14 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/default-css.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/styles.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/responsive.css') }}" />
+    <script src="{{ url_for('static', filename='assets/js/tambahanCdr.js') }}"></script>
+
     <!-- modernizr css -->
     <script src="{{ url_for('static', filename='assets/js/vendor/modernizr-2.8.3.min.js') }}"></script>
+
+    <link href="https://cdn.datatables.net/v/dt/dt-2.0.1/datatables.min.css" rel="stylesheet">
+
+    <script src="https://cdn.datatables.net/v/dt/dt-2.0.1/datatables.min.js"></script>
     <style>
         * {
             margin: 0px;
@@ -104,11 +128,11 @@
                                 <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                                 <p class="text-light mb-5">Please enter your login and password!</p>
 
-                                <select class="custom-select">
-                                    <option selected><i class="fa fa-angle-double-right"></i>Select User</option>
-                                    <option value="1">Livia Margaretha</option>
-                                    <option value="2">Alex Gochi</option>
-                                    <option value="3">Sukijan</option>
+                                <select class="custom-select" id="user">
+                                    <option selected disabled> Select User </option>
+                                    {% for x in list_user %}
+                                    <option value="{{ x['user_id'] }}"> {{ x['name'] }}</option>
+                                    {% endfor %}
                                 </select>
 
                                 <div class="alert alert-danger" role="alert" style="display: none" id='alert_box'>
@@ -144,9 +168,57 @@
                     </div>
                 </div>
             </div>
+
+            <div class="d-flex justify-content-center">
+                <div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="cari user..." id="search_table_user">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table id="table_user" class="table table-hover table-bordered w-100">
+                    <thead>
+                        <th>
+                            user_id
+                        </th>
+                        <th>
+                            nama
+                        </th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
     </section>
 
     <script type="text/javascript">
+        $(() => {
+            fill_table_user();
+            dt_search("search_table_user", fill_table_user);
+        });
+
+        function fill_table_user() {
+            const idTabel = "table_user";
+            const dt_options = {
+                columns: [
+                    { data: "user_id" },
+                    { data: "name" }
+                ]
+            }
+            const ajax_options = {
+                url: "/dt/user",
+                data: {
+                    "search": $('#search_table_user').val().trim()
+                }
+            }
+
+            dt_server(idTabel, ajax_options, dt_options);
+        }
         var pin = 0
         function alter_box(id) {
             var id_num = parseInt(id.split('')[1]);
@@ -195,7 +267,7 @@
                 ({
                     type: "POST",
                     data: {
-                        username: 'A001',
+                        user_id: document.getElementById('user').value,
                         pin: pin
                     },
                     url: "/login",
@@ -215,23 +287,7 @@
                 });
         }
     </script>
-    <script src="{{ url_for('static', filename='assets/js/vendor/jquery-2.2.4.min.js') }}"></script>
-    <!-- bootstrap 4 js -->
-    <script src="{{ url_for('static', filename='assets/js/popper.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/owl.carousel.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/metisMenu.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/jquery.slimscroll.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/jquery.slicknav.min.js') }}"></script>
 
-
-    <!-- all line chart activation -->
-    <script src="{{ url_for('static', filename='assets/js/line-chart.js') }}"></script>
-    <!-- all pie chart -->
-    <script src="{{ url_for('static', filename='assets/js/pie-chart.js') }}"></script>
-    <!-- others plugins -->
-    <script src="{{ url_for('static', filename='assets/js/plugins.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/scripts.js') }}"></script>
 </body>
 
 </html>
