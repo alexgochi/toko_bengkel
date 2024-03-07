@@ -3,7 +3,11 @@
 {% block menu %}Daftar Pelanggan{% endblock %}
 {% block content %}
 
-<div class="d-flex justify-content-right mt-5">
+
+<div class="d-flex justify-content-between mt-5 mr-5">
+    <div>
+        <button class="btn btn-primary btn-sm">+ Tambah Pelanggan</button>
+    </div>
     <div>
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="cari user..." id="search_table_member">
@@ -16,13 +20,14 @@
     </div>
 </div>
 <div class="table-responsive">
-    <table id="table_member" class="table table-hover table-bordered w-100">
-        <thead>
-            <th>ID</th>
+    <table id="table_member" class="table table-hover table-bordered table-striped w-100 mb-2">
+        <thead class="thead-dark">
+            <th class="text-center">ID</th>
             <th>Nama</th>
             <th>Telepon</th>
             <th>Email</th>
             <th>Alamat</th>
+            <th>Action</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -37,12 +42,24 @@
     function fill_table_member() {
         const idTabel = "table_member";
         const dt_options = {
+            scrollY: '50vh',
             columns: [
                 { data: "member_id" },
                 { data: "member_name" },
                 { data: "phone" },
                 { data: "email" },
                 { data: "address" },
+                {
+                    className: 'text-center',
+                    render: data => {
+                        return `
+                        <div class="d-flex align-items-center justify-content-center" style="gap: 10px;">
+                            <button class="btn btn-edit btn-secondary"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-delete btn-danger"><i class="fa fa-trash"></i></button>
+                        </div>
+                        `;
+                    }
+                }
             ]
         }
         const ajax_options = {
@@ -54,5 +71,11 @@
 
         dt_server(idTabel, ajax_options, dt_options);
     }
+
+    $("#table_member > tbody").on('click', '.btn-edit', e => {
+        const rowData = $('#table_member').DataTable().row(getTr(e)).data();
+        console.log(rowData)
+    })
+
 </script>
 {% endblock %}

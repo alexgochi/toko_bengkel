@@ -2,13 +2,13 @@ from flask_login import current_user, login_user, login_required, logout_user
 from ..dao import LoginDao as loginDao
 from .. import login_manager
 from io import StringIO
-from xhtml2pdf import pisa
-import pytz
+# from xhtml2pdf import pisa
+# import pytz
 from time import sleep
 from threading import Thread
 from functools import wraps
 import datetime
-import jwt
+# import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 from flask import current_app as app

@@ -29,7 +29,7 @@ try:
             user="postgres",
             password="admin",
             host="localhost",
-            port="5400",
+            port="5401",
             database="postgres",
             minconn=1,
             maxconn=5,

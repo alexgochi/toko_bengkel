@@ -4,7 +4,7 @@ import psycopg2
 def select_req(query, param={}):
     # Database connection parameters
     host = '127.0.0.1'
-    port = '5400'
+    port = '5401'
     database = 'postgres'
     user = 'postgres'
     password = 'admin'

@@ -169,7 +169,7 @@
                     </div>
                 </div>
             </div>
-<!-- 
+            <!-- 
             <div class="d-flex justify-content-center">
                 <div>
                     <div class="input-group mb-3">
@@ -195,7 +195,7 @@
                     <tbody></tbody>
                 </table>
             </div> -->
-    </section> 
+    </section>
 
     <script type="text/javascript">
         // $(() => {
@@ -278,6 +278,8 @@
                             window.location.href = "./"
                         } else {
                             alert(e.msg)
+                            $('.otp-input').val('')
+                            document.getElementById('o1').focus()
                         }
 
                     },
