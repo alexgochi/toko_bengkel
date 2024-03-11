@@ -26,6 +26,8 @@
     <script src="{{ url_for('static', filename='assets/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <!-- Datatble -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/datatables.min.css') }}">
+    <!-- SweetAlert 2 -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/sweetalert2.min.css') }}">
 
     <!-- jquery latest version -->
     <script src="{{ url_for('static', filename='assets/js/vendor/jquery-2.2.4.min.js') }}"></script>
@@ -33,6 +35,14 @@
     <style>
         table.dataTable tbody td {
             vertical-align: middle;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            margin: 0;
         }
     </style>
 </head>
@@ -90,7 +100,7 @@
                                 <a href="./"><i class="ti-shopping-cart"></i><span>Transaksi</span></a>
                             </li>
                             <li id="sidebar-rekening">
-                                <a href="./"><i class="ti-money"></i><span>Rekening</span></a>
+                                <a href="/rekening/"><i class="ti-money"></i><span>Rekening</span></a>
                             </li>
                             <li id="sidebar-toko">
                                 <a href="./"><i class="ti-home"></i><span>Toko</span></a>
@@ -103,21 +113,20 @@
         <!-- sidebar menu area end -->
         <!-- main content area start -->
         <div class="main-content">
-            <!-- header area start -->
-            <div class="header-area">
-                <div class="row align-items-center">
-                    <!-- nav and search button -->
-                </div>
-            </div>
-            <!-- header area end -->
             <!-- page title area start -->
             <div class="page-title-area">
                 <div class="row align-items-center">
                     <div class="col-sm-6">
                         <div class="breadcrumbs-area clearfix">
+                            <div class="nav-btn pull-left">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <h4 class="page-title pull-left">{% block menu %}{% endblock %}</h4>
                             <ul class="breadcrumbs pull-left">
                                 <li><a href="./">Home</a></li>
-                                <li><span>{% block menu %}{% endblock %}</span></li>
+                                <li><span>{{ self.menu() }}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -162,6 +171,8 @@
     <script src="{{ url_for('static', filename='assets/js/metisMenu.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/jquery.slicknav.min.js') }}"></script>
+    <!-- Sweet Alert -->
+    <script src="{{ url_for('static', filename='assets/js/sweetalert2.all.min.js') }}"></script>
 
 
     <!-- all line chart activation -->

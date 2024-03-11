@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% block tittle %}Daftar Pelanggan{% endblock %}
-{% block menu %}Daftar Pelanggan{% endblock %}
+{% block tittle %}Rekening{% endblock %}
+{% block menu %}Rekening{% endblock %}
 {% block content %}
 
 
@@ -10,7 +10,7 @@
     </div>
     <div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="cari user..." id="search_table_member">
+            <input type="text" class="form-control" placeholder="cari user..." id="search_table_rek">
             <div class="input-group-append">
                 <span class="input-group-text" id="basic-addon2">
                     <i class="fa fa-search"></i>
@@ -20,14 +20,14 @@
     </div>
 </div>
 <div class="table-responsive">
-    <table id="table_member" class="table table-hover table-bordered table-striped w-100 mb-2">
+    <table id="table_rek" class="table table-hover table-bordered table-striped w-100 mb-2">
         <thead class="thead-dark">
             <th class="text-center">ID</th>
-            <th>Nama</th>
-            <th>Telepon</th>
-            <th>Email</th>
-            <th>Alamat</th>
-            <th>Action</th>
+            <th class="text-center">No Rek</th>
+            <th class="text-center">Bank</th>
+            <th class="text-center">Nama Rek</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -38,7 +38,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editeModalLabel">Edit Data Pelanggan</h5>
+                <h5 class="modal-title" id="editeModalLabel">Edit Rekening</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -47,24 +47,26 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="idMemberEdit">Member ID</label>
-                        <input type="text" class="form-control" id="idMemberEdit" readonly>
+                        <input type="text" class="form-control" id="idRekEdit" readonly hidden>
                     </div>
                     <div class="form-group">
-                        <label for="namaMemberEdit">Nama</label>
-                        <input type="text" class="form-control" id="namaMemberEdit">
+                        <label for="noRekEdit">Rek. No</label>
+                        <input type="number" class="form-control" id="noRekEdit">
                     </div>
                     <div class="form-group">
-                        <label for="phoneMemberEdit">Telepon</label>
-                        <input type="number" class="form-control" id="phoneMemberEdit">
+                        <label for="namaRekEdit">Nama Rek.</label>
+                        <input type="text" class="form-control" id="namaRekEdit">
                     </div>
                     <div class="form-group">
-                        <label for="emailMemberEdit">Email</label>
-                        <input type="email" class="form-control" id="emailMemberEdit">
+                        <label for="bankRekEdit">Bank</label>
+                        <input type="text" class="form-control" id="bankRekEdit">
                     </div>
                     <div class="form-group">
-                        <label for="alamatMemberEdit">Alamat</label>
-                        <input type="text" class="form-control" id="alamatMemberEdit">
+                        <label for="statusRekEdit">Status</label>
+                        <select class="form-control" id="statusRekEdit">
+                            <option value="1">Aktif</option>
+                            <option value="0">Tidak Aktif</option>
+                        </select>
                     </div>
                 </form>
             </div>
@@ -82,7 +84,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addeModalLabel">Add Data Pelanggan</h5>
+                <h5 class="modal-title" id="addModalLabel">Add Rekening</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -91,24 +93,26 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="idMemberAdd">Member ID</label>
-                        <input type="text" class="form-control" id="idMemberAdd">
+                        <input type="text" class="form-control" id="idRekAdd" readonly hidden>
                     </div>
                     <div class="form-group">
-                        <label for="namaMemberAdd">Nama</label>
-                        <input type="text" class="form-control" id="namaMemberAdd">
+                        <label for="noRekAdd">Rek. No</label>
+                        <input type="number" class="form-control" id="noRekAdd">
                     </div>
                     <div class="form-group">
-                        <label for="phoneMemberAdd">Telepon</label>
-                        <input type="number" class="form-control" id="phoneMemberAdd">
+                        <label for="namaRekAdd">Nama Rek.</label>
+                        <input type="text" class="form-control" id="namaRekAdd">
                     </div>
                     <div class="form-group">
-                        <label for="emailMemberAdd">Email</label>
-                        <input type="email" class="form-control" id="emailMemberAdd">
+                        <label for="bankRekAdd">Bank</label>
+                        <input type="text" class="form-control" id="bankRekAdd">
                     </div>
                     <div class="form-group">
-                        <label for="alamatMemberAdd">Alamat</label>
-                        <input type="text" class="form-control" id="alamatMemberAdd">
+                        <label for="statusRekAdd">Status</label>
+                        <select class="form-control" id="statusRekAdd">
+                            <option value="1">Aktif</option>
+                            <option value="0">Tidak Aktif</option>
+                        </select>
                     </div>
                 </form>
             </div>
@@ -124,20 +128,20 @@
 <script type="text/javascript">
     // Show Data
     $(() => {
-        fill_table_member();
-        dt_search("search_table_member", fill_table_member);
+        fill_table_rek();
+        dt_search("search_table_rek", fill_table_rek);
     });
 
-    function fill_table_member() {
-        const idTabel = "table_member";
+    function fill_table_rek() {
+        const idTabel = "table_rek";
         const dt_options = {
             scrollY: '50vh',
             columns: [
-                { data: "member_id" },
-                { data: "member_name" },
-                { data: "phone" },
-                { data: "email" },
-                { data: "address" },
+                { data: "id" },
+                { data: "rek_no" },
+                { data: "rek_bank" },
+                { data: "rek_name" },
+                { data: "status" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -149,12 +153,19 @@
                         `;
                     }
                 }
+            ],
+            columnDefs: [
+                {
+                    target: 0,
+                    visible: false,
+                    searchable: false
+                }
             ]
         }
         const ajax_options = {
-            url: "/dt/member",
+            url: "/dt/rek/",
             data: {
-                "search": $('#search_table_member').val().trim()
+                "search": $('#search_table_rek').val().trim()
             }
         }
 
@@ -162,21 +173,26 @@
     }
 
     // Edit
-    $("#table_member > tbody").on('click', '.btn-edit', e => {
-        const rowData = $('#table_member').DataTable().row(getTr(e)).data();
-        $('#idMemberEdit').val(rowData['member_id'])
-        $('#namaMemberEdit').val(rowData['member_name'])
-        $('#phoneMemberEdit').val(rowData['phone'])
-        $('#emailMemberEdit').val(rowData['email'])
-        $('#alamatMemberEdit').val(rowData['address'])
+    $("#table_rek > tbody").on('click', '.btn-edit', e => {
+        const rowData = $('#table_rek').DataTable().row(getTr(e)).data();
+        $('#idRekEdit').val(rowData['id'])
+        $('#noRekEdit').val(rowData['rek_no'])
+        $('#namaRekEdit').val(rowData['rek_name'])
+        $('#bankRekEdit').val(rowData['rek_bank'])
+        if (rowData['status'] == 'Aktif') {
+            $('#statusRekEdit').val('1')
+        } else {
+            $('#statusRekEdit').val('0')
+        }
     })
+
     $("#btnSaveEditModal").on('click', e => {
-        var id = $('#idMemberEdit').val()
-        var name = $('#namaMemberEdit').val()
-        var phone = $('#phoneMemberEdit').val()
-        var email = $('#emailMemberEdit').val()
-        var addr = $('#alamatMemberEdit').val()
-        var data = { id: id, name: name, phone: phone, email: email, addr: addr }
+        var id = $('#idRekEdit').val()
+        var rek_no = $('#noRekEdit').val()
+        var rek_bank = $('#bankRekEdit').val()
+        var rek_name = $('#namaRekEdit').val()
+        var status = $('#statusRekEdit').val()
+        var data = { id: id, rek_no: rek_no, rek_bank: rek_bank, rek_name: rek_name, status: status }
         edit(data)
 
     })
@@ -186,29 +202,27 @@
             ({
                 type: "POST",
                 data: dataEdit,
-                url: "/member/edit",
+                url: "/rek/edit",
                 success: (e) => {
                     $('#editModal').modal('hide')
                     Swal.fire({
                         title: "Sukses",
-                        text: "Update Data Pelanggan Sukses",
+                        text: "Update Rekening Sukses",
                         icon: "success"
                     });
-                    fill_table_member()
+                    fill_table_rek()
 
                 },
                 error: function (xhr, status, err) {
                     alert(xhr.responseText);
-
                 }
             });
     }
 
     // Delete
-    $("#table_member > tbody").on('click', '.btn-delete', e => {
-        const rowData = $('#table_member').DataTable().row(getTr(e)).data();
-        id = rowData['member_id']
-        console.log(id)
+    $("#table_rek > tbody").on('click', '.btn-delete', e => {
+        const rowData = $('#table_rek').DataTable().row(getTr(e)).data();
+        id = rowData['id']
         Swal.fire({
             title: "Yakin Hapus Data?",
             text: "Data Tidak akan bisa dipulihkan",
@@ -224,14 +238,14 @@
                     ({
                         type: "POST",
                         data: { id: id },
-                        url: "/member/delete",
+                        url: "/rek/delete",
                         success: (e) => {
                             Swal.fire({
                                 title: "Berhasil!",
-                                text: "Data Berhasil Dihapus.",
+                                text: e.message,
                                 icon: "success"
                             });
-                            fill_table_member()
+                            fill_table_rek()
 
                         },
                         error: function (xhr, status, err) {
@@ -243,51 +257,25 @@
     })
 
     $("#btnSaveAddModal").on('click', e => {
-        var id = $('#idMemberAdd').val()
-        var name = $('#namaMemberAdd').val()
-        var phone = $('#phoneMemberAdd').val()
-        var email = $('#emailMemberAdd').val()
-        var addr = $('#alamatMemberAdd').val()
-        var data = { member_id: id, member_name: name, phone: phone, email: email, address: addr, outlet_id: 'MU' }
+        var rek_no = $('#noRekAdd').val()
+        var rek_bank = $('#bankRekAdd').val()
+        var rek_name = $('#namaRekAdd').val()
+        var status = $('#statusRekAdd').val()
+        var data = { rek_no: rek_no, rek_bank: rek_bank, rek_name: rek_name, status: status }
+        console.log(data)
 
-        var check = checkId(id)
-        if (check) {
-            addMember(data)
-        }
+
+        addRekening(data)
 
     })
 
-    function checkId(id) {
-        var status = true
-        $.ajax
-            ({
-                type: "POST",
-                data: { id: id },
-                url: "/member/checkId",
-                async: false,
-                success: (e) => {
-                    if (e.result.member_id) {
-                        status = false
-                        Swal.fire({
-                            title: "Gagal!",
-                            text: "ID Pelanggan Sudah ada",
-                            icon: "error"
-                        });
-                    }
-                },
-                error: function (xhr, status, err) {
-                    alert(xhr.responseText);
-                }
-            });
-        return status
-    }
-
-    function addMember(data) {
+    function addRekening(data) {
         $.ajax
             ({
                 type: "POST",
                 data: data,
-                url: "/member/add",
+                url: "/rek/add",
+                async: false,
                 success: (e) => {
                     if (e.status) {
                         $('#addModal').modal('hide')
@@ -297,7 +285,7 @@
                             icon: "success"
                         });
                     }
-                    fill_table_member()
+                    fill_table_rek()
                 },
                 error: function (xhr, status, err) {
                     alert(xhr.responseText);

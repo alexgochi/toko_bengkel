@@ -27,6 +27,6 @@ def create_app():
     login_manager.anonymous_user = Anonymous
 
     with app.app_context():
-        from applications.controller import LoginController, ErrorController, MemberController
+        from applications.controller import LoginController, ErrorController, MemberController, RekeningController
 
     return app
