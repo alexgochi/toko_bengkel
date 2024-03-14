@@ -13,18 +13,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 from flask import current_app as app
 from flask import request, render_template, make_response, jsonify, redirect, Blueprint, url_for, session
-from applications.dao.MemberDao import dt_data_member, update_data_member, delete_data_member, add_data_member, check_id_member
+from applications.dao import CategoryDao as categoryDao
 from applications.lib import dataTableError
 
 
-@app.route('/member/', methods=['GET'])
+@app.route('/category/', methods=['GET'])
 @login_required
-def member():
-    return render_template("member.html")
+def category():
+    db_res = categoryDao.get_data_merk()
+    merk = db_res.result
+    return render_template("category.html", data_merk = merk)
 
-@app.route("/dt/member", methods=["GET"])
-def dt_user():
-    res = dt_data_member(
+@app.route("/dt/category/", methods=["GET"])
+def dt_category():
+    res = categoryDao.dt_data_category(
         request.args.get("search"),
         request.args.get('start')
     )
@@ -36,43 +38,31 @@ def dt_user():
         "recordsFiltered": res.dt_total
     })
 
-@app.route('/member/edit', methods=['POST'])
+@app.route('/category/edit', methods=['POST'])
 @login_required
-def edit_member():
+def edit_category():
     data = request.form.to_dict()
-    db_res = update_data_member(data)
-    if db_res.is_error:
-        return jsonify({"status": False, "message": str(db_res.pgerror)})
-    # kalau hasilnya cuma 1 (ambil index ke-0)
-    index_0 = db_res.first
-    return jsonify({"status": True, "message": "Berhasil Update data Member"})
-
-
-@app.route('/member/delete', methods=['POST'])
-@login_required
-def delete_member():
-    data = request.form.to_dict()
-    db_res = delete_data_member(data['id'])
+    db_res = categoryDao.update_data_category(data)
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Hapus data Member"})
+    return jsonify({"status": db_res.status, "message": "Berhasil Update data"})
 
 
-@app.route('/member/checkId', methods=['POST'])
+@app.route('/category/delete', methods=['POST'])
 @login_required
-def check_id():
+def delete_category():
     data = request.form.to_dict()
-    db_res = check_id_member(data['id'])
+    db_res = categoryDao.delete_data_category(data['id'])
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Get Data", 'result': db_res.first})
+    return jsonify({"status": db_res.status, "message": "Berhasil Hapus data"})
 
 
-@app.route('/member/add', methods=['POST'])
+@app.route('/category/add', methods=['POST'])
 @login_required
-def add_member():
+def add_category():
     data = request.form.to_dict()
-    db_res = add_data_member(data)
+    db_res = categoryDao.add_data_category(data)
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Tambah data Member"})
+    return jsonify({"status": db_res.status, "message": "Berhasil Tambah data"})

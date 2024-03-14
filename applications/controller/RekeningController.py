@@ -43,7 +43,7 @@ def edit_rek():
     db_res = rekDao.update_data_rekening(data)
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Update data Rekening"})
+    return jsonify({"status": db_res.status, "message": "Berhasil Update data"})
 
 
 @app.route('/rek/delete', methods=['POST'])
@@ -53,7 +53,7 @@ def delete_rek():
     db_res = rekDao.delete_data_rekening(data['id'])
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Hapus data Rekening"})
+    return jsonify({"status": db_res.status, "message": "Berhasil Hapus data"})
 
 
 @app.route('/rek/add', methods=['POST'])
@@ -64,4 +64,4 @@ def add_rek():
     db_res = rekDao.add_data_rekening(data)
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Add data Member"})
+    return jsonify({"status": db_res.status, "message": "Berhasil Tambah Data"})

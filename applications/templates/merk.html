@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
-{% block tittle %}Rekening{% endblock %}
-{% block menu %}Rekening{% endblock %}
+{% block tittle %}Merk{% endblock %}
+{% block menu %}Merk{% endblock %}
 {% block content %}
 
 
 <div class="d-flex justify-content-between mt-5 mr-5">
     <div>
-        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">+ Tambah Rekening</button>
+        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">+ Tambah Merk</button>
     </div>
     <div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="cari rekening..." id="search_table_rek">
+            <input type="text" class="form-control" placeholder="cari merk..." id="search_table_merk">
             <div class="input-group-append">
                 <span class="input-group-text" id="basic-addon2">
                     <i class="fa fa-search"></i>
@@ -20,13 +20,11 @@
     </div>
 </div>
 <div class="table-responsive">
-    <table id="table_rek" class="table table-hover table-bordered table-striped w-100 mb-2">
+    <table id="table_merk" class="table table-hover table-bordered table-striped w-100 mb-2">
         <thead class="thead-dark">
             <th class="text-center">ID</th>
-            <th class="text-center">No Rek</th>
-            <th class="text-center">Bank</th>
-            <th class="text-center">Nama Rek</th>
-            <th class="text-center">Status</th>
+            <th class="text-center">Nama Merk</th>
+            <th class="text-center">Jumlah Kategori</th>
             <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
@@ -38,7 +36,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editeModalLabel">Edit Rekening</h5>
+                <h5 class="modal-title" id="editeModalLabel">Edit Merk</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -47,26 +45,11 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="idRekEdit" readonly hidden>
+                        <input type="text" class="form-control" id="idMerkEdit" readonly hidden>
                     </div>
                     <div class="form-group">
-                        <label for="noRekEdit">Rek. No</label>
-                        <input type="number" class="form-control" id="noRekEdit">
-                    </div>
-                    <div class="form-group">
-                        <label for="namaRekEdit">Nama Rek.</label>
-                        <input type="text" class="form-control" id="namaRekEdit">
-                    </div>
-                    <div class="form-group">
-                        <label for="bankRekEdit">Bank</label>
-                        <input type="text" class="form-control" id="bankRekEdit">
-                    </div>
-                    <div class="form-group">
-                        <label for="statusRekEdit">Status</label>
-                        <select class="form-control" id="statusRekEdit">
-                            <option value="1">Aktif</option>
-                            <option value="0">Tidak Aktif</option>
-                        </select>
+                        <label for="namaMerkEdit">Nama Merk</label>
+                        <input type="text" class="form-control" id="namaMerkEdit">
                     </div>
                 </form>
             </div>
@@ -84,7 +67,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">Add Rekening</h5>
+                <h5 class="modal-title" id="addModalLabel">Tambah Merk</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -96,23 +79,8 @@
                         <input type="text" class="form-control" id="idRekAdd" readonly hidden>
                     </div>
                     <div class="form-group">
-                        <label for="noRekAdd">Rek. No</label>
-                        <input type="number" class="form-control" id="noRekAdd">
-                    </div>
-                    <div class="form-group">
-                        <label for="namaRekAdd">Nama Rek.</label>
-                        <input type="text" class="form-control" id="namaRekAdd">
-                    </div>
-                    <div class="form-group">
-                        <label for="bankRekAdd">Bank</label>
-                        <input type="text" class="form-control" id="bankRekAdd">
-                    </div>
-                    <div class="form-group">
-                        <label for="statusRekAdd">Status</label>
-                        <select class="form-control" id="statusRekAdd">
-                            <option value="1">Aktif</option>
-                            <option value="0">Tidak Aktif</option>
-                        </select>
+                        <label for="namaMerkAdd">Nama Merk</label>
+                        <input type="text" class="form-control" id="namaMerkAdd">
                     </div>
                 </form>
             </div>
@@ -128,20 +96,18 @@
 <script type="text/javascript">
     // Show Data
     $(() => {
-        fill_table_rek();
-        dt_search("search_table_rek", fill_table_rek);
+        fill_table_merk();
+        dt_search("search_table_merk", fill_table_merk);
     });
 
-    function fill_table_rek() {
-        const idTabel = "table_rek";
+    function fill_table_merk() {
+        const idTabel = "table_merk";
         const dt_options = {
             scrollY: '50vh',
             columns: [
-                { data: "id" },
-                { data: "rek_no" },
-                { data: "rek_bank" },
-                { data: "rek_name" },
-                { data: "status" },
+                { data: "merk_id" },
+                { data: "merk_name" },
+                { data: "jumlah_category" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -159,13 +125,18 @@
                     target: 0,
                     visible: false,
                     searchable: false
+                },
+                {
+                    target: 2,
+                    searchable: false,
+                    className: 'text-center'
                 }
             ]
         }
         const ajax_options = {
-            url: "/dt/rek/",
+            url: "/dt/merk/",
             data: {
-                "search": $('#search_table_rek').val().trim()
+                "search": $('#search_table_merk').val().trim()
             }
         }
 
@@ -173,26 +144,16 @@
     }
 
     // Edit
-    $("#table_rek > tbody").on('click', '.btn-edit', e => {
-        const rowData = $('#table_rek').DataTable().row(getTr(e)).data();
-        $('#idRekEdit').val(rowData['id'])
-        $('#noRekEdit').val(rowData['rek_no'])
-        $('#namaRekEdit').val(rowData['rek_name'])
-        $('#bankRekEdit').val(rowData['rek_bank'])
-        if (rowData['status'] == 'Aktif') {
-            $('#statusRekEdit').val('1')
-        } else {
-            $('#statusRekEdit').val('0')
-        }
+    $("#table_merk > tbody").on('click', '.btn-edit', e => {
+        const rowData = $('#table_merk').DataTable().row(getTr(e)).data();
+        $('#idMerkEdit').val(rowData['merk_id'])
+        $('#namaMerkEdit').val(rowData['merk_name'])
     })
 
     $("#btnSaveEditModal").on('click', e => {
-        var id = $('#idRekEdit').val()
-        var rek_no = $('#noRekEdit').val()
-        var rek_bank = $('#bankRekEdit').val()
-        var rek_name = $('#namaRekEdit').val()
-        var status = $('#statusRekEdit').val()
-        var data = { id: id, rek_no: rek_no, rek_bank: rek_bank, rek_name: rek_name, status: status }
+        var id = $('#idMerkEdit').val()
+        var name = $('#namaMerkEdit').val()
+        var data = { merk_id: id, merk_name: name }
         edit(data)
 
     })
@@ -202,26 +163,39 @@
             ({
                 type: "POST",
                 data: dataEdit,
-                url: "/rek/edit",
+                url: "/merk/edit",
                 success: (e) => {
-                    $('#editModal').modal('hide')
-                    Swal.fire({
-                        title: "Sukses",
-                        text: "Update Rekening Sukses",
-                        icon: "success"
-                    });
-                    fill_table_rek()
+                    if (e.status) {
+                        $('#editModal').modal('hide')
+                        Swal.fire({
+                            title: "Sukses",
+                            text: e.message,
+                            icon: "success"
+                        });
+                        fill_table_merk()
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
                 },
                 error: function (xhr, status, err) {
-                    alert(xhr.responseText);
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
                 }
             });
     }
 
     // Delete
-    $("#table_rek > tbody").on('click', '.btn-delete', e => {
-        const rowData = $('#table_rek').DataTable().row(getTr(e)).data();
-        id = rowData['id']
+    $("#table_merk > tbody").on('click', '.btn-delete', e => {
+        const rowData = $('#table_merk').DataTable().row(getTr(e)).data();
+        id = rowData['merk_id']
         Swal.fire({
             title: "Yakin Hapus Data?",
             text: "Data Tidak akan bisa dipulihkan",
@@ -237,17 +211,30 @@
                     ({
                         type: "POST",
                         data: { id: id },
-                        url: "/rek/delete",
+                        url: "/merk/delete",
                         success: (e) => {
-                            Swal.fire({
-                                title: "Berhasil!",
-                                text: e.message,
-                                icon: "success"
-                            });
-                            fill_table_rek()
+                            if (e.status) {
+                                Swal.fire({
+                                    title: "Berhasil!",
+                                    text: e.message,
+                                    icon: "success"
+                                });
+                                fill_table_merk()
+                            }
+                            else {
+                                Swal.fire({
+                                    title: "Gagal",
+                                    text: e.message,
+                                    icon: "error"
+                                });
+                            }
                         },
                         error: function (xhr, status, err) {
-                            alert(xhr.responseText);
+                            Swal.fire({
+                                title: "Gagal",
+                                text: xhr.responseText,
+                                icon: "error"
+                            });
                         }
                     });
             }
@@ -255,23 +242,20 @@
     })
 
     $("#btnSaveAddModal").on('click', e => {
-        var rek_no = $('#noRekAdd').val()
-        var rek_bank = $('#bankRekAdd').val()
-        var rek_name = $('#namaRekAdd').val()
-        var status = $('#statusRekAdd').val()
-        var data = { rek_no: rek_no, rek_bank: rek_bank, rek_name: rek_name, status: status }
+        var name = $('#namaMerkAdd').val()
+        var data = { merk_name: name }
         console.log(data)
 
-        addRekening(data)
+        addMerk(data)
 
     })
 
-    function addRekening(data) {
+    function addMerk(data) {
         $.ajax
             ({
                 type: "POST",
                 data: data,
-                url: "/rek/add",
+                url: "/merk/add",
                 async: false,
                 success: (e) => {
                     if (e.status) {
@@ -282,10 +266,14 @@
                             icon: "success"
                         });
                     }
-                    fill_table_rek()
+                    fill_table_merk()
                 },
                 error: function (xhr, status, err) {
-                    alert(xhr.responseText);
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
                 }
             });
     }

@@ -74,7 +74,6 @@ def add_data_rekening(data):
                 (rek_no, rek_name, status, rek_bank) 
         VALUES 
                 (%(rek_no)s, %(rek_name)s, %(status)s, %(rek_bank)s);
-
     """
     param = data
 

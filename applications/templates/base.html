@@ -44,6 +44,11 @@
             appearance: none;
             margin: 0;
         }
+
+        th.dt-center,
+        td.dt-center {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -75,17 +80,17 @@
                     <nav>
                         <ul class="metismenu" id="menu">
                             <li id="sidebar-dashboard">
-                                <a href="./"><i class="ti-dashboard"></i><span>Dashboard</span></a>
+                                <a href="/"><i class="ti-dashboard"></i><span>Dashboard</span></a>
                             </li>
                             <li id="sidebar-pelanggan">
-                                <a href="./member/"><i class="ti-user"></i><span>Daftar Pelanggan</span></a>
+                                <a href="/member/"><i class="ti-user"></i><span>Daftar Pelanggan</span></a>
                             </li>
                             <li id="sidebar-kategori-parent">
                                 <a href="javascript:void(0)" aria-expanded="true"><i
                                         class="ti-briefcase"></i><span>Kategori</span></a>
                                 <ul class="collapse">
-                                    <li id="sidebar-merk"><a href="#">Merk</a></li>
-                                    <li id="sidebar-kategori"><a href="#">Daftar Kategori</a></li>
+                                    <li id="sidebar-merk"><a href="/merk/">Merk</a></li>
+                                    <li id="sidebar-kategori"><a href="/category/">Daftar Kategori</a></li>
                                 </ul>
                             </li>
                             <li id="sidebar-produk-parent">
@@ -103,7 +108,7 @@
                                 <a href="/rekening/"><i class="ti-money"></i><span>Rekening</span></a>
                             </li>
                             <li id="sidebar-toko">
-                                <a href="./"><i class="ti-home"></i><span>Toko</span></a>
+                                <a href="/outlet/"><i class="ti-home"></i><span>Outlet</span></a>
                             </li>
                         </ul>
                     </nav>
@@ -125,7 +130,7 @@
                             </div>
                             <h4 class="page-title pull-left">{% block menu %}{% endblock %}</h4>
                             <ul class="breadcrumbs pull-left">
-                                <li><a href="./">Home</a></li>
+                                <li><a href="/">Home</a></li>
                                 <li><span>{{ self.menu() }}</span></li>
                             </ul>
                         </div>
@@ -163,6 +168,22 @@
         <!-- footer area end-->
     </div>
     <!-- page container area end -->
+
+    <!-- Global Func -->
+    <script>
+        $('.modal').on("shown.bs.modal", function () {
+            $('input:visible:first', this).focus();
+        });
+        $('#addModal').on('click', function () {
+            $('input:visible', this).val('')
+        })
+
+        function set_option_val(text) {
+            $("select option").filter(function () {
+                return this.text == text;
+            }).attr('selected', true);
+        }
+    </script>
 
     <!-- bootstrap 4 js -->
     <script src="{{ url_for('static', filename='assets/js/popper.min.js') }}"></script>
