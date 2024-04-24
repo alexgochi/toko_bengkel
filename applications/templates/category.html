@@ -1,12 +1,24 @@
 {% extends 'base.html' %}
-{% block tittle %}Kategori{% endblock %}
+{% block title %}Kategori{% endblock %}
 {% block menu %}Kategori{% endblock %}
 {% block content %}
 
 
 <div class="d-flex justify-content-between mt-5 mr-5">
     <div>
-        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">+ Tambah Category</button>
+        <button class="btn btn-primary btn-sm" id="btn-AddModal" data-toggle="modal" data-target="#addModal">+ Tambah
+            Category</button>
+    </div>
+    <div class="form-row">
+        <select name="order" id="orderBy" class="form-control form-control-lg col-8">
+            <option value="category_name" selected disabled>Order By</option>
+            <option value="category_name">Kategori</option>
+            <option value="jumlah_merk">Jumlah Merk</option>
+        </select>
+        <select name="order" id="orderByAsc" class="form-control form-control-lg col-4">
+            <option value="asc">ASC</option>
+            <option value="desc">DESC</option>
+        </select>
     </div>
     <div>
         <div class="input-group mb-3">
@@ -20,13 +32,12 @@
     </div>
 </div>
 <div class="table-responsive">
-    <table id="table_category" class="table table-hover table-bordered table-striped w-100 mb-2">
+    <table id="table_category" class="table table-hover table-bordered table-striped w-100 mb-2"
+        style="white-space: nowrap;">
         <thead class="thead-dark">
-            <th class="text-center">No</th>
             <th class="text-center">ID</th>
-            <th class="text-center">Nama Kategory</th>
-            <th class="text-center">Nama Merk</th>
-            <th class="text-center">Jumlah Produk</th>
+            <th class="text-center">Kategori</th>
+            <th class="text-center">Jumlah Merk</th>
             <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
@@ -53,14 +64,14 @@
                         <label for="namaCategoryEdit">Nama Kategori</label>
                         <input type="text" class="form-control" id="namaCategoryEdit">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="merkCategoryEdit">Merk</label>
                         <select class="form-control" id="merkCategoryEdit">
                             {% for x in data_merk %}
                             <option value="{{ x['merk_id'] }}"> {{ x['merk_name'] }}</option>
                             {% endfor %}
                         </select>
-                    </div>
+                    </div> -->
                 </form>
             </div>
 
@@ -89,14 +100,14 @@
                         <label for="namaCategoryAdd">Nama Kategori</label>
                         <input type="text" class="form-control" id="namaCategoryAdd">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="merkCategoryAdd">Merk</label>
                         <select class="form-control" id="merkCategoryAdd">
                             {% for x in data_merk %}
                             <option value="{{ x['merk_id'] }}"> {{ x['merk_name'] }}</option>
                             {% endfor %}
                         </select>
-                    </div>
+                    </div> -->
                 </form>
             </div>
 
@@ -115,16 +126,24 @@
         dt_search("search_table_category", fill_table_category);
     });
 
+    $('#orderBy,#orderByAsc').on('change', function () {
+        fill_table_category()
+    });
+
     function fill_table_category() {
         const idTabel = "table_category";
+        var column = $('#orderBy').val() || 'category_name'
+        var order = $('#orderByAsc').val() || 'asc'
         const dt_options = {
             scrollY: '50vh',
             columns: [
-                { data: "no" },
                 { data: "category_id" },
                 { data: "category_name" },
-                { data: "merk_name" },
-                { data: "jumlah_produk" },
+                {
+                    data: "jumlah_merk",
+                    searchable: false,
+                    className: 'text-center'
+                },
                 {
                     className: 'text-center',
                     render: data => {
@@ -139,40 +158,37 @@
             ],
             columnDefs: [
                 {
-                    target: 1,
+                    target: 0,
                     visible: false,
                     searchable: false
-                },
-                {
-                    target: [0, 4],
-                    searchable: false,
-                    className: 'text-center'
                 }
             ]
         }
         const ajax_options = {
             url: "/dt/category/",
             data: {
-                "search": $('#search_table_category').val().trim()
+                "search": $('#search_table_category').val().trim(),
+                "order_by": column + ' ' + order
             }
         }
 
         dt_server(idTabel, ajax_options, dt_options);
     }
 
+
     // Edit
     $("#table_category > tbody").on('click', '.btn-edit', e => {
         const rowData = $('#table_category').DataTable().row(getTr(e)).data();
         $('#idCategoryEdit').val(rowData['category_id'])
         $('#namaCategoryEdit').val(rowData['category_name'])
-        set_option_val(rowData['merk_name'])
+        //set_option_val(rowData['merk_name'])
     })
 
     $("#btnSaveEditModal").on('click', e => {
         var id = $('#idCategoryEdit').val()
         var name = $('#namaCategoryEdit').val()
-        var merk = $('#merkCategoryEdit').val()
-        var data = { category_id: id, category_name: name, merk_id: merk }
+        //var merk = $('#merkCategoryEdit').val()
+        var data = { category_id: id, category_name: name }
         edit(data)
 
     })
@@ -262,8 +278,8 @@
 
     $("#btnSaveAddModal").on('click', e => {
         var name = $('#namaCategoryAdd').val()
-        var merk = $('#merkCategoryAdd').val()
-        var data = { category_name: name, merk_id: merk }
+        //var merk = $('#merkCategoryAdd').val()
+        var data = { category_name: name }
         addCategory(data)
 
     })

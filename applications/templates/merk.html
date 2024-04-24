@@ -1,12 +1,25 @@
 {% extends 'base.html' %}
-{% block tittle %}Merk{% endblock %}
+{% block title %}Merk{% endblock %}
 {% block menu %}Merk{% endblock %}
 {% block content %}
 
 
 <div class="d-flex justify-content-between mt-5 mr-5">
     <div>
-        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">+ Tambah Merk</button>
+        <button class="btn btn-primary btn-sm" id="btn-AddModal" data-toggle="modal" data-target="#addModal">+ Tambah
+            Merk</button>
+    </div>
+    <div class="form-row">
+        <select name="order" id="orderBy" class="form-control form-control-lg col-8">
+            <option value="merk_name" selected disabled>Order By</option>
+            <option value="merk_name">Merk</option>
+            <option value="category_name">Kategori</option>
+            <option value="jumlah_product">Jumlah Produk</option>
+        </select>
+        <select name="order" id="orderByAsc" class="form-control form-control-lg col-4">
+            <option value="asc">ASC</option>
+            <option value="desc">DESC</option>
+        </select>
     </div>
     <div>
         <div class="input-group mb-3">
@@ -20,11 +33,13 @@
     </div>
 </div>
 <div class="table-responsive">
-    <table id="table_merk" class="table table-hover table-bordered table-striped w-100 mb-2">
+    <table id="table_merk" class="table table-hover table-bordered table-striped w-100 mb-2"
+        style="white-space: nowrap;">
         <thead class="thead-dark">
             <th class="text-center">ID</th>
-            <th class="text-center">Nama Merk</th>
-            <th class="text-center">Jumlah Kategori</th>
+            <th class="text-center">Merk</th>
+            <th class="text-center">Kategori</th>
+            <th class="text-center">Jumlah Produk</th>
             <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
@@ -50,6 +65,14 @@
                     <div class="form-group">
                         <label for="namaMerkEdit">Nama Merk</label>
                         <input type="text" class="form-control" id="namaMerkEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="categoryMerkEdit">Merk</label>
+                        <select class="form-control" id="merkCategoryEdit">
+                            {% for x in data_cat %}
+                            <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </form>
             </div>
@@ -82,6 +105,14 @@
                         <label for="namaMerkAdd">Nama Merk</label>
                         <input type="text" class="form-control" id="namaMerkAdd">
                     </div>
+                    <div class="form-group">
+                        <label for="categoryMerkAdd">Merk</label>
+                        <select class="form-control" id="categoryMerkAdd">
+                            {% for x in data_cat %}
+                            <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </form>
             </div>
 
@@ -100,14 +131,21 @@
         dt_search("search_table_merk", fill_table_merk);
     });
 
+    $('#orderBy,#orderByAsc').on('change', function () {
+        fill_table_merk()
+    });
+
     function fill_table_merk() {
+        var column = $('#orderBy').val() || 'merk_name'
+        var order = $('#orderByAsc').val() || 'asc'
         const idTabel = "table_merk";
         const dt_options = {
             scrollY: '50vh',
             columns: [
                 { data: "merk_id" },
                 { data: "merk_name" },
-                { data: "jumlah_category" },
+                { data: "category_name" },
+                { data: "jumlah_product" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -127,7 +165,7 @@
                     searchable: false
                 },
                 {
-                    target: 2,
+                    target: 3,
                     searchable: false,
                     className: 'text-center'
                 }
@@ -136,7 +174,8 @@
         const ajax_options = {
             url: "/dt/merk/",
             data: {
-                "search": $('#search_table_merk').val().trim()
+                "search": $('#search_table_merk').val().trim(),
+                "order_by": column + ' ' + order
             }
         }
 
@@ -148,12 +187,14 @@
         const rowData = $('#table_merk').DataTable().row(getTr(e)).data();
         $('#idMerkEdit').val(rowData['merk_id'])
         $('#namaMerkEdit').val(rowData['merk_name'])
+        set_option_val(rowData['category_name'])
     })
 
     $("#btnSaveEditModal").on('click', e => {
         var id = $('#idMerkEdit').val()
         var name = $('#namaMerkEdit').val()
-        var data = { merk_id: id, merk_name: name }
+        var cat = $('#categoryMerkEdit').val()
+        var data = { merk_id: id, merk_name: name, category_id: cat }
         edit(data)
 
     })
@@ -243,8 +284,8 @@
 
     $("#btnSaveAddModal").on('click', e => {
         var name = $('#namaMerkAdd').val()
-        var data = { merk_name: name }
-        console.log(data)
+        var cat = $('#categoryMerkAdd').val()
+        var data = { merk_name: name, category_id: cat }
 
         addMerk(data)
 

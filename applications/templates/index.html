@@ -2,5 +2,266 @@
 {% block title %}Dashboard{% endblock %}
 {% block menu %}Dashboard{% endblock %}
 {% block content %}
-<h1>On develop</h1>
+
+
+<div class="d-flex bd-highlight mt-5 mr-5">
+    <div class="p-2 bd-highlight">
+        <button class="btn btn-primary"><a href="/addOrder/" style="color: white;">+ Tambah Pesanan</a></button>
+    </div>
+    <div class="form-row ml-auto p-2 bd-highlight">
+        <select name="order" id="orderBy" class="form-control form-control-lg col-8">
+            <option value="faktur" selected disabled>Order By</option>
+            <option value="faktur">Faktur</option>
+            <option value="date_tx">Tanggal Transaksi</option>
+            <option value="member_name">Pelanggan</option>
+            <option value="total_faktur">Total Pembelian</option>
+        </select>
+        <select name="order" id="orderByAsc" class="form-control form-control-lg col-4">
+            <option value="asc">ASC</option>
+            <option value="desc">DESC</option>
+        </select>
+    </div>
+    <div class="ml-auto p-2 bd-highlight">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="cari transaksi..." id="search_table_dashboard">
+            <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">
+                    <i class="fa fa-search"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table id="table_dashboard" class="table table-hover table-bordered table-striped w-100 mb-2"
+        style="white-space: nowrap;">
+        <thead class="thead-light">
+            <th class="text-center">No. Faktur</th>
+            <th class="text-center">Tanggal Transaksi</th>
+            <th class="text-center">Pelanggan</th>
+            <th class="text-center">Total Pembelian</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Action</th>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    // Show Data
+    $(() => {
+        fill_table_dashboard();
+        dt_search("search_table_dashboard", fill_table_dashboard);
+    });
+
+    $('#orderBy,#orderByAsc').on('change', function () {
+        fill_table_dashboard()
+    });
+
+    function fill_table_dashboard() {
+        const idTabel = "table_dashboard";
+        var column = $('#orderBy').val() || 'faktur'
+        var order = $('#orderByAsc').val() || 'asc'
+        const dt_options = {
+            scrollY: '50vh',
+            scrollX: true,
+            scrollCollapse: true,
+            columns: [
+                { data: "faktur" },
+                { data: "date_tx" },
+                { data: "member_name" },
+                { data: "total_faktur" },
+                { data: "status" },
+                {
+                    className: 'text-center',
+                    render: data => {
+                        return `
+                        <div class="d-flex align-items-center justify-content-center" style="gap: 10px;">
+                            <button class="btn btn-edit btn-secondary"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-delete btn-danger"><i class="fa fa-trash"></i></button>
+                        </div>
+                        `;
+                    }
+                }
+            ],
+            columnDefs: [
+                {
+                    target: 3,
+                    searchable: false,
+                    render: $.fn.dataTable.render.number(',', '.', 0, ''),
+                    className: 'text-right'
+                }
+            ]
+        }
+        const ajax_options = {
+            url: "/dt/dashboard/",
+            data: {
+                "search": $('#search_table_dashboard').val().trim(),
+                "order_by": column + ' ' + order
+            }
+        }
+
+        dt_server(idTabel, ajax_options, dt_options);
+    }
+
+    // Edit
+    $("#table_dashboard > tbody").on('click', '.btn-edit', e => {
+        const rowData = $('#table_dashboard').DataTable().row(getTr(e)).data();
+        window.location.href = "/editOrder/" + rowData['faktur']
+
+    })
+
+    $("#btnSaveEditModal").on('click', e => {
+        var empty = isEmpty("data-edit")
+        if (!empty) {
+            var sku = $('#skuDashboardEdit').val()
+            var part_number = $('#partNumberDashboardEdit').val()
+            var nama = $('#namaDashboardEdit').val()
+            var barcode = $('#barcodeDashboardEdit').val()
+            var vehicle = $('#vehicleDashboardEdit').val()
+
+            var merk = $('#merkDashboardEdit').val()
+            var category = $('#categoryDashboardEdit').val()
+            var outlet = $('#outletDashboardEdit').val()
+
+            var qty = $('#qtyDashboardEdit').val()
+            var hbeli = $('#hbeliDashboardEdit').val()
+            var hjual = $('#hjualDashboardEdit').val()
+
+            var data = {
+                sku: sku, dashboard_name: nama, part_number: part_number, barcode: barcode,
+                vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
+                qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual)
+            }
+            edit(data)
+        }
+
+    })
+
+    var edit = (dataEdit) => {
+        $.ajax
+            ({
+                type: "POST",
+                data: dataEdit,
+                url: "/dashboard/edit",
+                success: (e) => {
+                    if (e.status) {
+                        $('#editModal').modal('hide')
+                        Swal.fire({
+                            title: "Sukses",
+                            text: e.message,
+                            icon: "success"
+                        });
+                        fill_table_dashboard()
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
+    }
+
+    $('#categoryDashboardEdit, #categoryDashboardAdd').on('change', function () {
+        var merkSelect = $('#merkDashboardEdit')
+        if (this.id == 'categoryDashboardAdd') {
+            merkSelect = $('#merkDashboardAdd')
+        }
+
+        getMerkByCategory(this.value, merkSelect);
+    });
+
+    function getMerkByCategory(id, $el) {
+        $.ajax
+            ({
+                type: "POST",
+                data: { id: id },
+                url: "/dashboard/getMerk",
+                success: (e) => {
+                    if (e.status) {
+                        $el.empty(); // remove old options
+                        for (var i = 0; i < e.result.length; i++) {
+                            $el.append($("<option></option>")
+                                .attr("value", e.result[i].merk_id).text(e.result[i].merk_name));
+                        }
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
+    }
+
+    // Delete
+    $("#table_dashboard > tbody").on('click', '.btn-delete', e => {
+        const rowData = $('#table_dashboard').DataTable().row(getTr(e)).data();
+        faktur = rowData['faktur']
+        Swal.fire({
+            title: "Yakin Hapus Data?",
+            text: "Data Tidak akan bisa dipulihkan",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, Hapus",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax
+                    ({
+                        type: "POST",
+                        data: { faktur: faktur },
+                        url: "/dashboard/delete",
+                        success: (e) => {
+                            if (e.status) {
+                                Swal.fire({
+                                    title: "Berhasil!",
+                                    text: e.message,
+                                    icon: "success"
+                                });
+                                fill_table_dashboard()
+                            }
+                            else {
+                                Swal.fire({
+                                    title: "Gagal",
+                                    text: e.message,
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function (xhr, status, err) {
+                            Swal.fire({
+                                title: "Gagal",
+                                text: xhr.responseText,
+                                icon: "error"
+                            });
+                        }
+                    });
+            }
+        });
+    })
+
+
+</script>
 {% endblock %}

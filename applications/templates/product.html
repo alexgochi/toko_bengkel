@@ -1,0 +1,562 @@
+{% extends 'base.html' %}
+{% block title %}Product{% endblock %}
+{% block menu %}Product{% endblock %}
+{% block content %}
+
+
+<div class="d-flex bd-highlight mt-5 mr-5">
+    <div class="p-2 bd-highlight">
+        <button class="btn btn-primary " data-toggle="modal" data-target="#addModal">+ Tambah
+            Produk</button>
+    </div>
+    <div class="form-row ml-auto p-2 bd-highlight">
+        <select name="order" id="orderBy" class="form-control form-control-lg col-8">
+            <option value="product_name" selected disabled>Order By</option>
+            <option value="sku">SKU</option>
+            <option value="part_number">Part Number</option>
+            <option value="product_name">Nama Produk</option>
+            <option value="barcode">Barcode</option>
+            <option value="vehicle">Kendaraan</option>
+            <option value="merk_name">Merk</option>
+            <option value="category_name">Kategori</option>
+            <option value="outlet_name">Outlet</option>
+            <option value="qty">Qty</option>
+            <option value="harga_beli">Harga Beli</option>
+            <option value="harga_jual">Harga Jual</option>
+        </select>
+        <select name="order" id="orderByAsc" class="form-control form-control-lg col-4">
+            <option value="asc">ASC</option>
+            <option value="desc">DESC</option>
+        </select>
+    </div>
+    <div class="ml-auto p-2 bd-highlight">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="cari produk..." id="search_table_product">
+            <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">
+                    <i class="fa fa-search"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table id="table_product" class="table table-hover table-bordered table-striped w-100 mb-2"
+        style="white-space: nowrap;">
+        <thead class="thead-light">
+            <th class="text-center">SKU</th>
+            <th class="text-center">Part Number</th>
+            <th class="text-center">Nama Produk</th>
+            <th class="text-center">Barcode</th>
+            <th class="text-center">Kendaraan</th>
+            <th class="text-center">Merk</th>
+            <th class="text-center">Kategori</th>
+            <th class="text-center">Outlet</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center">Harga Beli</th>
+            <th class="text-center">Harga Jual</th>
+            <th class="text-center">Kategori ID</th>
+            <th class="text-center">Merk ID</th>
+            <th class="text-center">Action</th>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<!-- Modal Edit -->
+<div class="modal fade bd-example-modal-lg" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editeModalLabel">Edit Produk</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="skuProductEdit">SKU</label>
+                            <input type="text" class="form-control data-edit" id="skuProductEdit" readonly>
+                        </div>
+                        <div class="form-group col-md-9">
+                            <label for="namaProductEdit">Nama Produk</label>
+                            <input type="text" class="form-control data-edit" id="namaProductEdit" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="partNumberProductEdit">Part Number</label>
+                        <input type="text" class="form-control data-edit" id="partNumberProductEdit" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="barcodeProductEdit">Barcode</label>
+                            <input type="number" class="form-control data-edit" id="barcodeProductEdit" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="vehicleProductEdit">Kendaraan</label>
+                            <input type="text" class="form-control data-edit" id="vehicleProductEdit" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="categoryProductEdit">Kategori</label>
+                            <select class="form-control data-edit" id="categoryProductEdit">
+                                {% for x in data_cat %}
+                                <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="merkProductEdit">Merk</label>
+                            <select class="form-control data-edit" id="merkProductEdit">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="outletProductEdit">Outlet</label>
+                            <select class="form-control data-edit" id="outletProductEdit">
+                                {% for x in data_outlet %}
+                                <option value="{{ x['outlet_id'] }}"> {{ x['outlet_name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <hr class="w-100" style="border: 1px solid gray;">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="qtyProductEdit">Qty</label>
+                            <input type="number" class="form-control data-edit" id="qtyProductEdit" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="hbeliProductEdit">Harga Beli</label>
+                            <input type="number" class="form-control data-edit" id="hbeliProductEdit" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="hjualProductEdit">Harga Jual</label>
+                            <input type="number" class="form-control data-edit" id="hjualProductEdit" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="btnSaveEditModal" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Tambah Produk</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="skuProductAdd">SKU</label>
+                            <input type="text" class="form-control data-add" id="skuProductAdd" required>
+                        </div>
+                        <div class="form-group col-md-9">
+                            <label for="namaProductAdd">Nama Produk</label>
+                            <input type="text" class="form-control data-add" id="namaProductAdd" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="partNumberProductAdd">Part Number</label>
+                        <input type="text" class="form-control data-add" id="partNumberProductAdd" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="barcodeProductAdd">Barcode</label>
+                            <input type="number" class="form-control data-add" id="barcodeProductAdd" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="vehicleProductAdd">Kendaraan</label>
+                            <input type="text" class="form-control data-add" id="vehicleProductAdd" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="categoryProductAdd">Kategori</label>
+                            <select class="form-control data-add" id="categoryProductAdd">
+                                {% for x in data_cat %}
+                                <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="merkProductAdd">Merk</label>
+                            <select class="form-control data-add" id="merkProductAdd">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="outletProductAdd">Outlet</label>
+                            <select class="form-control data-add" id="outletProductAdd">
+                                {% for x in data_outlet %}
+                                <option value="{{ x['outlet_id'] }}"> {{ x['outlet_name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <hr class="w-100" style="border: 1px solid gray;">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="qtyProductAdd">Qty</label>
+                            <input type="number" class="form-control data-add" id="qtyProductAdd" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="hbeliProductAdd">Harga Beli</label>
+                            <input type="number" class="form-control data-add" id="hbeliProductAdd" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="hjualProductAdd">Harga Jual</label>
+                            <input type="number" class="form-control data-add" id="hjualProductAdd" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="btnSaveAddModal" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // Show Data
+    $(() => {
+        fill_table_product();
+        dt_search("search_table_product", fill_table_product);
+    });
+
+    $('#orderBy,#orderByAsc').on('change', function () {
+        fill_table_product()
+    });
+
+    function fill_table_product() {
+        const idTabel = "table_product";
+        var column = $('#orderBy').val() || 'product_name'
+        var order = $('#orderByAsc').val() || 'asc'
+        const dt_options = {
+            scrollY: '50vh',
+            fixedColumns: {
+                leftColumns: 3,
+                rightColumns: 1
+            },
+            scrollX: true,
+            scrollCollapse: true,
+            columns: [
+                { data: "sku" },
+                { data: "part_number" },
+                { data: "product_name" },
+                { data: "barcode" },
+                { data: "vehicle" },
+                { data: "merk_name" },
+                { data: "category_name" },
+                { data: "outlet_name" },
+                { data: "qty", className: 'text-center' },
+                { data: "harga_beli" },
+                { data: "harga_jual" },
+                { data: "category_id", searchable: false, visible: false },
+                { data: "merk_id", searchable: false, visible: false },
+                {
+                    className: 'text-center',
+                    render: data => {
+                        return `
+                        <div class="d-flex align-items-center justify-content-center" style="gap: 10px;">
+                            <button class="btn btn-edit btn-secondary" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-delete btn-danger"><i class="fa fa-trash"></i></button>
+                        </div>
+                        `;
+                    }
+                }
+            ],
+            columnDefs: [
+                {
+                    target: [9, 10],
+                    searchable: false,
+                    render: $.fn.dataTable.render.number(',', '.', 0, ''),
+                    className: 'text-right'
+                }
+            ]
+        }
+        const ajax_options = {
+            url: "/dt/product/",
+            data: {
+                "search": $('#search_table_product').val().trim(),
+                "order_by": column + ' ' + order
+            }
+        }
+
+        dt_server(idTabel, ajax_options, dt_options);
+    }
+
+    // Edit
+    $("#table_product > tbody").on('click', '.btn-edit', e => {
+        const rowData = $('#table_product').DataTable().row(getTr(e)).data();
+
+        // get Data Merk by Category
+
+        getMerkByCategory(rowData['category_id'], $('#merkProductEdit'))
+
+        $('#skuProductEdit').val(rowData['sku'])
+        $('#partNumberProductEdit').val(rowData['part_number'])
+        $('#namaProductEdit').val(rowData['product_name'])
+        $('#barcodeProductEdit').val(rowData['barcode'])
+        $('#vehicleProductEdit').val(rowData['vehicle'])
+
+        set_option_val('#merkProductEdit', rowData['merk_name'])
+        set_option_val('#categoryProductEdit', rowData['category_name'])
+        set_option_val('#outletProductEdit', rowData['outlet_name'])
+
+        $('#qtyProductEdit').val(rowData['qty'])
+        $('#hbeliProductEdit').val(rowData['harga_beli'])
+        $('#hjualProductEdit').val(rowData['harga_jual'])
+    })
+
+    $("#btnSaveEditModal").on('click', e => {
+        var empty = isEmpty("data-edit")
+        if (!empty) {
+            var sku = $('#skuProductEdit').val()
+            var part_number = $('#partNumberProductEdit').val()
+            var nama = $('#namaProductEdit').val()
+            var barcode = $('#barcodeProductEdit').val()
+            var vehicle = $('#vehicleProductEdit').val()
+
+            var merk = $('#merkProductEdit').val()
+            var category = $('#categoryProductEdit').val()
+            var outlet = $('#outletProductEdit').val()
+
+            var qty = $('#qtyProductEdit').val()
+            var hbeli = $('#hbeliProductEdit').val()
+            var hjual = $('#hjualProductEdit').val()
+
+            var data = {
+                sku: sku, product_name: nama, part_number: part_number, barcode: barcode,
+                vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
+                qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual)
+            }
+            edit(data)
+        }
+
+    })
+
+    var edit = (dataEdit) => {
+        $.ajax
+            ({
+                type: "POST",
+                data: dataEdit,
+                url: "/product/edit",
+                success: (e) => {
+                    if (e.status) {
+                        $('#editModal').modal('hide')
+                        Swal.fire({
+                            title: "Sukses",
+                            text: e.message,
+                            icon: "success"
+                        });
+                        fill_table_product()
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
+    }
+
+    $('#categoryProductEdit, #categoryProductAdd').on('change', function () {
+        var merkSelect = $('#merkProductEdit')
+        if (this.id == 'categoryProductAdd') {
+            merkSelect = $('#merkProductAdd')
+        }
+
+        getMerkByCategory(this.value, merkSelect);
+    });
+
+    function getMerkByCategory(id, $el) {
+        $.ajax
+            ({
+                type: "POST",
+                data: { id: id },
+                url: "/product/getMerk",
+                success: (e) => {
+                    if (e.status) {
+                        $el.empty(); // remove old options
+                        for (var i = 0; i < e.result.length; i++) {
+                            $el.append($("<option></option>")
+                                .attr("value", e.result[i].merk_id).text(e.result[i].merk_name));
+                        }
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
+    }
+
+    // Delete
+    $("#table_product > tbody").on('click', '.btn-delete', e => {
+        const rowData = $('#table_product').DataTable().row(getTr(e)).data();
+        id = rowData['sku']
+        Swal.fire({
+            title: "Yakin Hapus Data?",
+            text: "Data Tidak akan bisa dipulihkan",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, Hapus",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax
+                    ({
+                        type: "POST",
+                        data: { sku: id },
+                        url: "/product/delete",
+                        success: (e) => {
+                            if (e.status) {
+                                Swal.fire({
+                                    title: "Berhasil!",
+                                    text: e.message,
+                                    icon: "success"
+                                });
+                                fill_table_product()
+                            }
+                            else {
+                                Swal.fire({
+                                    title: "Gagal",
+                                    text: e.message,
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function (xhr, status, err) {
+                            Swal.fire({
+                                title: "Gagal",
+                                text: xhr.responseText,
+                                icon: "error"
+                            });
+                        }
+                    });
+            }
+        });
+    })
+
+    $('#addModal').on("shown.bs.modal", function () {
+        getMerkByCategory($('#categoryProductAdd').val(), $('#merkProductAdd'))
+    });
+
+    $("#btnSaveAddModal").on('click', e => {
+        var empty = isEmpty("data-add")
+        if (!empty) {
+            var sku = $('#skuProductAdd').val()
+            var part_number = $('#partNumberProductAdd').val()
+            var nama = $('#namaProductAdd').val()
+            var barcode = $('#barcodeProductAdd').val()
+            var vehicle = $('#vehicleProductAdd').val()
+
+            var merk = $('#merkProductAdd').val()
+            var category = $('#categoryProductAdd').val()
+            var outlet = $('#outletProductAdd').val()
+
+            var qty = $('#qtyProductAdd').val()
+            var hbeli = $('#hbeliProductAdd').val()
+            var hjual = $('#hjualProductAdd').val()
+
+            var data = {
+                sku: sku, product_name: nama, part_number: part_number, barcode: barcode,
+                vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
+                qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual)
+            }
+
+            if (barcode.length > 12) {
+                Swal.fire({
+                    title: "Gagal!",
+                    text: 'Panjang barcode tidak boleh lebih dari 12 digit',
+                    icon: "error"
+                });
+            } else {
+                addProduct(data)
+            }
+        }
+    })
+
+    $('#skuProductAdd').on('input', function (evt) {
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+    });
+
+    function addProduct(data) {
+        $.ajax
+            ({
+                type: "POST",
+                data: data,
+                url: "/product/add",
+                async: false,
+                success: (e) => {
+                    if (e.status) {
+                        $('#addModal').modal('hide')
+                        Swal.fire({
+                            title: "Berhasil!",
+                            text: e.message,
+                            icon: "success"
+                        });
+                        clearForm()
+                    } else {
+                        Swal.fire({
+                            title: "Gagal!",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                    fill_table_product()
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
+    }
+
+
+</script>
+{% endblock %}

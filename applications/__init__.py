@@ -30,6 +30,7 @@ def create_app():
         from applications.controller import \
             LoginController, ErrorController, MemberController,\
             RekeningController, MerkController, CategoryController,\
-            OutletController
+            OutletController, ProductController, DashboardController,\
+            BarcodeController, TransaksiController, ReceiptController
 
     return app

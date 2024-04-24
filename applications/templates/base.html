@@ -5,7 +5,7 @@
     <link rel="stylesheedt" type="text/css" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block tittle %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="shortcut icon" type="image/png"
         href="{{ url_for('static', filename='assets/images/icon/favicon.ico') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" />
@@ -26,13 +26,45 @@
     <script src="{{ url_for('static', filename='assets/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <!-- Datatble -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/datatables.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='assets/css/fixedColumns.dataTables.css') }}">
     <!-- SweetAlert 2 -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/sweetalert2.min.css') }}">
 
     <!-- jquery latest version -->
     <script src="{{ url_for('static', filename='assets/js/vendor/jquery-2.2.4.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/tambahanCdr.js') }}"></script>
+
+    <!-- printJS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/print.min.css') }}">
+    <script src="{{ url_for('static', filename='assets/js/print.min.js') }}"></script>
+
+    <!-- JS Barcode -->
+    <script src="{{ url_for('static', filename='assets/js/jsBarcode.all.min.js') }}"></script>
+
     <style>
+        .input-container input {
+            border: none;
+            box-sizing: border-box;
+            outline: 0;
+            padding: .75rem;
+            position: relative;
+            width: 100%;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+
         table.dataTable tbody td {
             vertical-align: middle;
         }
@@ -82,6 +114,8 @@
                             <li id="sidebar-dashboard">
                                 <a href="/"><i class="ti-dashboard"></i><span>Dashboard</span></a>
                             </li>
+
+                            {% if current_user.level|int >= 3 %}
                             <li id="sidebar-pelanggan">
                                 <a href="/member/"><i class="ti-user"></i><span>Daftar Pelanggan</span></a>
                             </li>
@@ -97,12 +131,15 @@
                                 <a href="javascript:void(0)" aria-expanded="true"><i
                                         class="ti-package"></i><span>Produk</span></a>
                                 <ul class="collapse">
-                                    <li id="sidebar-produk"><a href="#">Daftar Produk</a></li>
-                                    <li id="sidebar-barcode"><a href="#">Barcode</a></li>
+                                    <li id="sidebar-produk"><a href="/product/">Daftar Produk</a></li>
+                                    <li id="sidebar-barcode"><a href="/barcode/">Barcode</a></li>
                                 </ul>
                             </li>
                             <li id="sidebar-transaksi">
-                                <a href="./"><i class="ti-shopping-cart"></i><span>Transaksi</span></a>
+                                <a href="/transaksi/"><i class="ti-shopping-cart"></i><span>Transaksi</span></a>
+                            </li>
+                            <li id="sidebar-transaksi">
+                                <a href="/receipt/"><i class="ti-truck"></i><span>Terima Barang</span></a>
                             </li>
                             <li id="sidebar-rekening">
                                 <a href="/rekening/"><i class="ti-money"></i><span>Rekening</span></a>
@@ -110,6 +147,8 @@
                             <li id="sidebar-toko">
                                 <a href="/outlet/"><i class="ti-home"></i><span>Outlet</span></a>
                             </li>
+                            {% endif %}
+
                         </ul>
                     </nav>
                 </div>
@@ -171,17 +210,50 @@
 
     <!-- Global Func -->
     <script>
+
         $('.modal').on("shown.bs.modal", function () {
             $('input:visible:first', this).focus();
         });
-        $('#addModal').on('click', function () {
+
+        $('#btn-AddModal').on('click', function () {
             $('input:visible', this).val('')
         })
 
-        function set_option_val(text) {
-            $("select option").filter(function () {
+        function clearForm() {
+            var e = document.getElementById('addModal')
+            $('input:visible', e).val('')
+        }
+
+        function isEmpty(className) {
+            var data = ""
+            var isEmpty = document.getElementsByClassName(className)
+            for (var i = 0; i < isEmpty.length; i++) {
+                if (isEmpty[i].value == '') {
+                    data = data + $("label[for='" + isEmpty[i].id + "']").text() + ', '
+                }
+            }
+            if (data) {
+                Swal.fire({
+                    title: "Gagal",
+                    text: "Data " + data.substring(0, data.length - 2) + " tidak boleh kosong",
+                    icon: "error"
+                });
+                return true
+            }
+            return false
+        }
+
+        function set_option_val(id, text) {
+            $(id + ' option').filter(function () {
                 return this.text == text;
             }).attr('selected', true);
+        }
+
+        function thousand(x) {
+            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        }
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
     </script>
 
@@ -205,6 +277,9 @@
     <script src="{{ url_for('static', filename='assets/js/scripts.js') }}"></script>
     <!-- DataTables -->
     <script src="{{ url_for('static', filename='assets/js/datatables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/dataTables.fixedColumns.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/fixedColumns.dataTables.js') }}"></script>
+
 </body>
 
 </html>

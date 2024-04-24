@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block title %}Transaksi{% endblock %}
+{% block menu %}Transaksi{% endblock %}
+{% block content %}
+
+<!-- DataTables -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/datatables.min.css') }}">
+<script src="{{ url_for('static', filename='assets/js/datatables.min.js') }}"></script>
+
+<div class="container mt-5">
+    <div class="table-responsive text-dark mt-2">
+        <table id="table_transaksi" class="table table-hover table-bordered table-striped w-100 mb-2"
+            style="white-space: nowrap;">
+            <thead class="thead-dark">
+                <th class="text-center">No. Faktur</th>
+                <th class="text-center">Tanggal Transaksi</th>
+                <th class="text-center">Pelanggan</th>
+                <th class="text-center">Total Pembelian</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Print</th>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    const table = new DataTable('#table_transaksi', {
+        scrollCollapse: true,
+        scrollY: '50vh',
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true
+    })
+
+    $(() => {
+        getDataTransaksi()
+    });
+
+    function getDataTransaksi() {
+        table.clear().draw();
+        $.ajax
+            ({
+                type: "GET",
+                url: "/transaksi/getAllData",
+                success: (e) => {
+                    if (e.status) {
+                        if (e.data.length) {
+                            addDataTrans(e.data)
+                        }
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
+    }
+
+    function addDataTrans(data) {
+        for (var i = 0; i < data.length; i++) {
+            var item = [
+                data[i]['faktur'],
+                data[i]['date_tx'],
+                data[i]['member_name'],
+                numberWithCommas(data[i]['total_faktur']),
+                data[i]['type_name'] + ' ' + data[i]['payment_info'],
+                `<button class="btn btn-detail btn-primary"><i class="fa fa-print"></i></button>`
+            ]
+            var rowNode = table.row.add(item).draw().node()
+            $(rowNode).find('td').addClass('align-middle');
+            $(rowNode).find('td').eq(3).addClass('text-right');
+            $(rowNode).find('td').eq(5).addClass('text-center');
+        }
+    }
+
+    $("#table_transaksi > tbody").on('click', '.btn-detail', e => {
+        const rowData = table.row(getTr(e)).data()
+        getDataTransByFaktur(rowData[0])
+    })
+
+    function getDataTransByFaktur(faktur) {
+        printWindow = window.open("/transaksi/getDataTransByFaktur/" + faktur, '_blank')
+        printWindow.focus()
+    }
+
+    //delete
+    $("#table_transaksi > tbody").on('click', '.btn-delete', e => {
+        const rowData = table.row(getTr(e)).data()
+        Swal.fire({
+            title: "Hapus",
+            text: "Hapus " + rowData[0] + " ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, Hapus",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                table.row($(getTr(e))).remove().draw()
+            }
+        })
+    })
+
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+</script>
+
+{% endblock %}

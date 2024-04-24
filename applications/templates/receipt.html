@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% block title %}Terima Barang{% endblock %}
+{% block menu %}Terima Barang{% endblock %}
+{% block content %}
+
+<!-- DataTables -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/datatables.min.css') }}">
+<script src="{{ url_for('static', filename='assets/js/datatables.min.js') }}"></script>
+
+<div class="container mt-5">
+    <button class="btn btn-primary"><a href="/addReceipt/" style="color: white;">+ Tambah Terima Barang</a></button>
+    <div class="table-responsive text-dark">
+        <table id="table_receipt" class="table table-hover table-bordered table-striped w-100 mb-2"
+            style="white-space: nowrap;">
+            <thead class="thead-dark">
+                <th class="text-center">No. Faktur</th>
+                <th class="text-center">Tanggal Terima Barang</th>
+                <th class="text-center">Toko Beli</th>
+                <th class="text-center">Total Pembelian</th>
+                <th class="text-center">Detail</th>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal detail -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detaileModalLabel">Detail Terima Barang</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body row">
+                <div class="form-group col-4">
+                    <label for="fakturDetail">Faktur</label>
+                    <input type="text" class="form-control" id="fakturDetail" readonly>
+                </div>
+                <div class="form-group col-4">
+                    <label for="tanggalDetail">Tanggal Terima Barang</label>
+                    <input type="text" class="form-control" id="tanggalDetail" readonly>
+                </div>
+                <div class="form-group col-4">
+                    <label for="storeBuyDetail">Toko Beli</label>
+                    <input type="text" class="form-control" id="storeBuyDetail" readonly>
+                </div>
+
+                <div class="col-12">
+                    <table id="table_product" class="table table-hover table-bordered table-striped w-100 mb-2"
+                        style="white-space: nowrap;">
+                        <thead class="thead-dark">
+                            <th class="text-center sku-detail">SKU</th>
+                            <th class="text-center">Part Number</th>
+                            <th class="text-center">Nama Produk</th>
+                            <th class="text-center">Merk</th>
+                            <th class="text-center">Qty</th>
+                            <th class="text-center">Harga Beli</th>
+                            <th class="text-center">Sub Total</th>
+                        </thead>
+                    </table>
+
+                    <table class="font-order table table-borderless w-100">
+                        <thead>
+                            <tr>
+                                <th class="w-25 pr-5 text-dark">Total Barang</th>
+                                <th><b>Rp</b></th>
+                                <th class="w-25 text-right text-dark"><b id="totalBarangDetail">0</b></th>
+                                <th class="w-50"></th>
+                            </tr>
+                            <tr>
+                                <th class="w-25 pr-5 text-dark"><b>Biaya Ongkir</b></th>
+                                <th><b>Rp</b></th>
+                                <th class="w-25 text-right text-dark"><b id="otherFeeDetail">0</b></th>
+                                <th class="w-50"></th>
+                            </tr>
+                            <tr>
+                                <th class="w-25 pr-5 text-danger"><b>Diskon</b></th>
+                                <th class="text-danger"><b>Rp</b></th>
+                                <th class="w-25 text-right text-danger"><b id="discountDetail">0</b></th>
+                                <th class="w-50"></th>
+                            </tr>
+                            <tr>
+                                <th class="w-25 pr-5 text-primary"><b>Total Faktur</b></th>
+                                <th class="text-primary"><b>Rp</b></th>
+                                <th class="w-25 text-right text-primary"><b id="totalFakturDetail">0</b></th>
+                                <th class="w-50"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="form-group col-12">
+                    <label for="otherNoteDetail">Keterangan</label>
+                    <input type="text" class="form-control" id="otherNoteDetail" readonly>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    const table = new DataTable('#table_receipt', {
+        scrollCollapse: true,
+        scrollY: '50vh',
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true
+    })
+    const table_product = new DataTable('#table_product', {
+        scrollCollapse: true,
+        scrollY: '50vh',
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bInfo": false
+    })
+
+    $(() => {
+        getDataReceipt()
+    });
+
+    function getDataReceipt() {
+        table.clear().draw();
+        $.ajax
+            ({
+                type: "GET",
+                url: "/receipt/getAllData",
+                success: (e) => {
+                    if (e.status) {
+                        if (e.data.length) {
+                            addDataRec(e.data)
+                        }
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
+    }
+
+    function addDataRec(data) {
+        for (var i = 0; i < data.length; i++) {
+            var item = [
+                data[i]['faktur'],
+                data[i]['date_tx'],
+                data[i]['store_buy'],
+                numberWithCommas(data[i]['total_faktur']),
+                `<button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye"></i></button>`
+            ]
+            var rowNode = table.row.add(item).draw().node()
+            $(rowNode).find('td').addClass('align-middle');
+            $(rowNode).find('td').eq(3).addClass('text-right');
+            $(rowNode).find('td').eq(4).addClass('text-center');
+        }
+    }
+
+
+    $("#table_receipt > tbody").on('click', '.btn-detail', e => {
+        //reset all form
+        $('#fakturDetail').val('')
+        $('#tanggalDetail').val('')
+        $('#storeBuyDetail').val('')
+        table_product.clear().draw();
+
+        //get data detail
+        const rowData = table.row(getTr(e)).data()
+        $.ajax
+            ({
+                type: "GET",
+                data: {
+                    faktur: rowData[0]
+                },
+                url: "/receipt/detail",
+                success: (e) => {
+                    if (e.status) {
+                        addRowDetail(e.data)
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
+    })
+
+    function addRowDetail(data) {
+        //Set data form
+        $('#fakturDetail').val(data['faktur'])
+        $('#tanggalDetail').val(data['date_tx'])
+        $('#storeBuyDetail').val(data['store_buy'])
+        $('#otherNoteDetail').val(data['other_note'])
+
+        $('#totalBarangDetail').text(numberWithCommas(data['total_faktur']))
+        $('#otherFeeDetail').text(numberWithCommas(data['other_fee']))
+        $('#discountDetail').text(numberWithCommas(data['discount']))
+
+        totalAll = parseInt(data['total_faktur']) + parseInt(data['other_fee']) - parseInt(data['discount'])
+        $('#totalFakturDetail').text(numberWithCommas(totalAll))
+
+        //Add Row Table Detail Product
+        product = data['product']
+        for (var i = 0; i < product.length; i++) {
+            var item = [
+                product[i]['sku'],
+                product[i]['part_number'],
+                product[i]['product_name'],
+                product[i]['merk_name'],
+                numberWithCommas(product[i]['qty']),
+                numberWithCommas(product[i]['price']),
+                numberWithCommas(product[i]['subtotal']),
+            ]
+            var rowNode = table_product.row.add(item).draw().node()
+            $(rowNode).find('td').addClass('align-middle');
+            $(rowNode).find('td').eq(4).addClass('text-right');
+            $(rowNode).find('td').eq(5).addClass('text-right');
+            $(rowNode).find('td').eq(6).addClass('text-right');
+        }
+    }
+
+    $('#detailModal').on('shown.bs.modal', function (e) {
+        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust().draw();
+        $('.sku-detail').click()
+        $('.sku-detail').click()
+        $('.sku-detail').click()
+    });
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+</script>
+
+{% endblock %}

@@ -20,15 +20,16 @@ from applications.lib import dataTableError
 @app.route('/category/', methods=['GET'])
 @login_required
 def category():
-    db_res = categoryDao.get_data_merk()
-    merk = db_res.result
-    return render_template("category.html", data_merk = merk)
+    # db_res = categoryDao.get_data_merk()
+    # merk = db_res.result
+    return render_template("category.html")
 
 @app.route("/dt/category/", methods=["GET"])
 def dt_category():
     res = categoryDao.dt_data_category(
         request.args.get("search"),
-        request.args.get('start')
+        request.args.get('start'),
+        request.args.get('order_by')
     )
     if res.is_error:
         return dataTableError()

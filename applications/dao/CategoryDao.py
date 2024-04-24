@@ -11,30 +11,28 @@ def get_data_merk():
     """
     return db.execute(query)
 
-def dt_data_category(search, offset):
+def dt_data_category(search, offset, orderBy):
     db = PostgresDatabase()
-    query = """
+    query = f"""
         SELECT
-            row_number() over (ORDER BY category_name) as no,
             mc.category_id,
-            category_name,
-            (select merk_name from ms_merk mm where mm.merk_id=mc.merk_id) merk_name,
-            count(*) + 
-                max(case when mp.category_id is null then -1 else 0 end)
-            as jumlah_produk
+            mc.category_name,
+            count(*) +
+                max(case when mm.category_id is null then -1 else 0 end)
+            as jumlah_merk
         FROM ms_category mc
-            LEFT JOIN ms_product mp on mc.category_id = mp.category_id
+        LEFT JOIN ms_merk mm on mc.category_id = mm.category_id
         WHERE
             category_name ILIKE %(search)s
-        GROUP BY 
+        GROUP BY
             mc.category_id,
-            category_name
-        ORDER BY 
-            category_name;
+            mc.category_name
+        ORDER BY
+            {orderBy};
     """
     param = {
         "search": f"%{search}%",
-        "offset": offset
+        "offset": offset,
     }
 
     return db.execute_dt(query, param)
@@ -46,7 +44,6 @@ def update_data_category(data):
         UPDATE 
             ms_category
         SET
-            merk_id = %(merk_id)s,
             category_name = %(category_name)s
         WHERE
             category_id = %(category_id)s
@@ -72,12 +69,13 @@ def delete_data_category(id):
 
 def add_data_category(data):
     db = PostgresDatabase()
+    print(data)
     query = """
         INSERT INTO 
             ms_category 
-                (merk_id, category_name) 
+                (category_name) 
         VALUES 
-                (%(merk_id)s, %(category_name)s);
+                (%(category_name)s);
     """
     param = data
 

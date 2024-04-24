@@ -1,0 +1,148 @@
+<html>
+
+<head>
+
+    <title>{{ data['faktur'] }}</title>
+    <!-- printJS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/print.min.css') }}">
+    <script src="{{ url_for('static', filename='assets/js/print.min.js') }}"></script>
+
+    <style>
+        @media print {
+            @page {
+                size: potrait;
+                margin: 0;
+            }
+        }
+
+        .column {
+            float: left;
+            width: 60%;
+            margin-top: 20px;
+            padding: 3%;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        body {
+            padding: 10px;
+            font-family: 'Arial';
+        }
+
+        .product {
+            font-size: 28px;
+            white-space: nowrap;
+            overflow: hidden;
+            font-weight: bolder;
+
+        }
+
+        .barcode {
+            text-align: center;
+        }
+
+        .descp {
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: -10px;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+
+        .w-75 {
+            width: 75%;
+        }
+
+        .w-50 {
+            width: 50%;
+        }
+
+        .w-25 {
+            width: 25%;
+        }
+
+        .text-right {
+            text-align: end;
+        }
+
+        .row-inside {
+            display: flex;
+        }
+
+        .column-inside {
+            flex: 50%;
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="row" style="margin-top: -10px;">
+        {% for data in data %}
+        <div class="column">
+            <div class=" product">
+                {{ data['product_name'] }}
+            </div>
+            <div class="barcode">
+                {{ data['img_barcode']|safe }}
+            </div>
+            <div class="descp">
+                <div class="row-inside">
+                    <div class="column-inside">
+                        <table>
+                            <tr>
+                                <td>SKU</td>
+                                <td> : </td>
+                                <td>{{ data['sku'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Merk</td>
+                                <td> : </td>
+                                <td>{{ data['merk_name'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Kategori</td>
+                                <td> : </td>
+                                <td>{{ data['category_name'] }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="column-inside">
+                        <table class="text-right">
+                            <tr>
+                                <td>Harga</td>
+                                <td> : </td>
+                                <td>{{ data['price'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Part Number</td>
+                                <td> : </td>
+                                <td>{{ data['part_number'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Tgl. Cetak</td>
+                                <td> : </td>
+                                <td>{{ data['print_date'] }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>
