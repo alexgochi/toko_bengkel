@@ -10,7 +10,7 @@
     <style>
         @media print {
             @page {
-                size: landscape;
+                size: potrait;
                 margin: 0;
             }
 
@@ -26,12 +26,12 @@
 
         .container {
             padding-left: 20px;
+            margin-top: 10px;
         }
 
         header {
             margin-top: 20px;
             margin-bottom: 20px;
-            font-size: 12px;
         }
 
         .column {
@@ -62,6 +62,10 @@
         .center {
             text-align: center;
         }
+
+        .fs12 {
+            font-size: 12px;
+        }
     </style>
 </head>
 
@@ -75,7 +79,7 @@
         <!-- Header -->
         <div class="row header">
             <div class="column">
-                <table>
+                <table class="fs12">
                     <tr>
                         <td>Faktur</td>
                         <td> : &emsp;</td>
@@ -99,21 +103,15 @@
                 </table>
             </div>
             <div class="column" align="right">
-                <table style="width: 75%;">
+                <table style="width: 75%;" class="fs12">
                     <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>Tanggal Transaksi</td>
-                        <td> : &emsp;</td>
+                        <td>Transaksi</td>
+                        <td> : </td>
                         <td>{{ data['date_tx'] }}</td>
                     </tr>
                     <tr>
-                        <td>Tanggal Cetak</td>
-                        <td> : &emsp;</td>
+                        <td>Cetak</td>
+                        <td> : </td>
                         <td>{{ data['print_date'] }}</td>
                     </tr>
                 </table>
@@ -121,7 +119,7 @@
         </div>
 
         <!-- Product -->
-        <table style="margin-top: 50px;width: 100%;margin-right: 50px;border-collapse: collapse;">
+        <table style="margin-top: 20px;width: 100%;margin-right: 50px;border-collapse: collapse;font-size: 12px;">
             <thead>
                 <th>Nama Barang</th>
                 <th>Part Number</th>
@@ -154,32 +152,28 @@
                 </tr>
             </tbody>
         </table>
-        <i>*Barang yang sudah dibeli tidak dapat dikembalikan</i><br>
-        <p style="margin-top: 40px;">Pembayaran via <br><b>{{ data['type_name'] }} {{ data['payment_info'] }}</b> </p>
+        <i class="fs12">*Barang yang sudah dibeli tidak dapat dikembalikan</i><br>
+        <p style="margin-top: 20px;" class="fs12">Pembayaran via <br><b>{{ data['type_name'] }} {{ data['payment_info']
+                }}</b> </p>
 
         <div class="row" style="margin-top: 20px;">
-            <div class="column center">
+            <div class="column center fs12">
                 <p>Diterima Oleh,</p>
                 {% if data['member_name'] %}
-                <p style="margin-top: 80px;">({{ data['member_name'] }})</p>
+                <p>({{ data['member_name'] }})</p>
                 {% else %}
-                <p style="margin-top: 80px;">(. . . . . . . . . . . . . . . . . .)</p>
+                <p>(. . . . . . . . . . . . . . . . . .)</p>
                 {% endif %}
             </div>
-            <div class="column center">
+            <div class="column center fs12">
                 <p>Hormat Kami,</p>
-                <p style="margin-top: 80px;">({{ current_user.name }})</p>
+                <p>({{ current_user.name }})</p>
             </div>
         </div>
 
     </div>
 
     <script>
-
-        $(document).ready(function () {
-            print()
-        });
-        onfocus = print()
 
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
