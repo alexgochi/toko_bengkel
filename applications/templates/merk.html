@@ -67,7 +67,7 @@
                         <input type="text" class="form-control" id="namaMerkEdit">
                     </div>
                     <div class="form-group">
-                        <label for="categoryMerkEdit">Merk</label>
+                        <label for="categoryMerkEdit">Kategori</label>
                         <select class="form-control" id="merkCategoryEdit">
                             {% for x in data_cat %}
                             <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
@@ -106,7 +106,7 @@
                         <input type="text" class="form-control" id="namaMerkAdd">
                     </div>
                     <div class="form-group">
-                        <label for="categoryMerkAdd">Merk</label>
+                        <label for="categoryMerkAdd">Kategori</label>
                         <select class="form-control" id="categoryMerkAdd">
                             {% for x in data_cat %}
                             <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
@@ -193,7 +193,7 @@
     $("#btnSaveEditModal").on('click', e => {
         var id = $('#idMerkEdit').val()
         var name = $('#namaMerkEdit').val()
-        var cat = $('#categoryMerkEdit').val()
+        var cat = $('#merkCategoryEdit').val()
         var data = { merk_id: id, merk_name: name, category_id: cat }
         edit(data)
 
@@ -301,6 +301,13 @@
                 success: (e) => {
                     if (e.status) {
                         $('#addModal').modal('hide')
+                        empty()
+                        Swal.fire({
+                            title: "Berhasil!",
+                            text: e.message,
+                            icon: "success"
+                        });
+                    } else {
                         Swal.fire({
                             title: "Berhasil!",
                             text: e.message,
@@ -317,6 +324,11 @@
                     });
                 }
             });
+    }
+
+    function empty() {
+        $('#namaMerkAdd').val('')
+        $('#categoryMerkAdd').val('')
     }
 
 

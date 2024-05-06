@@ -7,7 +7,6 @@ def dt_data_member(search, offset):
             member_id,
             member_name,
             phone,
-            email,
             address
         FROM
             ms_member

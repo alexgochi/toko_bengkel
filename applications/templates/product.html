@@ -92,11 +92,11 @@
                         <input type="text" class="form-control data-edit" id="partNumberProductEdit" required>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" hidden>
                             <label for="barcodeProductEdit">Barcode</label>
                             <input type="number" class="form-control data-edit" id="barcodeProductEdit" required>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-12">
                             <label for="vehicleProductEdit">Kendaraan</label>
                             <input type="text" class="form-control data-edit" id="vehicleProductEdit" required>
                         </div>
@@ -165,7 +165,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="skuProductAdd">SKU</label>
-                            <input type="text" class="form-control data-add" id="skuProductAdd" required>
+                            <input type="text" disabled class="form-control data-add" id="skuProductAdd" required>
                         </div>
                         <div class="form-group col-md-9">
                             <label for="namaProductAdd">Nama Produk</label>
@@ -177,11 +177,11 @@
                         <input type="text" class="form-control data-add" id="partNumberProductAdd" required>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" hidden>
                             <label for="barcodeProductAdd">Barcode</label>
                             <input type="number" class="form-control data-add" id="barcodeProductAdd" required>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-12">
                             <label for="vehicleProductAdd">Kendaraan</label>
                             <input type="text" class="form-control data-add" id="vehicleProductAdd" required>
                         </div>
@@ -478,10 +478,47 @@
     })
 
     $('#addModal').on("shown.bs.modal", function () {
+        generateSKU()
         getMerkByCategory($('#categoryProductAdd').val(), $('#merkProductAdd'))
     });
 
+    function generateSKU() {
+        $.ajax
+            ({
+                type: "GET",
+                url: "/product/generateSku",
+                success: (e) => {
+                    if (e.status) {
+                        $('#skuProductAdd').val(e.sku)
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
+    }
+
     $("#btnSaveAddModal").on('click', e => {
+
+        if (!$('#partNumberProductAdd').val()) {
+            $('#partNumberProductAdd').val("-")
+        }
+        if (!$('#vehicleProductAdd').val()) {
+            $('#vehicleProductAdd').val("-")
+        }
+
+        $('#barcodeProductAdd').val($('#skuProductAdd').val())
         var empty = isEmpty("data-add")
         if (!empty) {
             var sku = $('#skuProductAdd').val()

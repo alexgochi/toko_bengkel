@@ -5,12 +5,14 @@ def getAllDataTransaksi():
     query = """
         SELECT faktur,
             to_char(date_tx, 'dd-mm-yyyy') as date_tx,
-            member_name,
+            coalesce(member_name,'Bukan Pelanggan') as member_name,
             total_faktur,
-            mpt.type_name,
-            coalesce(payment_info,' ') as payment_info
+            coalesce(mpt.type_name,' ') as type_name,
+            CASE WHEN current_date > date_tx and type_name is null 
+                THEN 'Overdue ' || current_date-date_tx ||' hari'
+            ELSE coalesce(payment_info,' ') END as payment_info
         FROM tx_trans tt
-        INNER JOIN ms_payment_type mpt on mpt.type_id = tt.payment_id
+        LEFT JOIN ms_payment_type mpt on mpt.type_id = tt.payment_id
         LEFT JOIN ms_member mm on mm.member_id = tt.member_id
         WHERE status = true
         ORDER BY faktur;
@@ -32,11 +34,13 @@ def getDataTransByFaktur(faktur):
             other_note,
             to_char(update_date, 'dd-mm-yyyy') as update_date,
             total_faktur,
-            mpt.type_name,
-            coalesce(payment_info,''),
+            coalesce(mpt.type_name,' ') as type_name,
+            CASE WHEN current_date > date_tx and type_name is null 
+                THEN 'Overdue ' || current_date-date_tx ||' hari'
+            ELSE coalesce(payment_info,' ') END as payment_info,
             time_tx::varchar
         FROM tx_trans tt
-            INNER JOIN ms_payment_type mpt on mpt.type_id = tt.payment_id
+            LEFT JOIN ms_payment_type mpt on mpt.type_id = tt.payment_id
             LEFT JOIN ms_member mm on mm.member_id = tt.member_id
         WHERE status = true
         AND faktur = %(faktur)s

@@ -449,28 +449,31 @@
 
                             <!-- Pembayaran -->
                             <div class="container col-6">
-                                <h2 class="my-2 mb-4">Pembayaran</h2>
-                                <div class="form-group row font-form">
-                                    <label for="typePaymentInvoice" class="col-sm-4 col-form-label">Metode Bayar</label>
-                                    <select class="form-control col-sm-8" id="typePaymentInvoice">
-                                        <option value="" disabled selected> -- Pilih Jenis Bayar</option>
-                                        {% for x in data_type %}
-                                        <option value="{{ x['type_id'] }}">{{ x['type_name'] }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div id="hidePayment" hidden>
+                                <div id="hideMethodPay">
+                                    <h2 class="my-2 mb-4">Pembayaran</h2>
                                     <div class="form-group row font-form">
-                                        <label for="rekInvoice" class="col-sm-4 col-form-label">Rekening</label>
-                                        <select class="form-control col-sm-8" id="rekInvoice">
-                                            <option value=" " disabled selected> -- Pilih Rekening</option>
-                                            {% for x in data_rek %}
-                                            <option
-                                                value="{{ x['rek_bank'] }} - {{ x['rek_no'] }} - {{ x['rek_name'] }}">
-                                                {{ x['rek_bank'] }} - {{ x['rek_no'] }} - {{ x['rek_name'] }}
-                                            </option>
+                                        <label for="typePaymentInvoice" class="col-sm-4 col-form-label">Metode
+                                            Bayar</label>
+                                        <select class="form-control col-sm-8" id="typePaymentInvoice">
+                                            <option value="" disabled selected> -- Pilih Jenis Bayar</option>
+                                            {% for x in data_type %}
+                                            <option value="{{ x['type_id'] }}">{{ x['type_name'] }}</option>
                                             {% endfor %}
                                         </select>
+                                    </div>
+                                    <div id="hidePayment" hidden>
+                                        <div class="form-group row font-form">
+                                            <label for="rekInvoice" class="col-sm-4 col-form-label">Rekening</label>
+                                            <select class="form-control col-sm-8" id="rekInvoice">
+                                                <option value=" " disabled selected> -- Pilih Rekening</option>
+                                                {% for x in data_rek %}
+                                                <option
+                                                    value="{{ x['rek_bank'] }} - {{ x['rek_no'] }} - {{ x['rek_name'] }}">
+                                                    {{ x['rek_bank'] }} - {{ x['rek_no'] }} - {{ x['rek_name'] }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -594,6 +597,7 @@
         }
 
         function getDataBySkuBarcode(input) {
+            var input = input.toUpperCase()
             $.ajax
                 ({
                     type: "GET",
@@ -605,8 +609,16 @@
                         if (e.status) {
                             if (e.data.length) {
                                 if (!checkSkuExist(input)) {
-                                    addProductRow(e.data[0])
-                                    $("#inputSkuBarcode").val('')
+                                    if (e.data[0]['qty'] > 0) {
+                                        addProductRow(e.data[0])
+                                        $("#inputSkuBarcode").val('')
+                                    } else {
+                                        Swal.fire({
+                                            title: "Gagal",
+                                            text: "QTY untuk SKU " + input + " kurang dari atau sama dengan 0",
+                                            icon: "error"
+                                        });
+                                    }
                                 } else {
                                     Swal.fire({
                                         title: "Gagal",
@@ -789,14 +801,15 @@
         })
 
         function saveInvoice() {
+            let res = checkPayMethod()
             if (checkProductExist()) {
-                if (checkPayMethod()) {
+                if (res[0]) {
                     var dataSave = getFormDataAddOrder()
                     saveTrans(dataSave, 'saveInvoice')
                 } else {
                     Swal.fire({
                         title: "Error",
-                        text: "Harap pilih metode pembayaran dan/ Rekening",
+                        text: res[1],
                         icon: "error"
                     });
                 }
@@ -807,25 +820,34 @@
             var payment = $("#typePaymentInvoice").val();
             var payment_text = $("#typePaymentInvoice option:selected").text();
             var rek = $("#rekInvoice").val() || ' ';
+            var jenisFaktur = $("input[type='radio'][name='jenisFaktur']:checked").val();
+            var jatuhTempo = $('#jatuhTempo').val();
 
             if (!payment) {
-                return false
-            }
-
-            if (payment_text.toLowerCase() == 'transfer') {
-                if (!rek) {
-                    return false
+                if (jenisFaktur == '0') {
+                    return [false, "Harap pilih metode pembayaran"]
+                } else if (jenisFaktur == '1') {
+                    if (!jatuhTempo) {
+                        return [false, "Harap Pilih Jumlah Hari Jatuh Jempo Bon"]
+                    }
+                }
+            } else {
+                if (payment_text.toLowerCase() == 'transfer') {
+                    if (rek == ' ') {
+                        return [false, "Harap pilih Rekening"]
+                    }
                 }
             }
-            return true
+            return [true, "Aman"]
         }
 
         function getFormDataAddOrder() {
             var dataSave = {}
+            var jenisFaktur = $("input[type='radio'][name='jenisFaktur']:checked").val()
             //Detail Invoice
             dataSave['outletId'] = $('#outletInvoice').val()
             dataSave['tanggal'] = $('#tanggalInvoice').val()
-            dataSave['jenisFaktur'] = $("input[type='radio'][name='jenisFaktur']:checked").val()
+            dataSave['jenisFaktur'] = jenisFaktur
             dataSave['jatuhTempo'] = $('#jatuhTempo').val()
             dataSave['radMember'] = $("input[type='radio'][name='poMember']:checked").val()
             dataSave['memberId'] = $('#memberInvoice').val()
@@ -835,6 +857,9 @@
             dataSave['subtotal'] = toNumber($('#subtotal_product').text().replace('Rp ', ''))
             dataSave['payment_id'] = $("#typePaymentInvoice").val();
             dataSave['payment_info'] = $("#rekInvoice").val();
+            if (jenisFaktur == '1') {
+                dataSave['payment_info'] = 'BON - ' + $('#jatuhTempo').val() + ' Hari'
+            }
             var dataProduct = []
             var product = document.getElementsByClassName('data-product')
             for (var i = 0; i < product.length; i++) {
@@ -944,8 +969,14 @@
             if (selected > 0) {
                 $('#hideJatuhTempo').removeAttr('hidden');
                 $('#hideJatuhTempo').show();
+
+                $('#hideMethodPay').hide();
+
             } else {
                 $('#hideJatuhTempo').hide();
+
+                $('#hideMethodPay').removeAttr('hidden');
+                $('#hideMethodPay').show();
             }
         })
         $("input[type='radio'][name='poMember']").on('change', e => {
@@ -971,6 +1002,7 @@
                 $('#hidePayment').hide();
             }
         })
+
         $("#memberInvoice").on('change', e => {
             var val = $("#memberInvoice").val();
             $.ajax

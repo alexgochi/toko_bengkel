@@ -26,7 +26,6 @@
             <th class="text-center">ID</th>
             <th>Nama</th>
             <th>Telepon</th>
-            <th>Email</th>
             <th>Alamat</th>
             <th>Action</th>
         </thead>
@@ -57,9 +56,9 @@
                     </div>
                     <div class="form-group">
                         <label for="phoneMemberEdit">Telepon</label>
-                        <input type="number" class="form-control" id="phoneMemberEdit">
+                        <input type="text" class="form-control" id="phoneMemberEdit">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label for="emailMemberEdit">Email</label>
                         <input type="email" class="form-control" id="emailMemberEdit">
                     </div>
@@ -101,9 +100,9 @@
                     </div>
                     <div class="form-group">
                         <label for="phoneMemberAdd">Telepon</label>
-                        <input type="number" class="form-control" id="phoneMemberAdd">
+                        <input type="text" class="form-control" id="phoneMemberAdd">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label for="emailMemberAdd">Email</label>
                         <input type="email" class="form-control" id="emailMemberAdd">
                     </div>
@@ -137,7 +136,6 @@
                 { data: "member_id" },
                 { data: "member_name" },
                 { data: "phone" },
-                { data: "email" },
                 { data: "address" },
                 {
                     className: 'text-center',

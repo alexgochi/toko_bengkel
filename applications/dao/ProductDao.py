@@ -120,17 +120,29 @@ def delete_data_product(id):
     return db.execute(query, param)
 
 def add_data_product(data):
-    db = PostgresDatabase()
-    query = """
-        INSERT INTO 
-            ms_product 
-                (sku, part_number, product_name, vehicle, merk_id, category_id, outlet_id, qty, harga_beli, harga_jual, barcode) 
-        VALUES 
-                (%(sku)s, %(part_number)s, %(product_name)s, %(vehicle)s, %(merk_id)s, %(category_id)s, %(outlet_id)s, %(qty)s, %(harga_beli)s, %(harga_jual)s, %(barcode)s);
-    """
-    param = data
+    try:
+        db = PostgresDatabase()
+        query = """
+            INSERT INTO 
+                ms_product 
+                    (sku, part_number, product_name, vehicle, merk_id, category_id, outlet_id, qty, harga_beli, harga_jual, barcode) 
+            VALUES 
+                    (%(sku)s, %(part_number)s, %(product_name)s, %(vehicle)s, %(merk_id)s, %(category_id)s, %(outlet_id)s, %(qty)s, %(harga_beli)s, %(harga_jual)s, %(barcode)s);
+        """
+        param = data
 
-    return db.execute(query, param)
+        hasil = db.execute_preserve(query,param)
+        if hasil.is_error:
+            return hasil
+        
+        
+        hasil = update_sku(db, data['sku'])
+        if hasil.is_error:
+            return hasil
+
+        return db.commit()
+    finally:
+        db.release_connection()
 
 def check_id_product(id):
     db = PostgresDatabase()
@@ -144,3 +156,35 @@ def check_id_product(id):
     """
     param = {'sku': id }
     return db.execute(query, param)
+
+
+def generate_sku():
+    db = PostgresDatabase()
+    ordinal_num = 1000
+    query = """
+        SELECT * 
+        FROM 
+            tx_ofaktur
+        WHERE 
+            head_fak = 'SKU'
+    """
+    res = db.execute(query).result
+    if res:
+        ordinal_num = int(res[0]['ordinal_number']) + 1
+    return ordinal_num
+
+def update_sku(conn,num):
+
+    query = """
+            INSERT INTO
+                tx_ofaktur (head_fak, ordinal_number)
+            VALUES
+                ('SKU', '1')
+            ON CONFLICT
+                (head_fak)
+            DO UPDATE
+            SET
+                ordinal_number = %(ordinal_number)s;
+            """
+    param = {'ordinal_number': str(num)}
+    return conn.execute_preserve(query, param)

@@ -24,6 +24,12 @@ def product():
     outlet = productDao.get_data_outlet().result
     return render_template("product.html", data_cat=category, data_outlet=outlet)
 
+@app.route('/product/generateSku', methods=['GET'])
+@login_required
+def generateSku():
+    sku = productDao.generate_sku()
+    return jsonify({"status": True, "message": "Berhasil Get SKU", 'sku': sku})
+
 @app.route('/product/getMerk', methods=['POST'])
 @login_required
 def get_merk():

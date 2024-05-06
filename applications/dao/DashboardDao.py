@@ -87,7 +87,8 @@ def getDataBySkuBarcode(search):
             mp.merk_id,
             merk_name,
             harga_jual,
-            harga_beli
+            harga_beli,
+            qty
         FROM
             ms_product mp
         INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
