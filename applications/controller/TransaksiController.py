@@ -48,3 +48,24 @@ def getDataTransByFaktur(Faktur):
         x['subtotal'] = '{:,}'.format(x['subtotal'])
 
     return render_template('invoice.html', data=db_res['data'])
+
+@app.route('/transaksi/getDetailDataTrans', methods=['GET'])
+@login_required
+def getDetailDataTrans():
+    db_res = transaksiDao.getDataTransByFaktur(request.args.get('faktur'))
+    if db_res['status']:
+        db_res['data']['print_date'] = datetime.datetime.now().strftime("%d-%m-%Y  %H:%M:%S")
+
+        # set number with commas
+        db_res['data']['other_fee'] = '{:,}'.format(db_res['data']['other_fee'])
+        db_res['data']['total_faktur'] = '{:,}'.format(db_res['data']['total_faktur'])
+        
+        total_faktur = int(db_res['data']['total_faktur'].replace(',','')) + int(db_res['data']['other_fee'].replace(',',''))
+        db_res['data']['total_faktur'] = '{:,}'.format(total_faktur)
+        
+        for x in db_res['data']['product']:
+            x['qty'] = '{:,}'.format(x['qty'])
+            x['price'] = '{:,}'.format(x['price'])
+            x['subtotal'] = '{:,}'.format(x['subtotal'])
+
+    return jsonify(db_res)

@@ -3,9 +3,6 @@
 <head>
 
     <title>{{ data['faktur'] }}</title>
-    <!-- printJS -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/print.min.css') }}">
-    <script src="{{ url_for('static', filename='assets/js/print.min.js') }}"></script>
 
     <style>
         @media print {
@@ -13,83 +10,62 @@
                 size: potrait;
                 margin: 0;
             }
-        }
 
-        .column {
-            float: left;
-            width: 60%;
-            margin-top: 20px;
-            padding: 3%;
-        }
 
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
+            .paper {
+                /* customize paper size */
+                width: 150mm;
+                margin: 1mm;
+                overflow: hidden;
+                height: fit-content;
+                outline: 1px dotted #32a852;
+                font-size: 12px;
+            }
 
-        body {
-            padding: 10px;
-            font-family: 'Arial';
-        }
+            .label {
+                /* customize label size */
+                width: 40mm;
+                height: 15mm;
+                margin-right: 1mm;
+                margin-bottom: 1mm;
 
-        .product {
-            font-size: 28px;
-            white-space: nowrap;
-            overflow: hidden;
-            font-weight: bolder;
+                padding: 3mm 0.2mm;
+                /* the gutter */
+                float: left;
+                text-align: left;
+                overflow: hidden;
+                background: #fff;
+                outline: 1px dotted #999;
+            }
 
-        }
+            p {
+                margin: 0;
+                width: 100%;
+            }
 
-        .barcode {
-            text-align: center;
-        }
+            .center {
+                text-align: center;
+            }
 
-        .descp {
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: -10px;
-        }
-
-        .w-100 {
-            width: 100%;
-        }
-
-        .w-75 {
-            width: 75%;
-        }
-
-        .w-50 {
-            width: 50%;
-        }
-
-        .w-25 {
-            width: 25%;
-        }
-
-        .text-right {
-            text-align: end;
-        }
-
-        .row-inside {
-            display: flex;
-        }
-
-        .column-inside {
-            flex: 50%;
-            padding: 10px;
-        }
-
-        table {
-            width: 100%;
+            .page-break {
+                clear: left;
+                display: block;
+                page-break-after: always;
+            }
         }
     </style>
 </head>
 
 <body>
-
-    <div class="row" style="margin-top: -10px;">
+    <div class="paper" style="background-color: #fff;" width='50mm'>
+        {% for data in data %}
+        <div class="label">
+            <p style="margin-top: -2mm;">{{ data['product_name'] }}</p>
+            <p class="center">{{ data['img_barcode']|safe }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- <div class="row" style="margin-top: -10px;">
         {% for data in data %}
         <div class="column">
             <div class=" product">
@@ -142,7 +118,7 @@
             </div>
         </div>
         {% endfor %}
-    </div>
+    </div> -->
 </body>
 
 </html>

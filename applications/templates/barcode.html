@@ -194,9 +194,12 @@
 
     function textToBase64Barcode(text) {
         var canvas = document.createElement('svg')
+        canvas.style.width = '3mm'
+        canvas.setAttribute("style", "width:3mm");
         JsBarcode(canvas, text, {
-            format: "code39",
-            fontSize: 16,
+            width: 1.3,
+            height: 30,
+            fontSize: 10
         })
         var svg = $('<svg>').append($(canvas).clone()).html();
         return String(svg)
@@ -301,7 +304,6 @@
 
             for (var i = 0; i < rowData.length; i++) {
                 var barcode = {}
-                console.log(rowData[i])
                 barcode['sku'] = rowData[i][0]
                 barcode['product_name'] = rowData[i][1].toUpperCase()
                 barcode['merk_name'] = rowData[i][2]

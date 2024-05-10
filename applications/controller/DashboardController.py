@@ -60,6 +60,16 @@ def editOrder(Faktur):
     rekening = dashboardDao.getRekening().result
     return render_template("orderEdit.html", faktur=Faktur, data_outlet=outlet, data_member=member,data_type=paymentType,data_rek=rekening)
 
+@app.route('/detailOrder/<Faktur>', methods=['GET'])
+@login_required
+def detailOrder(Faktur):
+    member = dashboardDao.getDataMember().result
+    outlet = dashboardDao.getDataOutlet().result
+    paymentType = dashboardDao.getPaymentType().result
+    rekening = dashboardDao.getRekening().result
+    return render_template("orderDetail.html", faktur=Faktur, data_outlet=outlet, data_member=member,data_type=paymentType,data_rek=rekening)
+
+
 @app.route('/getDataFaktur/', methods=['GET'])
 @login_required
 def getDataFaktur():

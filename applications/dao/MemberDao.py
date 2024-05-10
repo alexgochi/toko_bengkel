@@ -11,10 +11,9 @@ def dt_data_member(search, offset):
         FROM
             ms_member
         WHERE
-            member_id ILIKE %(search)s OR
+            CAST(member_id AS TEXT) ILIKE %(search)s OR
             member_name ILIKE %(search)s OR
-            phone ILIKE %(search)s OR
-            email ILIKE %(search)s 
+            phone ILIKE %(search)s 
         ORDER BY
             member_name;
     """
@@ -33,7 +32,6 @@ def update_data_member(data):
         SET
             member_name = %(name)s,
             phone = %(phone)s,
-            email = %(email)s,
             address = %(addr)s
         WHERE
             member_id = %(id)s
@@ -41,7 +39,6 @@ def update_data_member(data):
     param = {
         "name" : data['name'],
         "phone" : data['phone'],
-        "email" : data['email'],
         "addr" : data['addr'],
         "id" : data['id']
     }
@@ -68,9 +65,9 @@ def add_data_member(data):
     query = """
         INSERT INTO 
             ms_member 
-                (member_id, member_name, phone, address, email, outlet_id) 
+                (member_name, phone, address) 
         VALUES 
-                (%(member_id)s, %(member_name)s, %(phone)s, %(address)s, %(email)s, %(outlet_id)s);
+                (%(member_name)s, %(phone)s, %(address)s);
 
     """
     param = data

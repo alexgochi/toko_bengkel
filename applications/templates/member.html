@@ -58,10 +58,6 @@
                         <label for="phoneMemberEdit">Telepon</label>
                         <input type="text" class="form-control" id="phoneMemberEdit">
                     </div>
-                    <div class="form-group" hidden>
-                        <label for="emailMemberEdit">Email</label>
-                        <input type="email" class="form-control" id="emailMemberEdit">
-                    </div>
                     <div class="form-group">
                         <label for="alamatMemberEdit">Alamat</label>
                         <input type="text" class="form-control" id="alamatMemberEdit">
@@ -90,7 +86,7 @@
 
             <div class="modal-body">
                 <form>
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label for="idMemberAdd">Member ID</label>
                         <input type="text" class="form-control" id="idMemberAdd">
                     </div>
@@ -101,10 +97,6 @@
                     <div class="form-group">
                         <label for="phoneMemberAdd">Telepon</label>
                         <input type="text" class="form-control" id="phoneMemberAdd">
-                    </div>
-                    <div class="form-group" hidden>
-                        <label for="emailMemberAdd">Email</label>
-                        <input type="email" class="form-control" id="emailMemberAdd">
                     </div>
                     <div class="form-group">
                         <label for="alamatMemberAdd">Alamat</label>
@@ -166,16 +158,14 @@
         $('#idMemberEdit').val(rowData['member_id'])
         $('#namaMemberEdit').val(rowData['member_name'])
         $('#phoneMemberEdit').val(rowData['phone'])
-        $('#emailMemberEdit').val(rowData['email'])
         $('#alamatMemberEdit').val(rowData['address'])
     })
     $("#btnSaveEditModal").on('click', e => {
         var id = $('#idMemberEdit').val()
         var name = $('#namaMemberEdit').val()
         var phone = $('#phoneMemberEdit').val()
-        var email = $('#emailMemberEdit').val()
         var addr = $('#alamatMemberEdit').val()
-        var data = { id: id, name: name, phone: phone, email: email, addr: addr }
+        var data = { id: id, name: name, phone: phone, addr: addr }
         edit(data)
 
     })
@@ -241,45 +231,23 @@
         });
     })
 
+    $('#addModal').on("shown.bs.modal", function () {
+        $('#idMemberAdd').val('')
+        $('#namaMemberAdd').val('')
+        $('#phoneMemberAdd').val('')
+        $('#emailMemberAdd').val('')
+        $('#alamatMemberAdd').val('')
+    });
+
     $("#btnSaveAddModal").on('click', e => {
-        var id = $('#idMemberAdd').val()
         var name = $('#namaMemberAdd').val()
         var phone = $('#phoneMemberAdd').val()
         var email = $('#emailMemberAdd').val()
         var addr = $('#alamatMemberAdd').val()
-        var data = { member_id: id, member_name: name, phone: phone, email: email, address: addr, outlet_id: 'MU' }
+        var data = { member_name: name, phone: phone, email: email, address: addr }
 
-        var check = checkId(id)
-        if (check) {
-            addMember(data)
-        }
-
+        addMember(data)
     })
-
-    function checkId(id) {
-        var status = true
-        $.ajax
-            ({
-                type: "POST",
-                data: { id: id },
-                url: "/member/checkId",
-                async: false,
-                success: (e) => {
-                    if (e.result.member_id) {
-                        status = false
-                        Swal.fire({
-                            title: "Gagal!",
-                            text: "ID Pelanggan Sudah ada",
-                            icon: "error"
-                        });
-                    }
-                },
-                error: function (xhr, status, err) {
-                    alert(xhr.responseText);
-                }
-            });
-        return status
-    }
 
     function addMember(data) {
         $.ajax

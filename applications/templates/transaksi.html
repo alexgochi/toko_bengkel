@@ -17,12 +17,13 @@
                 <th class="text-center">Pelanggan</th>
                 <th class="text-center">Total Pembelian</th>
                 <th class="text-center">Status</th>
-                <th class="text-center">Print</th>
+                <th class="text-center">Action</th>
             </thead>
             <tbody></tbody>
         </table>
     </div>
 </div>
+
 
 <script type="text/javascript">
     const table = new DataTable('#table_transaksi', {
@@ -75,7 +76,8 @@
                 data[i]['member_name'],
                 numberWithCommas(data[i]['total_faktur']),
                 data[i]['type_name'] + ' ' + data[i]['payment_info'],
-                `<button class="btn btn-detail btn-primary"><i class="fa fa-print"></i></button>`
+                `<button class="btn btn-detail btn-secondary"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
+                <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>`
             ]
             var rowNode = table.row.add(item).draw().node()
             $(rowNode).find('td').addClass('align-middle');
@@ -84,7 +86,7 @@
         }
     }
 
-    $("#table_transaksi > tbody").on('click', '.btn-detail', e => {
+    $("#table_transaksi > tbody").on('click', '.btn-print', e => {
         const rowData = table.row(getTr(e)).data()
         getDataTransByFaktur(rowData[0])
     })
@@ -113,6 +115,11 @@
         })
     })
 
+    //Detail
+    $("#table_transaksi > tbody").on('click', '.btn-detail', e => {
+        const rowData = table.row(getTr(e)).data();
+        window.location.href = "/detailOrder/" + rowData[0]
+    })
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
