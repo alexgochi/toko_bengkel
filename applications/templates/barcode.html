@@ -28,7 +28,7 @@
             <th class="text-center">Harga Jual</th>
             <th class="text-center">Kendaraan</th>
             <th class="text-center">Kategori</th>
-            <th class="text-center">Part Number</th>
+            <th class="text-center">Outlet Name</th>
             <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
@@ -67,6 +67,27 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Jumlah Cetak -->
+<div class="modal fade" id="jumlahCetakModal" tabindex="-1" role="dialog" aria-labelledby="jumlahCetakModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="lovModalLabel">Jumlah Cetak</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <input type="text" id="skuJumlahCetakBarcode" hidden>
+                <input type="number" class="form-control font-order" id="jumlahCetakBarcode" min="1" autofocus required>
+                <button class="btn btn-jumlah btn-primary w-50 mt-2 " onclick="addProductQty()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
 <svg id="barcode12">
 
 </svg>
@@ -80,11 +101,25 @@
         scrollY: '45vh'
     })
 
+    function addProductQty() {
+        var sku = $('#skuJumlahCetakBarcode').val()
+        getDataBySkuBarcode(sku)
+    }
+
+    $("#jumlahCetakBarcode").on('keyup', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            addProductQty()
+        }
+    });
+
     $("#inputSkuBarcode").on('keyup', function (e) {
         if (e.key === 'Enter' || e.keyCode === 13) {
             input = $("#inputSkuBarcode").val()
             if (input) {
-                getDataBySkuBarcode(input)
+                $('#lovModal').modal('hide')
+                $('#jumlahCetakModal').modal('show')
+                $('#skuJumlahCetakBarcode').val(input)
+                $('#jumlahCetakBarcode').val('')
             } else {
                 Swal.fire({
                     title: "Data Kosong",
@@ -117,16 +152,9 @@
                 success: (e) => {
                     if (e.status) {
                         if (e.data.length) {
-                            if (!checkSkuExist(input)) {
-                                addProductRow(e.data[0])
-                                $("#inputSkuBarcode").val('')
-                            } else {
-                                Swal.fire({
-                                    title: "Gagal",
-                                    text: "SKU " + input + " sudah ada",
-                                    icon: "error"
-                                });
-                            }
+                            addProductRow(e.data[0], $('#jumlahCetakBarcode').val())
+                            $("#inputSkuBarcode").val('')
+
                         } else {
                             Swal.fire({
                                 title: "Gagal",
@@ -165,24 +193,26 @@
         return status
     }
     //add row
-    function addProductRow(data) {
+    function addProductRow(data, jumlah) {
         if (data['barcode']) {
-            var item = [
-                data['sku'],
-                data['product_name'],
-                data['merk_name'],
-                data['barcode'],
-                numberWithCommas(parseInt(data['harga_jual'])),
-                data['vehicle'],
-                data['category_name'],
-                data['part_number'],
-                `<button class="btn btn-delete btn-danger"><i class="fa fa-trash"></i></button>`
-            ]
-            var rowNode = table.row.add(item).draw().node()
-            $(rowNode).find('td').addClass('align-middle');
-            $(rowNode).addClass('data-product')
-            $(rowNode).find('td').eq(8).addClass('text-center');
-            $(rowNode).find('td').eq(3).addClass('text-left');
+            for (var i = 0; i < jumlah; i++) {
+                var item = [
+                    data['sku'],
+                    data['product_name'],
+                    data['merk_name'],
+                    data['barcode'],
+                    numberWithCommas(parseInt(data['harga_jual'])),
+                    data['vehicle'],
+                    data['category_name'],
+                    data['outlet_name'],
+                    `<button class="btn btn-delete btn-danger"><i class="fa fa-trash"></i></button>`
+                ]
+                var rowNode = table.row.add(item).draw().node()
+                $(rowNode).find('td').addClass('align-middle');
+                $(rowNode).addClass('data-product')
+                $(rowNode).find('td').eq(8).addClass('text-center');
+                $(rowNode).find('td').eq(3).addClass('text-left');
+            }
         } else {
             Swal.fire({
                 title: "Data Kosong",
@@ -190,6 +220,8 @@
                 icon: "error"
             });
         }
+        $('#jumlahCetakModal').modal('hide')
+        $("#inputSkuBarcode").focus()
     }
 
     function textToBase64Barcode(text) {
@@ -272,8 +304,10 @@
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                getDataBySkuBarcode(rowData[0])
                 $('#lovModal').modal('hide')
+                $('#jumlahCetakModal').modal('show')
+                $('#skuJumlahCetakBarcode').val(rowData[0])
+                $('#jumlahCetakBarcode').val('')
             }
         });
     })
@@ -305,13 +339,13 @@
             for (var i = 0; i < rowData.length; i++) {
                 var barcode = {}
                 barcode['sku'] = rowData[i][0]
-                barcode['product_name'] = rowData[i][1].toUpperCase()
+                barcode['product_name'] = rowData[i][1]
                 barcode['merk_name'] = rowData[i][2]
                 barcode['barcode'] = rowData[i][3]
                 barcode['price'] = rowData[i][4]
                 barcode['vehicle'] = rowData[i][5]
                 barcode['category_name'] = rowData[i][6]
-                barcode['part_number'] = rowData[i][7]
+                barcode['outlet_name'] = rowData[i][7]
                 barcode['print_date'] = getTodayDate()
                 barcode['img_barcode'] = textToBase64Barcode(rowData[i][3])
                 dataBarcode.push(barcode)

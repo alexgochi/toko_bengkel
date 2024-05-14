@@ -536,20 +536,12 @@
             var hjual = $('#hjualProductAdd').val()
 
             var data = {
-                sku: sku, product_name: nama, part_number: part_number, barcode: barcode,
+                sku: sku, product_name: nama, part_number: part_number,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
                 qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual)
             }
 
-            if (barcode.length > 12) {
-                Swal.fire({
-                    title: "Gagal!",
-                    text: 'Panjang barcode tidak boleh lebih dari 12 digit',
-                    icon: "error"
-                });
-            } else {
-                addProduct(data)
-            }
+            addProduct(data)
         }
     })
 
@@ -577,7 +569,7 @@
                         clearForm()
                     } else {
                         Swal.fire({
-                            title: "Gagal!",
+                            title: "Gagal, Coba Lagi!",
                             text: e.message,
                             icon: "error"
                         });

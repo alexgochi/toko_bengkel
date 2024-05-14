@@ -621,9 +621,11 @@
             "bFilter": true
         })
 
+        $('#btn-lovModal').on('click', function (e) {
+            getDataLovProduct()
+        })
         $('#lovModal').on('shown.bs.modal', function (e) {
             $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
-            getDataLovProduct()
         });
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -631,14 +633,16 @@
             $('#inputSkuBarcode').focus()
         })
 
-        function addLovData(data) {
+        function addLovData(data, item_table) {
             for (var i = 0; i < data.length; i++) {
-                var item = [
-                    data[i]['sku'],
-                    data[i]['product_name'],
-                    data[i]['merk_name']
-                ]
-                tableLov.row.add(item).draw().node()
+                if (!(item_table.includes(data[i]['sku']))) {
+                    var item = [
+                        data[i]['sku'],
+                        data[i]['product_name'],
+                        data[i]['merk_name']
+                    ]
+                    tableLov.row.add(item).draw().node()
+                }
             }
         }
 
@@ -651,7 +655,13 @@
                     success: (e) => {
                         if (e.status) {
                             if (e.data.length) {
-                                addLovData(e.data)
+
+                                var item = []
+                                var product = document.getElementsByClassName('data-product')
+                                for (var i = 0; i < product.length; i++) {
+                                    item.push($(product[i]).find('td').eq(0).text());
+                                }
+                                addLovData(e.data, item)
                             }
                         }
                         else {

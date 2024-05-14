@@ -24,6 +24,107 @@
     </div>
 </div>
 
+<!-- Modal detail -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detaileModalLabel">Detail Order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body row">
+                <div class="form-group col-12">
+                    <label for="fakturDetail">Faktur</label>
+                    <input type="text" class="form-control" id="fakturDetail" readonly>
+                </div>
+                <div class="form-group col-4">
+                    <label for="outletNameDetail">Nama Outlet</label>
+                    <input type="text" class="form-control" id="outletNameDetail" readonly>
+                </div>
+                <div class="form-group col-4">
+                    <label for="tanggalDetail">Tanggal Transaksi</label>
+                    <input type="text" class="form-control" id="tanggalDetail" readonly>
+                </div>
+                <div class="form-group col-4">
+                    <label for="timeDetail">Waktu Transaksi</label>
+                    <input type="text" class="form-control" id="timeDetail" readonly>
+                </div>
+                <div class="form-group col-4">
+                    <label for="jenisFakturDetail">Jenis Faktur</label>
+                    <input type="text" class="form-control" id="jenisFakturDetail" readonly>
+                </div>
+                <div class="form-group col-4">
+                    <label for="jatuhTempoDetail">Jatuh Tempo</label>
+                    <input type="text" class="form-control" id="jatuhTempoDetail" readonly>
+                </div>
+                <div class="form-group col-4">
+                    <label for="memberNameDetail">Nama Pelanggan</label>
+                    <input type="text" class="form-control" id="memberNameDetail" readonly>
+                </div>
+
+                <div class="col-12">
+                    <p style="margin-top: 10px;">Produk</p>
+                    <table id="table_product" class="table table-hover table-bordered table-striped w-100 mb-2"
+                        style="white-space: nowrap;">
+                        <thead class="thead-dark">
+                            <th class="text-center sku-detail">SKU</th>
+                            <th class="text-center">Part Number</th>
+                            <th class="text-center">Nama Produk</th>
+                            <th class="text-center">Merk</th>
+                            <th class="text-center">Qty</th>
+                            <th class="text-center">Harga Beli</th>
+                            <th class="text-center">Sub Total</th>
+                        </thead>
+                    </table>
+
+                    <table class="font-order table table-borderless w-100">
+                        <thead>
+                            <tr>
+                                <th class="w-25 pr-5 text-dark">Total Barang</th>
+                                <th><b>Rp</b></th>
+                                <th class="w-25 text-right text-dark"><b id="totalBarangDetail">0</b></th>
+                                <th class="w-50"></th>
+                            </tr>
+                            <tr>
+                                <th class="w-25 pr-5 text-danger"><b>Biaya Ongkir</b></th>
+                                <th><b class="text-danger">Rp</b></th>
+                                <th class="w-25 text-right text-danger"><b id="otherFeeDetail">0</b></th>
+                                <th class="w-50"></th>
+                            </tr>
+                            <tr>
+                                <th class="w-25 pr-5 text-primary"><b>Total Faktur</b></th>
+                                <th class="text-primary"><b>Rp</b></th>
+                                <th class="w-25 text-right text-primary"><b id="totalFakturDetail">0</b></th>
+                                <th class="w-50"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="form-group col-6">
+                    <label for="paymentTypeDetail">Metode Bayar</label>
+                    <input type="text" class="form-control" id="paymentTypeDetail" readonly>
+                </div>
+                <div class="form-group col-6">
+                    <label for="paymentInfoDetail">Info</label>
+                    <input type="text" class="form-control" id="paymentInfoDetail" readonly>
+                </div>
+                <div class="form-group col-12">
+                    <label for="otherNoteDetail">Keterangan</label>
+                    <input type="text" class="form-control" id="otherNoteDetail" readonly>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
     const table = new DataTable('#table_transaksi', {
@@ -76,7 +177,7 @@
                 data[i]['member_name'],
                 numberWithCommas(data[i]['total_faktur']),
                 data[i]['type_name'] + ' ' + data[i]['payment_info'],
-                `<button class="btn btn-detail btn-secondary"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
+                `<button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
                 <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>`
             ]
             var rowNode = table.row.add(item).draw().node()
@@ -96,30 +197,105 @@
         printWindow.focus()
     }
 
-    //delete
-    $("#table_transaksi > tbody").on('click', '.btn-delete', e => {
-        const rowData = table.row(getTr(e)).data()
-        Swal.fire({
-            title: "Hapus",
-            text: "Hapus " + rowData[0] + " ?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ya, Hapus",
-            cancelButtonText: "Batal"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                table.row($(getTr(e))).remove().draw()
-            }
-        })
+    //Detail
+    const table_product = new DataTable('#table_product', {
+        scrollCollapse: true,
+        scrollY: '50vh',
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bInfo": false
     })
 
-    //Detail
     $("#table_transaksi > tbody").on('click', '.btn-detail', e => {
-        const rowData = table.row(getTr(e)).data();
-        window.location.href = "/detailOrder/" + rowData[0]
+        //reset all form
+        $('#fakturDetail').val('')
+        $('#tanggalDetail').val('')
+        $('#storeBuyDetail').val('')
+        table_product.clear().draw();
+
+        //get data detail
+        const rowData = table.row(getTr(e)).data()
+        $.ajax
+            ({
+                type: "GET",
+                data: {
+                    faktur: rowData[0]
+                },
+                url: "/transaksi/getDetailDataTrans",
+                success: (e) => {
+                    if (e.status) {
+                        addRowDetail(e.data)
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
     })
+
+    function addRowDetail(data) {
+        //Set data form
+        $('#fakturDetail').val(data['faktur'])
+        $('#tanggalDetail').val(data['date_tx'])
+        $('#timeDetail').val(data['time_tx'])
+        $('#outletNameDetail').val(data['outlet']['outlet_name'])
+        $('#jatuhTempoDetail').val(data['due_date'] || '-')
+
+        if (data['tx_type'] == '1') {
+            $('#jenisFakturDetail').val('Bon')
+        } else {
+            $('#jenisFakturDetail').val('Kontan')
+        }
+        $('#memberNameDetail').val(data['member_name'] || 'Bukan Pelanggan')
+        $('#paymentTypeDetail').val(data['type_name'] || '-')
+        $('#paymentInfoDetail').val(data['payment_info'] || '-')
+
+
+        $('#otherNoteDetail').val(data['other_note'])
+        $('#totalBarangDetail').text(numberWithCommas(data['total_faktur']))
+        $('#otherFeeDetail').text(numberWithCommas(data['other_fee']))
+
+        totalAll = parseInt(data['total_faktur']) + parseInt(data['other_fee'])
+        $('#totalFakturDetail').text(numberWithCommas(totalAll))
+
+        //Add Row Table Detail Product
+        product = data['product']
+        for (var i = 0; i < product.length; i++) {
+            var item = [
+                product[i]['sku'],
+                product[i]['part_number'],
+                product[i]['product_name'],
+                product[i]['merk_name'],
+                numberWithCommas(product[i]['qty']),
+                numberWithCommas(product[i]['price']),
+                numberWithCommas(product[i]['subtotal']),
+            ]
+            var rowNode = table_product.row.add(item).draw().node()
+            $(rowNode).find('td').addClass('align-middle');
+            $(rowNode).find('td').eq(4).addClass('text-right');
+            $(rowNode).find('td').eq(5).addClass('text-right');
+            $(rowNode).find('td').eq(6).addClass('text-right');
+        }
+    }
+
+    $('#detailModal').on('shown.bs.modal', function (e) {
+        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust().draw();
+        $('.sku-detail').click()
+        $('.sku-detail').click()
+        $('.sku-detail').click()
+    });
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

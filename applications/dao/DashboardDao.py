@@ -107,8 +107,8 @@ def dt_data_dashboard(search, offset, orderBy):
         SELECT
             faktur,
             to_char(date_tx, 'dd-mm-yyyy') as date_tx,
-            COALESCE(mm.member_name,'-') as member_name,
-            total_faktur,
+            COALESCE(mm.member_name,'Bukan Pelanggan') as member_name,
+            total_faktur + other_fee as total_faktur,
             CASE
                 WHEN status = false THEN 'Draft'
                 ELSE 'Done'

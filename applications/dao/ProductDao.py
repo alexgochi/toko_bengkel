@@ -1,4 +1,5 @@
 from applications.lib import PostgresDatabase
+import random
 
 def get_data_merk(id):
     db = PostgresDatabase()
@@ -144,6 +145,26 @@ def add_data_product(data):
     finally:
         db.release_connection()
 
+def generate_barcode():
+    temp = random.randint(10000000,99999999)
+    db = PostgresDatabase()
+    query = """
+        SELECT
+            sku
+        FROM
+            ms_product
+        WHERE
+            barcode = %(temp)s
+    """
+    param = {'temp': temp }
+    res = db.execute(query, param)
+    if res.result:
+        generate_barcode()
+    else:   
+        return temp
+
+
+
 def check_id_product(id):
     db = PostgresDatabase()
     query = """
@@ -160,7 +181,7 @@ def check_id_product(id):
 
 def generate_sku():
     db = PostgresDatabase()
-    ordinal_num = 1000
+    ordinal_num = 10000000
     query = """
         SELECT * 
         FROM 

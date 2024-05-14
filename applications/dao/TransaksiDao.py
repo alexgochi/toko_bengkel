@@ -6,10 +6,10 @@ def getAllDataTransaksi():
         SELECT faktur,
             to_char(date_tx, 'dd-mm-yyyy') as date_tx,
             coalesce(member_name,'Bukan Pelanggan') as member_name,
-            total_faktur,
+            total_faktur + other_fee as total_faktur,
             coalesce(mpt.type_name,' ') as type_name,
-            CASE WHEN current_date > date_tx and type_name is null 
-                THEN 'Overdue ' || current_date-date_tx ||' hari'
+            CASE WHEN current_date > due_date::int + date_tx and type_name is null
+                THEN 'Overdue ' || current_date- (due_date::int + date_tx) ||' hari'
             ELSE coalesce(payment_info,' ') END as payment_info
         FROM tx_trans tt
         LEFT JOIN ms_payment_type mpt on mpt.type_id = tt.payment_id
@@ -35,8 +35,8 @@ def getDataTransByFaktur(faktur):
             to_char(update_date, 'dd-mm-yyyy') as update_date,
             total_faktur,
             coalesce(mpt.type_name,' ') as type_name,
-            CASE WHEN current_date > date_tx and type_name is null 
-                THEN 'Overdue ' || current_date-date_tx ||' hari'
+            CASE WHEN current_date > due_date::int + date_tx and type_name is null
+                THEN 'Overdue ' || current_date- (due_date::int + date_tx) ||' hari'
             ELSE coalesce(payment_info,' ') END as payment_info,
             time_tx::varchar
         FROM tx_trans tt

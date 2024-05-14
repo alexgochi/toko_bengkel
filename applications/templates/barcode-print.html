@@ -19,7 +19,7 @@
                 overflow: hidden;
                 height: fit-content;
                 outline: 1px dotted #32a852;
-                font-size: 12px;
+                font-size: 10.5px;
             }
 
             .label {
@@ -36,6 +36,7 @@
                 overflow: hidden;
                 background: #fff;
                 outline: 1px dotted #999;
+                position: relative;
             }
 
             p {
@@ -52,73 +53,34 @@
                 display: block;
                 page-break-after: always;
             }
+
+            .bottom-right {
+                position: absolute;
+                bottom: 0;
+                left: 70%;
+                font-size: 9px;
+            }
+
+            .bottom-left {
+                position: absolute;
+                bottom: 0;
+                font-size: 9px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="paper" style="background-color: #fff;" width='50mm'>
+    <div class="paper" style="background-color: #fff;">
         {% for data in data %}
         <div class="label">
             <p style="margin-top: -2mm;">{{ data['product_name'] }}</p>
             <p class="center">{{ data['img_barcode']|safe }}</p>
+            <p class="bottom-left">{{ data['outlet_name'] }}</p>
+            <p class="bottom-right">{{ data['print_date'] }}</p>
         </div>
         {% endfor %}
     </div>
-    <!-- <div class="row" style="margin-top: -10px;">
-        {% for data in data %}
-        <div class="column">
-            <div class=" product">
-                {{ data['product_name'] }}
-            </div>
-            <div class="barcode">
-                {{ data['img_barcode']|safe }}
-            </div>
-            <div class="descp">
-                <div class="row-inside">
-                    <div class="column-inside">
-                        <table>
-                            <tr>
-                                <td>SKU</td>
-                                <td> : </td>
-                                <td>{{ data['sku'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Merk</td>
-                                <td> : </td>
-                                <td>{{ data['merk_name'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Kategori</td>
-                                <td> : </td>
-                                <td>{{ data['category_name'] }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="column-inside">
-                        <table class="text-right">
-                            <tr>
-                                <td>Harga</td>
-                                <td> : </td>
-                                <td>{{ data['price'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Part Number</td>
-                                <td> : </td>
-                                <td>{{ data['part_number'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Tgl. Cetak</td>
-                                <td> : </td>
-                                <td>{{ data['print_date'] }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div> -->
 </body>
 
 </html>

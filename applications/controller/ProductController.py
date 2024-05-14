@@ -80,6 +80,10 @@ def delete_product():
 @login_required
 def add_product():
     data = request.form.to_dict()
+    print(data)
+    barcode = productDao.generate_barcode()
+    data['barcode'] = barcode
+    # return jsonify({'status':True, "message": "Berhasil Tambah data"})
     db_res = productDao.add_data_product(data)
     print("ini db res : ",db_res)
     if db_res.is_error:

@@ -975,7 +975,7 @@
             dataSave['subtotal'] = toNumber($('#subtotal_product').text().replace('Rp ', ''))
             dataSave['payment_id'] = $("#typePaymentInvoice").val();
             dataSave['payment_info'] = $("#rekInvoice").val();
-            if (jenisFaktur == '1') {
+            if (dataSave['jenisFaktur'] == '1') {
                 dataSave['payment_info'] = 'BON - ' + $('#jatuhTempo').val() + ' Hari'
             }
             var dataProduct = []
