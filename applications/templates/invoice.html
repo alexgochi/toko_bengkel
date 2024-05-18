@@ -104,6 +104,18 @@
             </div>
             <div class="column" align="right">
                 <table style="width: 75%;" class="fs12">
+                    {% if data['member_name'] %}
+                    <tr>
+                        <td>Nama Pelanggan</td>
+                        <td> : </td>
+                        <td>{{ data['member_name'] }} {{ data['phone'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Alamat Pelanggan</td>
+                        <td> : </td>
+                        <td>{{ data['address'] }}</td>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <td>Transaksi</td>
                         <td> : </td>
@@ -132,9 +144,9 @@
                 {% for x in data['product'] %}
                 <tr>
                     <td>{{ x['product_name'] }}</td>
-                    <td>{{ x['part_number'] }}</td>
-                    <td>{{ x['merk_name'] }}</td>
-                    <td class="right">{{ x['qty'] }}</td>
+                    <td class="center">{{ x['part_number'] }}</td>
+                    <td class="center">{{ x['merk_name'] }}</td>
+                    <td class="center">{{ x['qty'] }}</td>
                     <td class="right">{{ x['price'] }}</td>
                     <td class="right">{{ x['subtotal'] }}</td>
                 </tr>
@@ -153,8 +165,13 @@
             </tbody>
         </table>
         <i class="fs12">*Barang yang sudah dibeli tidak dapat dikembalikan</i><br>
-        <p style="margin-top: 20px;" class="fs12">Pembayaran <br><b>{{ data['type_name'] }}
-                {{ data['payment_info'] }}</b> </p>
+        <p style="margin-top: 20px;" class="fs12">Pembayaran <br>
+            <b>
+                {% autoescape false %}
+                {{ data['type_name'] }} {{data['payment_info'] | replace("-", "<br />") }}
+                {% endautoescape %}
+            </b>
+        </p>
 
         <div class="row" style="margin-top: 20px;">
             <div class="column center fs12">

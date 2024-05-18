@@ -1,4 +1,5 @@
 from applications.lib import PostgresDatabase
+from flask import jsonify
 
 def get_data_merk():
     db = PostgresDatabase()
@@ -41,6 +42,18 @@ def dt_data_category(search, offset, orderBy):
 def update_data_category(data):
     db = PostgresDatabase()
     query = """
+        SELECT category_name
+        FROM ms_category
+        where LOWER(category_name) = LOWER(%(category_name)s);
+    """
+    param = data
+    
+    res = db.execute(query, param)
+
+    if res.result:
+        return jsonify({"status": False, "message": "Nama Kategori sudah digunakan"})
+
+    query = """
         UPDATE 
             ms_category
         SET
@@ -49,8 +62,10 @@ def update_data_category(data):
             category_id = %(category_id)s
     """
     param = data
-
-    return db.execute(query, param)
+    res = db.execute(query, param)
+    if res.is_error:
+        return jsonify({"status": res.status, "message": str(res.pgerror)})
+    return jsonify({"status": True, "message": "Berhasil Update data"})
 
 def delete_data_category(id):
     db = PostgresDatabase()
@@ -69,7 +84,18 @@ def delete_data_category(id):
 
 def add_data_category(data):
     db = PostgresDatabase()
-    print(data)
+    query = """
+        SELECT category_name
+        FROM ms_category
+        where LOWER(category_name) = LOWER(%(category_name)s);
+    """
+    param = data
+    
+    res = db.execute(query, param)
+
+    if res.result:
+        return jsonify({"status": False, "message": "Nama Kategori sudah digunakan"})
+
     query = """
         INSERT INTO 
             ms_category 
@@ -78,5 +104,7 @@ def add_data_category(data):
                 (%(category_name)s);
     """
     param = data
-
-    return db.execute(query, param)
+    res = db.execute(query, param)
+    if res.is_error:
+        return jsonify({"status": res.status, "message": str(res.pgerror)})
+    return jsonify({"status": True, "message": "Berhasil Tambah data"})

@@ -43,11 +43,8 @@ def dt_merk():
 @login_required
 def edit_merk():
     data = request.form.to_dict()
-    print(data)
     db_res = merkDao.update_data_merk(data)
-    if db_res.is_error:
-        return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Update data"})
+    return db_res
 
 
 @app.route('/merk/delete', methods=['POST'])
@@ -65,6 +62,4 @@ def delete_merk():
 def add_merk():
     data = request.form.to_dict()
     db_res = merkDao.add_data_merk(data)
-    if db_res.is_error:
-        return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Tambah data"})
+    return db_res

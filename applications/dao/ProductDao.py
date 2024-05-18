@@ -1,5 +1,6 @@
 from applications.lib import PostgresDatabase
 import random
+from flask import jsonify
 
 def get_data_merk(id):
     db = PostgresDatabase()
@@ -54,7 +55,9 @@ def dt_data_product(search, offset, orderBy):
             qty,
             harga_beli,
             harga_jual,
-            mp.category_id
+            mp.category_id,
+            mp.merk_id,
+            mp.outlet_id
         FROM
             ms_product mp
             INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
@@ -80,6 +83,26 @@ def dt_data_product(search, offset, orderBy):
     }
 
     return db.execute_dt(query, param)
+
+def checkProductdbExist(data):
+    db = PostgresDatabase()
+    print(data)
+    query = """
+        SELECT product_name 
+        FROM ms_product
+        WHERE LOWER(product_name)=LOWER(%(product_name)s)
+        AND merk_id=%(merk_id)s
+        AND category_id=%(category_id)s
+        AND sku != %(sku)s
+    """
+    param = data
+    res = db.execute(query, param)
+    print(res.result)
+    if res.is_error:
+        return {"status": False, "message": res.pgerror}
+    if res.result:
+        return {"status": False, "message": "Nama Product di Kategori dan Merk tersebut sudah digunakan"}
+    return {"status": True, "message": ""}
 
 
 def update_data_product(data):

@@ -44,9 +44,7 @@ def dt_category():
 def edit_category():
     data = request.form.to_dict()
     db_res = categoryDao.update_data_category(data)
-    if db_res.is_error:
-        return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Update data"})
+    return db_res
 
 
 @app.route('/category/delete', methods=['POST'])
@@ -64,6 +62,4 @@ def delete_category():
 def add_category():
     data = request.form.to_dict()
     db_res = categoryDao.add_data_category(data)
-    if db_res.is_error:
-        return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Tambah data"})
+    return db_res

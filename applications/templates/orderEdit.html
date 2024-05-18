@@ -585,7 +585,7 @@
                 $('#memberInvoice').trigger("change")
             }
             for (var i = 0; i < data['product'].length; i++) {
-                addProductRow(data['product'][i])
+                addProductRow(data['product'][i], 'old')
             }
             //Informasi Produk
             $('#biayaOngkir').val(data['other_fee'])
@@ -594,6 +594,7 @@
             $("#typePaymentInvoice").val(data['payment_id']);
             $("#typePaymentInvoice").trigger("change");
             $("#rekInvoice").val(data['payment_info']);
+            getTotalHarga()
 
             /*var dataProduct = []
             var product = document.getElementsByClassName('data-product')
@@ -657,8 +658,11 @@
         }
 
         //add row
-        function addProductRow(data) {
+        function addProductRow(data, status) {
             qty = data['qty'] || 1
+            if (status == 'new') {
+                qty = 1
+            }
             var item = [
                 data['sku'],
                 data['part_number'],
@@ -691,7 +695,7 @@
                             if (e.data.length) {
                                 if (!checkSkuExist(input)) {
                                     if (e.data[0]['qty'] > 0) {
-                                        addProductRow(e.data[0])
+                                        addProductRow(e.data[0], 'new')
                                         $("#inputSkuBarcode").val('')
                                     } else {
                                         Swal.fire({

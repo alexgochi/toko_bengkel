@@ -146,6 +146,7 @@
                 { data: "merk_name" },
                 { data: "category_name" },
                 { data: "jumlah_product" },
+                { data: "category_id" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -168,6 +169,11 @@
                     target: 3,
                     searchable: false,
                     className: 'text-center'
+                },
+                {
+                    target: 4,
+                    visible: false,
+                    searchable: false
                 }
             ]
         }
@@ -187,7 +193,8 @@
         const rowData = $('#table_merk').DataTable().row(getTr(e)).data();
         $('#idMerkEdit').val(rowData['merk_id'])
         $('#namaMerkEdit').val(rowData['merk_name'])
-        set_option_val(rowData['category_name'])
+
+        $('#merkCategoryEdit').val(rowData['category_id'])
     })
 
     $("#btnSaveEditModal").on('click', e => {
@@ -309,9 +316,9 @@
                         });
                     } else {
                         Swal.fire({
-                            title: "Berhasil!",
+                            title: "Gagal",
                             text: e.message,
-                            icon: "success"
+                            icon: "error"
                         });
                     }
                     fill_table_merk()

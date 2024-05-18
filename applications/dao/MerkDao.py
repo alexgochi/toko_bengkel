@@ -1,4 +1,5 @@
 from applications.lib import PostgresDatabase
+from flask import jsonify
 
 def get_data_category():
     db = PostgresDatabase()
@@ -18,6 +19,7 @@ def dt_data_merk(search, offset, orderBy):
             me.merk_id,
             merk_name,
             mc.category_name,
+            mc.category_id,
             count(*)
                 + max(case when mp.merk_id is null then -1 else 0 end)
             as jumlah_product
@@ -31,7 +33,8 @@ def dt_data_merk(search, offset, orderBy):
         GROUP BY
             me.merk_name,
             me.merk_id,
-            category_name
+            category_name,
+            mc.category_id
         ORDER BY
             {orderBy};
     """
@@ -46,6 +49,18 @@ def dt_data_merk(search, offset, orderBy):
 def update_data_merk(data):
     db = PostgresDatabase()
     query = """
+        SELECT merk_name
+        FROM ms_merk
+        WHERE LOWER(merk_name)= LOWER(%(merk_name)s)
+        AND category_id= %(category_id)s
+    """
+    param = data
+    res = db.execute(query, param)
+
+    if res.result:
+        return jsonify({"status": False, "message": "Nama Merk di Kategori tersebut sudah digunakan"})
+
+    query = """
         UPDATE 
             ms_merk 
         SET 
@@ -55,8 +70,10 @@ def update_data_merk(data):
             merk_id = %(merk_id)s;
     """
     param = data
-
-    return db.execute(query, param)
+    res = db.execute(query, param)
+    if res.is_error:
+        return jsonify({"status": res.status, "message": str(res.pgerror)})
+    return jsonify({"status": True, "message": "Berhasil Tambah data"})
 
 def delete_data_merk(id):
     db = PostgresDatabase()
@@ -76,6 +93,18 @@ def delete_data_merk(id):
 def add_data_merk(data):
     db = PostgresDatabase()
     query = """
+        SELECT merk_name
+        FROM ms_merk
+        WHERE LOWER(merk_name)= LOWER(%(merk_name)s)
+        AND category_id= %(category_id)s
+    """
+    param = data
+    res = db.execute(query, param)
+
+    if res.result:
+        return jsonify({"status": False, "message": "Nama Merk di Kategori tersebut sudah digunakan"})
+
+    query = """
         INSERT INTO 
             ms_merk 
                 (merk_name, category_id) 
@@ -83,5 +112,7 @@ def add_data_merk(data):
                 (%(merk_name)s, %(category_id)s);
     """
     param = data
-
-    return db.execute(query, param)
+    res = db.execute(query, param)
+    if res.is_error:
+        return jsonify({"status": res.status, "message": str(res.pgerror)})
+    return jsonify({"status": True, "message": "Berhasil Tambah data"})

@@ -30,6 +30,8 @@ def getDataTransByFaktur(faktur):
             tx_type,
             to_char(date_tx + due_date::int,'dd-mm-yyyy') as due_date,
             member_name,
+            address,
+            phone,
             other_fee,
             other_note,
             to_char(update_date, 'dd-mm-yyyy') as update_date,

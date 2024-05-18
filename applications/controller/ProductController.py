@@ -60,6 +60,9 @@ def dt_product():
 @login_required
 def edit_product():
     data = request.form.to_dict()
+    check = productDao.checkProductdbExist(data)
+    if not check['status']:
+        return jsonify({"status": False, "message": check['message']})
     db_res = productDao.update_data_product(data)
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
@@ -80,10 +83,11 @@ def delete_product():
 @login_required
 def add_product():
     data = request.form.to_dict()
-    print(data)
+    check = productDao.checkProductdbExist(data)
+    if not check['status']:
+        return jsonify({"status": False, "message": check['message']})
     barcode = productDao.generate_barcode()
     data['barcode'] = barcode
-    # return jsonify({'status':True, "message": "Berhasil Tambah data"})
     db_res = productDao.add_data_product(data)
     print("ini db res : ",db_res)
     if db_res.is_error:

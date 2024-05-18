@@ -271,6 +271,7 @@
                 { data: "harga_jual" },
                 { data: "category_id", searchable: false, visible: false },
                 { data: "merk_id", searchable: false, visible: false },
+                { data: "outlet_id", searchable: false, visible: false },
                 {
                     className: 'text-center',
                     render: data => {
@@ -317,9 +318,9 @@
         $('#barcodeProductEdit').val(rowData['barcode'])
         $('#vehicleProductEdit').val(rowData['vehicle'])
 
-        set_option_val('#merkProductEdit', rowData['merk_name'])
-        set_option_val('#categoryProductEdit', rowData['category_name'])
-        set_option_val('#outletProductEdit', rowData['outlet_name'])
+        $('#merkProductEdit').val(rowData['merk_id'])
+        $('#categoryProductEdit').val(rowData['category_id'])
+        $('#outletProductEdit').val(rowData['outlet_id'])
 
         $('#qtyProductEdit').val(rowData['qty'])
         $('#hbeliProductEdit').val(rowData['harga_beli'])

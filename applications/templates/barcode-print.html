@@ -9,49 +9,44 @@
             @page {
                 size: potrait;
                 margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
             }
 
 
             .paper {
                 /* customize paper size */
-                width: 150mm;
-                margin: 1mm;
+                width: 40mm;
                 overflow: hidden;
-                height: fit-content;
-                outline: 1px dotted #32a852;
                 font-size: 10.5px;
+                padding: 0;
             }
 
             .label {
                 /* customize label size */
                 width: 40mm;
-                height: 15mm;
-                margin-right: 1mm;
-                margin-bottom: 1mm;
+                height: 19mm;
 
-                padding: 3mm 0.2mm;
                 /* the gutter */
                 float: left;
                 text-align: left;
                 overflow: hidden;
-                background: #fff;
-                outline: 1px dotted #999;
+                /*outline: 1px dotted #999;*/
                 position: relative;
+                padding: 0.5mm;
             }
 
             p {
                 margin: 0;
-                width: 100%;
             }
 
             .center {
                 text-align: center;
-            }
-
-            .page-break {
-                clear: left;
-                display: block;
-                page-break-after: always;
             }
 
             .bottom-right {
@@ -71,10 +66,10 @@
 </head>
 
 <body>
-    <div class="paper" style="background-color: #fff;">
+    <div class="paper">
         {% for data in data %}
         <div class="label">
-            <p style="margin-top: -2mm;">{{ data['product_name'] }}</p>
+            <p>{{ data['product_name'] }}</p>
             <p class="center">{{ data['img_barcode']|safe }}</p>
             <p class="bottom-left">{{ data['outlet_name'] }}</p>
             <p class="bottom-right">{{ data['print_date'] }}</p>
