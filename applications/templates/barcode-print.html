@@ -47,6 +47,9 @@
 
             .center {
                 text-align: center;
+                margin-top: -2mm;
+                position: relative;
+                z-index: -1;
             }
 
             .bottom-right {
@@ -69,7 +72,12 @@
     <div class="paper">
         {% for data in data %}
         <div class="label">
-            <p>{{ data['product_name'] }}</p>
+            <p>{{ data['product_name'] }}
+                {% if data['vehicle'] != '-' %}
+                {{ data['vehicle'] }}
+                {% endif %}
+            </p>
+            <p style="font-size: 6px;">{{ data['merk_name'] }}</p>
             <p class="center">{{ data['img_barcode']|safe }}</p>
             <p class="bottom-left">{{ data['outlet_name'] }}</p>
             <p class="bottom-right">{{ data['print_date'] }}</p>

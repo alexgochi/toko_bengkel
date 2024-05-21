@@ -42,6 +42,10 @@
     <!-- JS Barcode -->
     <script src="{{ url_for('static', filename='assets/js/jsBarcode.all.min.js') }}"></script>
 
+    <!-- Select2 -->
+    <script src="{{ url_for('static', filename='assets/js/select2.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/select2.min.css') }}">
+
     <style>
         .input-container input {
             border: none;
@@ -210,6 +214,8 @@
 
     <!-- Global Func -->
     <script>
+
+        $('.select2').select2();
 
         $('.modal').on("shown.bs.modal", function () {
             $('input:visible:first', this).focus();

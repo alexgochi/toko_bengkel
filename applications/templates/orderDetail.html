@@ -57,7 +57,21 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/print.min.css') }}">
     <script src="{{ url_for('static', filename='assets/js/print.min.js') }}"></script>
 
+
+    <!-- Select2 -->
+    <script src="{{ url_for('static', filename='assets/js/select2.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/select2.min.css') }}">
+
     <style>
+        .select2-container .select2-selection--single {
+            height: 34px !important;
+        }
+
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #ccc !important;
+            border-radius: 0px !important;
+        }
+
         .input-container input {
             border: none;
             box-sizing: border-box;
@@ -356,7 +370,7 @@
                             <div id="hideMember" hidden>
                                 <div class="form-group row font-form">
                                     <label for="memberInvoice" class="col-sm-2 col-form-label">Nama Pelanggan</label>
-                                    <select class="form-control col-sm-5" id="memberInvoice" disabled>
+                                    <select class="form-control col-sm-5 select2" id="memberInvoice" disabled>
                                         <option value="" disabled selected> -- Pilih Pelanggan</option>
                                         {% for x in data_member %}
                                         <option value="{{ x['member_id'] }}">
@@ -1027,6 +1041,7 @@
             if (selected > 0) {
                 $('#hideMember').removeAttr('hidden');
                 $('#hideMember').show();
+                $('.select2').select2();
             } else {
                 $("#memberInvoice").val("");
                 $("#addressMember").val("")

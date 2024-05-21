@@ -59,6 +59,7 @@
                             <th class="text-center">SKU</th>
                             <th class="text-center">Nama Product</th>
                             <th class="text-center">Merk</th>
+                            <th class="text-center">QTY</th>
                         </thead>
                         <tbody></tbody>
                     </table>
@@ -74,7 +75,7 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <p class="modal-title" id="lovModalLabel">Jumlah Cetak</p>
+                <p class="modal-title">Jumlah Cetak</p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -160,8 +161,11 @@
                                 title: "Gagal",
                                 text: "Data untuk PLU/Barcode " + input + " Tidak ditemukan di master Produk",
                                 icon: "error"
+                            }).then(function () {
+                                $("#inputSkuBarcode").val('')
+                                $('#jumlahCetakModal').modal('hide')
+                                $("#inputSkuBarcode").focus()
                             });
-                            $("#inputSkuBarcode").val('')
                         }
                     }
                     else {
@@ -285,9 +289,11 @@
             var item = [
                 data[i]['sku'],
                 data[i]['product_name'],
-                data[i]['merk_name']
+                data[i]['merk_name'],
+                data[i]['qty']
             ]
-            tableLov.row.add(item).draw().node()
+            var rowNode = tableLov.row.add(item).draw().node()
+            $(rowNode).find('td').eq(3).addClass('text-center');
         }
     }
 

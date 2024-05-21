@@ -70,7 +70,8 @@ def getDataLovProduct():
         SELECT
             sku,
             product_name,
-            merk_name
+            merk_name,
+            qty
         FROM
             ms_product mp
         INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id

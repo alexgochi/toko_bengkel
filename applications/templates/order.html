@@ -57,7 +57,20 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/print.min.css') }}">
     <script src="{{ url_for('static', filename='assets/js/print.min.js') }}"></script>
 
+    <!-- Select2 -->
+    <script src="{{ url_for('static', filename='assets/js/select2.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/select2.min.css') }}">
+
     <style>
+        .select2-container .select2-selection--single {
+            height: 34px !important;
+        }
+
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #ccc !important;
+            border-radius: 0px !important;
+        }
+
         .input-container input {
             border: none;
             box-sizing: border-box;
@@ -351,7 +364,7 @@
                             <div id="hideMember" hidden>
                                 <div class="form-group row font-form">
                                     <label for="memberInvoice" class="col-sm-2 col-form-label">Nama Pelanggan</label>
-                                    <select class="form-control col-sm-5" id="memberInvoice">
+                                    <select class="form-control col-sm-5 select2" id="memberInvoice">
                                         <option value="" disabled selected> -- Pilih Pelanggan</option>
                                         {% for x in data_member %}
                                         <option value="{{ x['member_id'] }}">
@@ -538,6 +551,7 @@
             d = d < 10 ? "0" + d : d;
 
             document.querySelector("input[type=date]").value = y + "-" + m + "-" + d;
+
         });
         //================================ Product ================================
         const table = new DataTable('#table_product', {
@@ -582,7 +596,8 @@
                 data['part_number'],
                 data['product_name'],
                 data['merk_name'],
-                `<input type="number" min="1" class="form-control font-order qty_product" value="1" onfocus="autoSelect(this)">`,
+                `<input type="number" min="1" class="form-control font-order qty_product" value="1" onfocus="autoSelect(this)">
+                <input type="number" min="1" class="form-control font-order qty_maks" value="` + parseInt(data['qty']) + `" hidden>`,
                 `<input type="number" min="1" class="form-control font-order hjual_product" onfocus="autoSelect(this)" value="` + parseInt(data['harga_jual']) + `"> `,
                 numberWithCommas(parseInt(data['harga_jual'])),
                 `<button class="btn btn-delete btn-danger"><i class="fa fa-trash"></i></button>`
@@ -662,12 +677,20 @@
             let td = getTr(e).querySelector(".qtytot");
             let hjual_raw = getTr(e).querySelector(".hjual_product");
             let qty_raw = getTr(e).querySelector(".qty_product");
+            let qty_maks = $(getTr(e).querySelector(".qty_maks")).val();
 
             let hjual = $(hjual_raw).val()
             let qty = $(qty_raw).val()
-
+            if (parseInt(qty) > parseInt(qty_maks)) {
+                Swal.fire({
+                    title: "Stock Tidak cukup",
+                    text: "Stock saat ini = " + qty_maks,
+                    icon: "error"
+                })
+                $(qty_raw).val(qty_maks)
+                qty = qty_maks
+            }
             $(td).text(numberWithCommas(parseInt(hjual) * parseInt(qty)))
-
             getSubTotal()
         }
 
@@ -984,6 +1007,7 @@
             if (selected > 0) {
                 $('#hideMember').removeAttr('hidden');
                 $('#hideMember').show();
+                $('.select2').select2();
             } else {
                 $("#memberInvoice").val("");
                 $("#addressMember").val("")
