@@ -17,8 +17,8 @@
             <option value="product_name">Nama Produk</option>
             <option value="barcode">Barcode</option>
             <option value="vehicle">Kendaraan</option>
-            <option value="merk_name">Merk</option>
-            <option value="category_name">Kategori</option>
+            <option value="merk_name">Kategori</option>
+            <option value="category_name">Merk</option>
             <option value="outlet_name">Outlet</option>
             <option value="qty">Qty</option>
             <option value="harga_beli">Harga Beli</option>
@@ -49,8 +49,8 @@
             <th class="text-center">Nama Produk</th>
             <th class="text-center">Barcode</th>
             <th class="text-center">Kendaraan</th>
-            <th class="text-center">Merk</th>
             <th class="text-center">Kategori</th>
+            <th class="text-center">Merk</th>
             <th class="text-center">Outlet</th>
             <th class="text-center">Qty</th>
             <th class="text-center">Harga Beli</th>
@@ -101,7 +101,7 @@
                             <input type="text" class="form-control data-edit" id="vehicleProductEdit" required>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="categoryProductEdit">Kategori</label>
+                            <label for="categoryProductEdit">Merk</label>
                             <select class="form-control data-edit" id="categoryProductEdit">
                                 {% for x in data_cat %}
                                 <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
@@ -109,7 +109,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="merkProductEdit">Merk</label>
+                            <label for="merkProductEdit">Kategori</label>
                             <select class="form-control data-edit" id="merkProductEdit">
                             </select>
                         </div>
@@ -186,7 +186,7 @@
                             <input type="text" class="form-control data-add" id="vehicleProductAdd" required>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="categoryProductAdd">Kategori</label>
+                            <label for="categoryProductAdd">Merk</label>
                             <select class="form-control data-add" id="categoryProductAdd">
                                 {% for x in data_cat %}
                                 <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
@@ -194,7 +194,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="merkProductAdd">Merk</label>
+                            <label for="merkProductAdd">Kategori</label>
                             <select class="form-control data-add" id="merkProductAdd">
                             </select>
                         </div>
@@ -310,6 +310,7 @@
 
         // get Data Merk by Category
 
+        $('#categoryProductEdit').val(rowData['category_id'])
         getMerkByCategory(rowData['category_id'], $('#merkProductEdit'))
 
         $('#skuProductEdit').val(rowData['sku'])
@@ -319,7 +320,6 @@
         $('#vehicleProductEdit').val(rowData['vehicle'])
 
         $('#merkProductEdit').val(rowData['merk_id'])
-        $('#categoryProductEdit').val(rowData['category_id'])
         $('#outletProductEdit').val(rowData['outlet_id'])
 
         $('#qtyProductEdit').val(rowData['qty'])
@@ -403,6 +403,7 @@
                 type: "POST",
                 data: { id: id },
                 url: "/product/getMerk",
+                async: false,
                 success: (e) => {
                     if (e.status) {
                         $el.empty(); // remove old options

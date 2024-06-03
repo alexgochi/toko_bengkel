@@ -65,14 +65,16 @@ def save_receipt(data):
             
             query = """
                 UPDATE ms_product mp
-                SET qty = x.qty
+                SET qty = x.qty,
+                    harga_jual = %(hjual)s
                 FROM 
                     (SELECT qty+%(qty)s qty, sku,outlet_id from ms_product where sku = %(sku)s) x
                 WHERE mp.sku = x.sku;
             """
             param = {
                     "sku":  i['sku'], 
-                    "qty":  i['qty']
+                    "qty":  i['qty'],
+                    "hjual": i['hjual']
                 }
             hasil = db.execute_preserve(query,param)
             if hasil.is_error:

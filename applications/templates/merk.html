@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
-{% block title %}Merk{% endblock %}
-{% block menu %}Merk{% endblock %}
+{% block title %}Kategori{% endblock %}
+{% block menu %}Kategori{% endblock %}
 {% block content %}
 
 
 <div class="d-flex justify-content-between mt-5 mr-5">
     <div>
         <button class="btn btn-primary btn-sm" id="btn-AddModal" data-toggle="modal" data-target="#addModal">+ Tambah
-            Merk</button>
+            Kategori</button>
     </div>
     <div class="form-row">
         <select name="order" id="orderBy" class="form-control form-control-lg col-8">
             <option value="merk_name" selected disabled>Order By</option>
-            <option value="merk_name">Merk</option>
-            <option value="category_name">Kategori</option>
+            <option value="merk_name">Kategori</option>
+            <option value="category_name">Merk</option>
             <option value="jumlah_product">Jumlah Produk</option>
         </select>
         <select name="order" id="orderByAsc" class="form-control form-control-lg col-4">
@@ -23,7 +23,7 @@
     </div>
     <div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="cari merk..." id="search_table_merk">
+            <input type="text" class="form-control" placeholder="cari kategori..." id="search_table_merk">
             <div class="input-group-append">
                 <span class="input-group-text" id="basic-addon2">
                     <i class="fa fa-search"></i>
@@ -37,8 +37,8 @@
         style="white-space: nowrap;">
         <thead class="thead-dark">
             <th class="text-center">ID</th>
-            <th class="text-center">Merk</th>
             <th class="text-center">Kategori</th>
+            <th class="text-center">Merk</th>
             <th class="text-center">Jumlah Produk</th>
             <th class="text-center">Action</th>
         </thead>
@@ -51,7 +51,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editeModalLabel">Edit Merk</h5>
+                <h5 class="modal-title" id="editeModalLabel">Edit Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -63,11 +63,11 @@
                         <input type="text" class="form-control" id="idMerkEdit" readonly hidden>
                     </div>
                     <div class="form-group">
-                        <label for="namaMerkEdit">Nama Merk</label>
+                        <label for="namaMerkEdit">Nama Kategori</label>
                         <input type="text" class="form-control" id="namaMerkEdit">
                     </div>
                     <div class="form-group">
-                        <label for="categoryMerkEdit">Kategori</label>
+                        <label for="categoryMerkEdit">Merk</label>
                         <select class="form-control" id="merkCategoryEdit">
                             {% for x in data_cat %}
                             <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
@@ -90,7 +90,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">Tambah Merk</h5>
+                <h5 class="modal-title" id="addModalLabel">Tambah Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -102,11 +102,11 @@
                         <input type="text" class="form-control" id="idRekAdd" readonly hidden>
                     </div>
                     <div class="form-group">
-                        <label for="namaMerkAdd">Nama Merk</label>
+                        <label for="namaMerkAdd">Nama Kategori</label>
                         <input type="text" class="form-control" id="namaMerkAdd">
                     </div>
                     <div class="form-group">
-                        <label for="categoryMerkAdd">Kategori</label>
+                        <label for="categoryMerkAdd">Merk</label>
                         <select class="form-control" id="categoryMerkAdd">
                             {% for x in data_cat %}
                             <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>

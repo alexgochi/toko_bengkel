@@ -33,6 +33,21 @@ def getDataLovProduct():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Get Data", "data":db_res.result})
 
+@app.route('/dt/lovProduct', methods=['GET'])
+@login_required
+def dt_lovProduct():
+    res = dashboardDao.dt_lovProduct(
+        request.args.get("search"),
+        request.args.get('start')
+    )
+    if res.is_error:
+        return dataTableError()
+    
+    return jsonify({
+        "data": res.result,
+        "recordsFiltered": res.dt_total
+    })
+
 @app.route('/dashboard/getMemberById', methods=['GET'])
 @login_required
 def getMemberById():

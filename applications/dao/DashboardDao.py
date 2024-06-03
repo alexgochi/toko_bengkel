@@ -78,6 +78,32 @@ def getDataLovProduct():
     """
     return db.execute(query)
 
+def dt_lovProduct(search, offset):
+    db = PostgresDatabase()
+    query = """
+        SELECT
+            sku,
+            product_name,
+            merk_name,
+            qty
+        FROM
+            ms_product mp
+        INNER JOIN 
+            ms_merk mm on mm.merk_id = mp.merk_id
+        WHERE
+            CAST(sku AS TEXT) ILIKE %(search)s OR
+            product_name ILIKE %(search)s OR
+            merk_name ILIKE %(search)s 
+        ORDER BY
+            sku;
+    """
+    param = {
+        "search": f"%{search}%",
+        "offset": offset
+    }
+    
+    return db.execute_dt(query, param)
+
 def getDataBySkuBarcode(search):
     db = PostgresDatabase()
     query = """

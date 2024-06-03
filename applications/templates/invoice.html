@@ -108,7 +108,12 @@
                     <tr>
                         <td>Nama Pelanggan</td>
                         <td> : </td>
-                        <td>{{ data['member_name'] }} {{ data['phone'] }}</td>
+                        <td>
+                            {{ data['member_name'] }}
+                            {% if data['phone'] %}
+                            / {{ data['phone'] }}
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td>Alamat Pelanggan</td>
@@ -135,7 +140,7 @@
             <thead>
                 <th>Nama Barang</th>
                 <th>Part Number</th>
-                <th>Merk</th>
+                <th>Kategori</th>
                 <th>Qty</th>
                 <th>Harga</th>
                 <th>Subtotal</th>
