@@ -21,6 +21,20 @@ from applications.lib import dataTableError
 def transaksi():
     return render_template('transaksi.html')
 
+@app.route("/dt/transaksi", methods=["GET"])
+def dt_transaksi():
+    res = transaksiDao.dt_data_trans(
+        request.args.get("search"),
+        request.args.get('start')
+    )
+    if res.is_error:
+        return dataTableError()
+    
+    return jsonify({
+        "data": res.result,
+        "recordsFiltered": res.dt_total
+    })
+
 @app.route('/transaksi/getAllData', methods=['GET'])
 @login_required
 def getAllDataTransaksi():

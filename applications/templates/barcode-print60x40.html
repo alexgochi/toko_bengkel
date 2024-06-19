@@ -1,0 +1,89 @@
+<html>
+
+<head>
+
+    <title>{{ data['faktur'] }}</title>
+
+    <style>
+        @media print {
+            @page {
+                size: potrait;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+
+            .paper {
+                /* customize paper size */
+                width: 60mm;
+                overflow: hidden;
+                font-size: 14.5px;
+                padding: 0;
+            }
+
+            .label {
+                /* customize label size */
+                width: 60mm;
+                height: 39mm;
+
+                /* the gutter */
+                float: left;
+                text-align: left;
+                overflow: hidden;
+                /*outline: 1px dotted #999;*/
+                position: relative;
+                padding: 0.5mm;
+            }
+
+            p {
+                margin: 0;
+            }
+
+            .center {
+                text-align: center;
+                position: relative;
+                z-index: -1;
+                margin-top: 10px
+            }
+
+            .bottom-right {
+                position: absolute;
+                bottom: 0;
+                left: 70%;
+                font-size: 13px;
+            }
+
+            .bottom-left {
+                position: absolute;
+                bottom: 0;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="paper">
+        {% for data in data %}
+        <div class="label">
+            <p>{{ data['product_name'] }}
+                {% if data['vehicle'] != '-' %}
+                {{ data['vehicle'] }}
+                {% endif %}
+            </p>
+            <p style="font-size: 10px;">{{ data['merk_name'] }}</p>
+            <p class="center">{{ data['img_barcode']|safe }}</p>
+            <p class="bottom-left">{{ data['outlet_name'] }}</p>
+            <p class="bottom-right">{{ data['print_date'] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

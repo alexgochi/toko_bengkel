@@ -88,11 +88,13 @@ def checkProductdbExist(data):
     db = PostgresDatabase()
     print(data)
     query = """
-        SELECT product_name 
+        SELECT product_name
         FROM ms_product
         WHERE LOWER(product_name)=LOWER(%(product_name)s)
         AND merk_id=%(merk_id)s
         AND category_id=%(category_id)s
+        AND part_number=%(part_number)s
+        AND LOWER(vehicle)=LOWER(%(vehicle)s)
         AND sku != %(sku)s
     """
     param = data
@@ -101,7 +103,7 @@ def checkProductdbExist(data):
     if res.is_error:
         return {"status": False, "message": res.pgerror}
     if res.result:
-        return {"status": False, "message": "Nama Product di Kategori dan Merk tersebut sudah digunakan"}
+        return {"status": False, "message": "Error, Ket : Nama Produk Bentrok / Duplikat"}
     return {"status": True, "message": ""}
 
 

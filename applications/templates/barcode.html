@@ -8,6 +8,15 @@
 <script src="{{ url_for('static', filename='assets/js/datatables.min.js') }}"></script>
 
 <div class="form-row mt-5">
+    <div class="form-group col-2 pl-3 pt-2">
+        <label><b>Ukuran Kertas</b></label>
+    </div>
+    <div class="form-group col-4 text-right">
+        <select class="form-control" id="paper-size">
+            <option value="1" selected>60 x 40 mm</option>
+            <option value="2">40 x 20 mm</option>
+        </select>
+    </div>
     <div class="form-group col-11">
         <input type="text" class="form-control font-order" id="inputSkuBarcode"
             placeholder="Masukkan SKU atau scan barcode" autofocus required>
@@ -238,13 +247,24 @@
 
     function textToBase64Barcode(text) {
         var canvas = document.createElement('svg')
+        var size = $("#paper-size").val()
+        var lebar = 1.3
+        var panjang = 30
+        var sizeFont = 10
+
+        if (size == '1') {
+            lebar = 2
+            panjang = 40
+            sizeFont = 14
+        }
         canvas.style.width = '3mm'
         canvas.setAttribute("style", "width:3mm");
         JsBarcode(canvas, text, {
-            width: 1.3,
-            height: 30,
-            fontSize: 10
+            width: lebar,
+            height: panjang,
+            fontSize: sizeFont
         })
+
         var svg = $('<svg>').append($(canvas).clone()).html();
         return String(svg)
     }
@@ -318,6 +338,7 @@
 
     function printBarcode() {
         const rowData = table.rows().data()
+        var size = $("#paper-size").val()
         if (rowData.length > 0) {
             dataBarcode = []
 
@@ -340,7 +361,7 @@
                     type: "POST",
                     data: JSON.stringify(dataBarcode),
                     contentType: "application/json",
-                    url: "/barcode/printBarcode",
+                    url: "/barcode/printBarcode" + size,
                     async: false,
                     success: (e) => {
                         if (e.status) {

@@ -1,5 +1,37 @@
 from applications.lib import PostgresDatabase
 
+def dt_data_trans(search, offset):
+    db = PostgresDatabase()
+    query = """
+        SELECT faktur,
+            to_char(date_tx, 'dd-mm-yyyy') as date_tx,
+            coalesce(member_name,'Bukan Pelanggan') as member_name,
+            to_char(total_faktur + other_fee, 'fm999G999') as total_faktur,
+            coalesce(mpt.type_name,' ') as type_name,
+            CASE WHEN current_date > due_date::int + date_tx and type_name is null
+                THEN 'Overdue ' || current_date - (due_date::int + date_tx) ||' hari'
+            ELSE coalesce(payment_info,' ') END as payment_info
+        FROM tx_trans tt
+        LEFT JOIN ms_payment_type mpt on mpt.type_id = tt.payment_id
+        LEFT JOIN ms_member mm on mm.member_id = tt.member_id
+        WHERE
+            STATUS = true 
+            AND (
+                CAST(date_tx AS TEXT) ILIKE %(search)s OR
+                member_name ILIKE %(search)s OR
+                payment_info ILIKE %(search)s OR
+                type_name ILIKE %(search)s 
+            )
+        ORDER BY
+            faktur;
+    """
+    param = {
+        "search": f"%{search}%",
+        "offset": offset
+    }
+
+    return db.execute_dt(query, param)
+
 def getAllDataTransaksi():
     db = PostgresDatabase()
     query = """

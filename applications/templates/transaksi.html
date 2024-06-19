@@ -7,21 +7,34 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/datatables.min.css') }}">
 <script src="{{ url_for('static', filename='assets/js/datatables.min.js') }}"></script>
 
-<div class="container mt-5">
-    <div class="table-responsive text-dark mt-2">
-        <table id="table_transaksi" class="table table-hover table-bordered table-striped w-100 mb-2"
-            style="white-space: nowrap;">
-            <thead class="thead-dark">
-                <th class="text-center">No. Faktur</th>
-                <th class="text-center">Tanggal Transaksi</th>
-                <th class="text-center">Pelanggan</th>
-                <th class="text-center">Total Pembelian</th>
-                <th class="text-center">Status</th>
-                <th class="text-center">Action</th>
-            </thead>
-            <tbody></tbody>
-        </table>
+<div class="d-flex justify-content-between mt-5 mr-5">
+    <div>
+        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">+ Tambah Pelanggan</button>
     </div>
+    <div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="cari transaksi..." id="search_table_trans">
+            <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">
+                    <i class="fa fa-search"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table id="table_transaksi" class="table table-hover table-bordered table-striped w-100 mb-2"
+        style="white-space: nowrap;">
+        <thead class="thead-dark">
+            <th class="text-center">No. Faktur</th>
+            <th class="text-center">Tanggal Transaksi</th>
+            <th class="text-center">Pelanggan</th>
+            <th class="text-center">Total Pembelian</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Action</th>
+        </thead>
+        <tbody></tbody>
+    </table>
 </div>
 
 <!-- Modal detail -->
@@ -127,69 +140,48 @@
 </div>
 
 <script type="text/javascript">
-    const table = new DataTable('#table_transaksi', {
-        scrollCollapse: true,
-        scrollY: '50vh',
-        "bPaginate": false,
-        "bLengthChange": false,
-        "bFilter": true
-    })
-
     $(() => {
-        getDataTransaksi()
+        fill_table_trans();
+        dt_search("search_table_trans", fill_table_trans);
     });
 
-    function getDataTransaksi() {
-        table.clear().draw();
-        $.ajax
-            ({
-                type: "GET",
-                url: "/transaksi/getAllData",
-                success: (e) => {
-                    if (e.status) {
-                        if (e.data.length) {
-                            addDataTrans(e.data)
-                        }
+    function fill_table_trans() {
+        const idTabel = "table_transaksi";
+        const dt_options = {
+            scrollY: '50vh',
+            columns: [
+                { data: "faktur" },
+                { data: "date_tx" },
+                { data: "member_name" },
+                { data: "total_faktur" },
+                { data: "payment_info" },
+                {
+                    className: 'text-center',
+                    render: data => {
+                        return `
+                        <div class="d-flex align-items-center justify-content-center" style="gap: 10px;">
+                            <button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
+                            <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>
+                        </div>
+                        `;
                     }
-                    else {
-                        Swal.fire({
-                            title: "Gagal",
-                            text: e.message,
-                            icon: "error"
-                        });
-                    }
-                },
-                error: function (xhr, status, err) {
-                    Swal.fire({
-                        title: "Gagal",
-                        text: xhr.responseText,
-                        icon: "error"
-                    });
                 }
-            });
+            ]
+        }
+        const ajax_options = {
+            url: "/dt/transaksi",
+            data: {
+                "search": $('#search_table_trans').val().trim()
+            }
+        }
+
+        dt_server(idTabel, ajax_options, dt_options);
     }
 
-    function addDataTrans(data) {
-        for (var i = 0; i < data.length; i++) {
-            var item = [
-                data[i]['faktur'],
-                data[i]['date_tx'],
-                data[i]['member_name'],
-                numberWithCommas(data[i]['total_faktur']),
-                data[i]['type_name'] + ' ' + data[i]['payment_info'],
-                `<button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
-                <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>`
-            ]
-            var rowNode = table.row.add(item).draw().node()
-            $(rowNode).find('td').addClass('align-middle');
-            $(rowNode).find('td').eq(3).addClass('text-right');
-            $(rowNode).find('td').eq(5).addClass('text-center');
-        }
-    }
 
     $("#table_transaksi > tbody").on('click', '.btn-print', e => {
-        const rowData = table.row(getTr(e)).data()
-        getDataTransByFaktur(rowData[0])
+        const rowData = $('#table_transaksi').DataTable().row(getTr(e)).data();
+        getDataTransByFaktur(rowData['faktur'])
     })
 
     function getDataTransByFaktur(faktur) {
@@ -215,12 +207,12 @@
         table_product.clear().draw();
 
         //get data detail
-        const rowData = table.row(getTr(e)).data()
+        const rowData = $('#table_transaksi').DataTable().row(getTr(e)).data();
         $.ajax
             ({
                 type: "GET",
                 data: {
-                    faktur: rowData[0]
+                    faktur: rowData['faktur']
                 },
                 url: "/transaksi/getDetailDataTrans",
                 success: (e) => {

@@ -32,8 +32,15 @@ def getProductBySkuBarcode():
     return jsonify({"status": db_res.status, "message": "Berhasil Get Data", "data":db_res.result})
 
 
-@app.route('/barcode/printBarcode', methods=['POST'])
+@app.route('/barcode/printBarcode2', methods=['POST'])
 @login_required
-def printBarcode():
+def printBarcode2():
     data = request.get_json()
     return jsonify({"status": True, "message": "Berhasil Get Data", "data":render_template('barcode-print.html',data=data)})
+
+
+@app.route('/barcode/printBarcode1', methods=['POST'])
+@login_required
+def printBarcode1():
+    data = request.get_json()
+    return jsonify({"status": True, "message": "Berhasil Get Data", "data":render_template('barcode-print60x40.html',data=data)})
