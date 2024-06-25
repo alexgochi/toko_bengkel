@@ -6,7 +6,7 @@ def dt_data_trans(search, offset):
         SELECT faktur,
             to_char(date_tx, 'dd-mm-yyyy') as date_tx,
             coalesce(member_name,'Bukan Pelanggan') as member_name,
-            to_char(total_faktur + other_fee, 'fm999G999') as total_faktur,
+            to_char(total_faktur + other_fee, 'fm999G999G999G999') as total_faktur,
             coalesce(mpt.type_name,' ') as type_name,
             CASE WHEN current_date > due_date::int + date_tx and type_name is null
                 THEN 'Overdue ' || current_date - (due_date::int + date_tx) ||' hari'

@@ -691,7 +691,7 @@
 
             let hjual = $(hjual_raw).val()
             let qty = $(qty_raw).val()
-            if (parseInt(qty) > parseInt(qty_maks)) {
+            /*if (parseInt(qty) > parseInt(qty_maks)) {
                 Swal.fire({
                     title: "Stock Tidak cukup",
                     text: "Stock saat ini = " + qty_maks,
@@ -699,7 +699,7 @@
                 })
                 $(qty_raw).val(qty_maks)
                 qty = qty_maks
-            }
+            }*/
             $(td).text(numberWithCommas(parseInt(hjual) * parseInt(qty)))
             getSubTotal()
         }

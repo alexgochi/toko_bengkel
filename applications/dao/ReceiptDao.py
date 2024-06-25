@@ -2,6 +2,28 @@ from applications.lib import PostgresDatabase
 from applications.lib.globalFunc import generate_faktur,to_date,update_faktur
 import datetime
 
+def dt_data_receipt(search, offset):
+    db = PostgresDatabase()
+    query = """
+        SELECT faktur,
+            to_char(date_tx, 'dd-mm-yyyy') as date_tx,
+            store_buy,
+            to_char(total_faktur + other_fee - discount, 'fm999G999G999G999') as total_faktur
+        FROM tx_receipt
+        WHERE
+            CAST(date_tx AS TEXT) ILIKE %(search)s OR
+            store_buy ILIKE %(search)s OR
+            faktur ILIKE %(search)s
+        ORDER BY
+            faktur;
+    """
+    param = {
+        "search": f"%{search}%",
+        "offset": offset
+    }
+
+    return db.execute_dt(query, param)
+
 def getAllDataReceipt():
     db = PostgresDatabase()
     query = """

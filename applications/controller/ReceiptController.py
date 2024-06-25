@@ -22,6 +22,20 @@ from applications.lib import dataTableError
 def receipt():
     return render_template('receipt.html')
 
+@app.route("/dt/receipt", methods=["GET"])
+def dt_receipt():
+    res = receiptDao.dt_data_receipt(
+        request.args.get("search"),
+        request.args.get('start')
+    )
+    if res.is_error:
+        return dataTableError()
+    
+    return jsonify({
+        "data": res.result,
+        "recordsFiltered": res.dt_total
+    })
+
 @app.route('/receipt/getAllData', methods=['GET'])
 @login_required
 def getAllDataReceipt():
