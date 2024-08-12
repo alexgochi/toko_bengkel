@@ -124,6 +124,7 @@
         const idTabel = "table_member";
         const dt_options = {
             scrollY: '50vh',
+            pageLength: 25,
             columns: [
                 { data: "member_id" },
                 { data: "member_name" },
@@ -140,6 +141,13 @@
                         `;
                     }
                 }
+            ],
+            columnDefs: [
+                {
+                    target: 0,
+                    visible: false,
+                    searchable: false
+                },
             ]
         }
         const ajax_options = {

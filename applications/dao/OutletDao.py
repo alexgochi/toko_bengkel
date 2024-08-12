@@ -17,7 +17,7 @@ def dt_data_outlet(search, offset):
         "offset": offset
     }
 
-    return db.execute_dt(query, param)
+    return db.execute_dt(query, param, limit=25)
 
 
 def update_data_outlet(data):

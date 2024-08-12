@@ -321,7 +321,7 @@
                             </div>
                             <div class="form-group col-1">
                                 <button class="btn btn-danger font-order" id="btn-lovModal" data-toggle="modal"
-                                    data-target="#lovModal">LOV</button>
+                                    data-target="#lovModal">Cari</button>
                             </div>
                         </div>
                         <div class="table-responsive text-dark mt-2">
@@ -336,7 +336,7 @@
                                     <th class="text-center">Harga Beli</th>
                                     <th class="text-center">Harga Jual</th>
                                     <th class="text-center">Total</th>
-                                    <th class="text-center">Action</th>
+                                    <th class="text-center">&nbsp;</th>
                                 </thead>
                                 <tbody class="font-order"></tbody>
                             </table>
@@ -431,7 +431,7 @@
                             style="white-space: nowrap;">
                             <thead class="thead-dark">
                                 <th class="text-center">SKU</th>
-                                <th class="text-center">Nama Product</th>
+                                <th class="text-center">Nama Produk</th>
                                 <th class="text-center">Kategori</th>
                             </thead>
                             <tbody></tbody>
@@ -457,10 +457,12 @@
         //================================ Product ================================
         const table = new DataTable('#table_product', {
             "bPaginate": false,
-            "bFilter": true,
+            "bFilter": false,
             scrollCollapse: true,
-            scrollY: '30vh',
-            dom: '<"top left"f>r<"top right"i>t<"clear">'
+            ordering: false,
+            scrollY: '60vh',
+            dom: '<"top left"f>r<"top right"i>t<"clear">',
+            columnDefs: [{ width: '12%', targets: 4 }, { width: '18%', targets: [5, 6] }]
         })
 
 
@@ -496,7 +498,7 @@
                 data['sku'],
                 data['part_number'],
                 data['product_name'],
-                data['merk_name'],
+                data['category_name'],
                 `<input type="number" min="1" class="form-control font-order qty_product" value="1" onfocus="autoSelect(this)">`,
                 `<input type="number" min="1" class="form-control font-order hbeli_product" onfocus="autoSelect(this)" value="` + parseInt(data['harga_beli']) + `"> ` +
                 `<input type="number" hidden class="hbeli_old" value="` + parseInt(data['harga_beli']) + `">`,
@@ -525,13 +527,13 @@
                     success: (e) => {
                         if (e.status) {
                             if (e.data.length) {
-                                if (!checkSkuExist(input)) {
+                                if (!checkSkuExist(e.data[0]['sku'])) {
                                     addProductRow(e.data[0])
                                     $("#inputSkuBarcode").val('')
                                 } else {
                                     Swal.fire({
                                         title: "Gagal",
-                                        text: "SKU " + input + " sudah ada",
+                                        text: "SKU " + e.data[0]['sku'] + " sudah ada",
                                         icon: "error"
                                     });
                                 }

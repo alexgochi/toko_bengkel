@@ -100,14 +100,14 @@
                     </div>
                     <div class="form-group">
                         <label for="teleponOutletAdd">Telepon</label>
-                        <input type="number" class="form-control" id="teleponOutletAdd">
+                        <input type="text" class="form-control" id="teleponOutletAdd">
                     </div>
                 </form>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="btnSaveAddModal" class="btn btn-primary">Save changes</button>
+                <button type="button" id="btnSaveAddModal" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
@@ -267,6 +267,7 @@
         var address = $('#alamatOutletAdd').val()
         var phone = $('#teleponOutletAdd').val()
         var data = { outlet_id: id, outlet_name: name, address: address, phone: phone }
+        console.log(data)
 
         var check = checkId(id)
         if (check) {

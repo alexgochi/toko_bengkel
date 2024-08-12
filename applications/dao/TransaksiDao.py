@@ -1,13 +1,14 @@
+import datetime
 from applications.lib import PostgresDatabase
 
-def dt_data_trans(search, offset):
+def dt_data_trans(search, offset, filter):
     db = PostgresDatabase()
-    query = """
+    query = f"""
         SELECT faktur,
             to_char(date_tx, 'dd-mm-yyyy') as date_tx,
             coalesce(member_name,'Bukan Pelanggan') as member_name,
-            to_char(total_faktur + other_fee, 'fm999G999G999G999') as total_faktur,
-            coalesce(mpt.type_name,' ') as type_name,
+            to_char(total_faktur + other_fee - diskon, 'fm999G999G999G999') as total_faktur,
+            coalesce(mpt.type_name,'Bon') as type_name,
             CASE WHEN current_date > due_date::int + date_tx and type_name is null
                 THEN 'Overdue ' || current_date - (due_date::int + date_tx) ||' hari'
             ELSE coalesce(payment_info,' ') END as payment_info
@@ -17,11 +18,12 @@ def dt_data_trans(search, offset):
         WHERE
             STATUS = true 
             AND (
+                faktur ILIKE %(search)s OR
                 CAST(date_tx AS TEXT) ILIKE %(search)s OR
-                member_name ILIKE %(search)s OR
                 payment_info ILIKE %(search)s OR
                 type_name ILIKE %(search)s 
             )
+            {filter}
         ORDER BY
             faktur;
     """
@@ -30,7 +32,27 @@ def dt_data_trans(search, offset):
         "offset": offset
     }
 
-    return db.execute_dt(query, param)
+    return db.execute_dt(query, param, limit=25)
+
+def get_data_distinct():
+    db = PostgresDatabase()
+    data = {}
+    query = """
+        SELECT *
+        FROM (SELECT DISTINCT ON (upper(member_name)) member_name
+            FROM ms_member)
+        ORDER BY member_name;
+    """
+    data['member'] = db.execute(query).result
+
+    query = """
+        SELECT *
+        FROM (SELECT DISTINCT ON (upper(outlet_name)) outlet_name, outlet_id
+            FROM ms_outlet)
+        ORDER BY outlet_name;
+    """
+    data['outlet'] = db.execute(query).result
+    return data
 
 def getAllDataTransaksi():
     db = PostgresDatabase()
@@ -38,7 +60,7 @@ def getAllDataTransaksi():
         SELECT faktur,
             to_char(date_tx, 'dd-mm-yyyy') as date_tx,
             coalesce(member_name,'Bukan Pelanggan') as member_name,
-            total_faktur + other_fee as total_faktur,
+            total_faktur + other_fee - diskon as total_faktur,
             coalesce(mpt.type_name,' ') as type_name,
             CASE WHEN current_date > due_date::int + date_tx and type_name is null
                 THEN 'Overdue ' || current_date- (due_date::int + date_tx) ||' hari'
@@ -68,6 +90,7 @@ def getDataTransByFaktur(faktur):
             other_note,
             to_char(update_date, 'dd-mm-yyyy') as update_date,
             total_faktur,
+            diskon,
             coalesce(mpt.type_name,' ') as type_name,
             CASE WHEN current_date > due_date::int + date_tx and type_name is null
                 THEN 'Overdue ' || current_date- (due_date::int + date_tx) ||' hari'
@@ -89,9 +112,17 @@ def getDataTransByFaktur(faktur):
         return {'status': False, 'message': 'Data Tidak ditemukan', 'data': {}}
     
     query = """
-        SELECT 
-            sku, part_number, product_name, merk_name, qty, price, qty*price as subtotal
-        FROM tx_trans_detail
+        SELECT tt.sku,
+            mp.part_number,
+            tt.product_name,
+            mc.category_name  merk_name,
+            mp.satuan,
+            tt.qty,
+            price,
+            tt.qty * price as subtotal
+        FROM tx_trans_detail tt
+            INNER JOIN ms_product mp on tt.sku = mp.sku
+            INNER JOIN ms_category mc on mc.category_id = mp.category_id
         WHERE faktur = %(faktur)s
         ORDER BY faktur;
     """
@@ -111,3 +142,18 @@ def getDataTransByFaktur(faktur):
     }
     data['outlet'] = db.execute(query, param).result[0]
     return {'status': True, 'message': 'Berhasil get data', 'data': data}
+
+
+def update_payment_trans(param):
+    db = PostgresDatabase()
+    query = """
+        UPDATE
+            tx_trans
+        SET tx_type = false,
+            payment_id = %(payment_id)s,
+            payment_info= %(payment_info)s,
+            update_date= current_date
+        WHERE
+            faktur = %(faktur)s;
+        """
+    return db.execute(query, param)

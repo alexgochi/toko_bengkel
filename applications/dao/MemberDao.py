@@ -22,7 +22,7 @@ def dt_data_member(search, offset):
         "offset": offset
     }
 
-    return db.execute_dt(query, param)
+    return db.execute_dt(query, param, limit=25)
 
 def update_data_member(data):
     db = PostgresDatabase()

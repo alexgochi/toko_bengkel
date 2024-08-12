@@ -1,6 +1,7 @@
 from applications.lib import PostgresDatabase
 from applications.lib.globalFunc import generate_faktur,to_date,update_faktur
 import datetime
+from flask import request
 
 def getDataOutlet():
     db = PostgresDatabase()
@@ -83,13 +84,19 @@ def dt_lovProduct(search, offset):
     query = """
         SELECT
             sku,
-            product_name,
+            CASE WHEN f_print_vehicle is true
+                THEN product_name || ' ' || COALESCE(vehicle,'')
+                ELSE product_name
+            END product_name,
             merk_name,
+            category_name,
             qty
         FROM
             ms_product mp
         INNER JOIN 
-            ms_merk mm on mm.merk_id = mp.merk_id
+                ms_merk mm on mm.merk_id = mp.merk_id
+        INNER JOIN 
+                ms_category mc on mm.category_id = mc.category_id
         WHERE
             CAST(sku AS TEXT) ILIKE %(search)s OR
             product_name ILIKE %(search)s OR
@@ -102,7 +109,7 @@ def dt_lovProduct(search, offset):
         "offset": offset
     }
     
-    return db.execute_dt(query, param)
+    return db.execute_dt(query, param, limit=25)
 
 def getDataBySkuBarcode(search):
     db = PostgresDatabase()
@@ -110,8 +117,12 @@ def getDataBySkuBarcode(search):
         SELECT
             sku,
             part_number,
-            product_name,
+            CASE WHEN f_print_vehicle is true
+                THEN product_name || ' ' || COALESCE(vehicle,'')
+                ELSE product_name
+            END product_name,
             mp.merk_id,
+            category_name,
             merk_name,
             harga_jual,
             harga_beli,
@@ -119,6 +130,7 @@ def getDataBySkuBarcode(search):
         FROM
             ms_product mp
         INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
+        INNER JOIN ms_category mc on mm.category_id = mc.category_id
         WHERE
             UPPER(sku) = %(search)s OR
             CAST(barcode AS TEXT) =  %(search)s
@@ -155,7 +167,7 @@ def dt_data_dashboard(search, offset, orderBy):
         "offset": offset,
     }
 
-    return db.execute_dt(query, param)
+    return db.execute_dt(query, param, limit=25)
 
 
 def update_data_category(data):
@@ -242,18 +254,18 @@ def save_order(data,type = 'draft'):
         query = """
             INSERT INTO
                 tx_trans (faktur, date_tx, tx_type, due_date, member_id,
-                        status, other_fee, other_note, update_date,
+                        status, other_fee, other_note, update_date, diskon,
                         total_faktur, payment_id, payment_info, time_tx)
             VALUES
                 (%(faktur)s, %(date_tx)s, %(tx_type)s, %(due_date)s, %(member_id)s,
-                    %(status)s, %(other_fee)s, %(other_note)s, %(update_date)s,
+                    %(status)s, %(other_fee)s, %(other_note)s, %(update_date)s, %(diskon)s,
                     %(total_faktur)s, %(payment_id)s, %(payment_info)s, %(time_tx)s)
             ON CONFLICT (faktur)
             DO UPDATE
             SET faktur = excluded.faktur, date_tx = excluded.date_tx, tx_type = excluded.tx_type,
                 due_date = excluded.due_date, member_id = excluded.member_id, status = excluded.status,
                 other_fee = excluded.other_fee, other_note = excluded.other_note, update_date = excluded.update_date,
-                total_faktur = excluded.total_faktur, payment_id = excluded.payment_id,
+                diskon = excluded.diskon, total_faktur = excluded.total_faktur, payment_id = excluded.payment_id,
                 payment_info = excluded.payment_info, time_tx = excluded.time_tx;
         """
         param = {
@@ -261,7 +273,7 @@ def save_order(data,type = 'draft'):
                 "due_date":  data['jatuhTempo'], "member_id":  data['memberId'], "status":  data['status'],
                 "other_fee":  data['ongkir'], "other_note":  data['keterangan'], "update_date":  now.strftime('%Y-%m-%d'),
                 "total_faktur":  data['subtotal'], "payment_id":  data['payment_id'], "payment_info":  data['payment_info'],
-                "time_tx":  now.strftime('%H:%M:%S')
+                "time_tx":  now.strftime('%H:%M:%S'), "diskon": data['diskon']
             }
         hasil = db.execute_preserve(query,param)
         if hasil.is_error:
@@ -345,7 +357,8 @@ def getTransDraftData(faktur):
             update_date,
             total_faktur,
             payment_id,
-            payment_info
+            payment_info,
+            diskon
         FROM
             tx_trans
         WHERE   

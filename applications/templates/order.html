@@ -406,13 +406,12 @@
                             </div>
                             <div class="form-group col-1">
                                 <button class="btn btn-danger font-order" id="btn-lovModal" data-toggle="modal"
-                                    data-target="#lovModal">LOV</button>
+                                    data-target="#lovModal">Cari</button>
                             </div>
                         </div>
                         <div class="table-responsive text-dark mt-2">
-                            <table id="table_product" class="table table-hover table-bordered table-striped w-100 mb-2"
-                                style="white-space: nowrap;">
-                                <thead class="thead-dark">
+                            <table id="table_product" class="table table-hover table-bordered table-striped w-100 mb-2">
+                                <thead class="thead-dark" style="text-wrap: nowrap;">
                                     <th class="text-center">SKU</th>
                                     <th class="text-center">Part Number</th>
                                     <th class="text-center">Nama Produk</th>
@@ -420,7 +419,7 @@
                                     <th class="text-center">Qty</th>
                                     <th class="text-center">Harga Satuan</th>
                                     <th class="text-center">Total</th>
-                                    <th class="text-center">Action</th>
+                                    <th class="text-center"></th>
                                 </thead>
                                 <tbody class="font-order"></tbody>
                             </table>
@@ -445,9 +444,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group row font-form">
+                                    <label for="diskon" class="col-sm-5 col-form-label">Diskon</label>
+                                    <div class="col-sm-7">
+                                        <input type="number" onfocus="autoSelect(this)" class="form-control font-form"
+                                            id="diskon" min="0" required value="0">
+                                    </div>
+                                </div>
+                                <div class="form-group row font-form">
                                     <label for="otherInfo" class="col-sm-5 col-form-label">Keterangan</label>
                                     <div class="col-sm-7">
-                                        <textarea class="form-control font-form" id="otherInfo" rows="3"></textarea>
+                                        <textarea class="form-control font-form" id="otherInfo" rows="2"></textarea>
                                     </div>
                                 </div>
 
@@ -537,7 +543,7 @@
                             style="white-space: nowrap;">
                             <thead class="thead-dark">
                                 <th class="text-center">SKU</th>
-                                <th class="text-center">Nama Product</th>
+                                <th class="text-center">Nama Produk</th>
                                 <th class="text-center">Merk</th>
                             </thead>
                             <tbody></tbody>
@@ -564,10 +570,12 @@
         //================================ Product ================================
         const table = new DataTable('#table_product', {
             "bPaginate": false,
-            "bFilter": true,
+            "bFilter": false,
             scrollCollapse: true,
-            scrollY: '30vh',
-            dom: '<"top left"f>r<"top right"i>t<"clear">'
+            ordering: false,
+            scrollY: '60vh',
+            dom: '<"top left"f>r<"top right"i>t<"clear">',
+            columnDefs: [{ width: '12%', targets: 4 }, { width: '18%', targets: [5, 6] }]
         })
 
 
@@ -603,7 +611,7 @@
                 data['sku'],
                 data['part_number'],
                 data['product_name'],
-                data['merk_name'],
+                data['category_name'],
                 `<input type="number" min="1" class="form-control font-order qty_product" value="1" onfocus="autoSelect(this)">
                 <input type="number" min="1" class="form-control font-order qty_maks" value="` + parseInt(data['qty']) + `" hidden>`,
                 `<input type="number" min="1" class="form-control font-order hjual_product" onfocus="autoSelect(this)" value="` + parseInt(data['harga_jual']) + `"> `,
@@ -631,7 +639,7 @@
                     success: (e) => {
                         if (e.status) {
                             if (e.data.length) {
-                                if (!checkSkuExist(input)) {
+                                if (!checkSkuExist(e.data[0]['sku'])) {
                                     addProductRow(e.data[0])
                                     $("#inputSkuBarcode").val('')
                                     /*if (e.data[0]['qty'] > 0) {
@@ -647,7 +655,7 @@
                                 } else {
                                     Swal.fire({
                                         title: "Gagal",
-                                        text: "SKU " + input + " sudah ada",
+                                        text: "SKU " + e.data[0]['sku'] + " sudah ada",
                                         icon: "error"
                                     });
                                 }
@@ -713,14 +721,15 @@
             getTotalHarga()
         }
 
-        $("#biayaOngkir").on('change', e => {
+        $("#biayaOngkir, #diskon").on('change', e => {
             getTotalHarga()
         })
 
         function getTotalHarga() {
             var ongkir = parseInt($('#biayaOngkir').val())
             var subtotal = toNumber($('#subtotal_product').text().replace('Rp ', ''))
-            $('#totalHjual').text('Rp ' + numberWithCommas(subtotal + ongkir))
+            var diskon = parseInt($('#diskon').val())
+            $('#totalHjual').text('Rp ' + numberWithCommas(subtotal + ongkir - diskon))
         }
 
         //delete
@@ -763,10 +772,11 @@
             const idTabel = "table_lov_product";
             const dt_options = {
                 scrollY: '50vh',
+                pageLength: 25,
                 columns: [
                     { data: "sku" },
                     { data: "product_name" },
-                    { data: "merk_name" }
+                    { data: "category_name" }
                 ]
             }
             const ajax_options = {
@@ -869,6 +879,7 @@
             dataSave['subtotal'] = toNumber($('#subtotal_product').text().replace('Rp ', ''))
             dataSave['payment_id'] = $("#typePaymentInvoice").val();
             dataSave['payment_info'] = $("#rekInvoice").val();
+            dataSave['diskon'] = $("#diskon").val();
             if (jenisFaktur == '1') {
                 dataSave['payment_info'] = 'BON - ' + $('#jatuhTempo').val() + ' Hari'
             }

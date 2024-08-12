@@ -14,18 +14,23 @@ import uuid
 from flask import current_app as app
 from flask import request, render_template, make_response, jsonify, redirect, Blueprint, url_for, session
 from applications.dao import TransaksiDao as transaksiDao
+from applications.dao import DashboardDao as dashboardDao
 from applications.lib import dataTableError
 
 @app.route('/transaksi/', methods=['GET'])
 @login_required
 def transaksi():
-    return render_template('transaksi.html')
+    data = transaksiDao.get_data_distinct()
+    paymentType = dashboardDao.getPaymentType().result
+    rekening = dashboardDao.getRekening().result
+    return render_template('transaksi.html', data=data, data_rek=rekening, data_type=paymentType)
 
 @app.route("/dt/transaksi", methods=["GET"])
 def dt_transaksi():
     res = transaksiDao.dt_data_trans(
         request.args.get("search"),
-        request.args.get('start')
+        request.args.get('start'),
+        request.args.get('filter')
     )
     if res.is_error:
         return dataTableError()
@@ -52,8 +57,9 @@ def getDataTransByFaktur(Faktur):
     # set number with commas
     db_res['data']['other_fee'] = '{:,}'.format(db_res['data']['other_fee'])
     db_res['data']['total_faktur'] = '{:,}'.format(db_res['data']['total_faktur'])
+    db_res['data']['diskon'] = '{:,}'.format(db_res['data']['diskon'])
     
-    total_faktur = int(db_res['data']['total_faktur'].replace(',','')) + int(db_res['data']['other_fee'].replace(',',''))
+    total_faktur = int(db_res['data']['total_faktur'].replace(',','')) + int(db_res['data']['other_fee'].replace(',','')) - int(db_res['data']['diskon'].replace(',',''))
     db_res['data']['total_faktur'] = '{:,}'.format(total_faktur)
     
     for x in db_res['data']['product']:
@@ -74,3 +80,13 @@ def getDetailDataTrans():
             x['subtotal'] = '{:,}'.format(x['subtotal'])
 
     return jsonify(db_res)
+
+
+@app.route('/transaksi/updatePayment', methods=['POST'])
+@login_required
+def updatePaymentTrans():
+    data = request.get_json()
+    db_res = transaksiDao.update_payment_trans(data)
+    if db_res.is_error:
+        return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
+    return jsonify({"status": db_res.status, "message": "Berhasil Update Data Pembayaran"})

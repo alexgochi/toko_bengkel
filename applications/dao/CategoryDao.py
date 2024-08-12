@@ -36,7 +36,7 @@ def dt_data_category(search, offset, orderBy):
         "offset": offset,
     }
 
-    return db.execute_dt(query, param)
+    return db.execute_dt(query, param, limit=25)
 
 
 def update_data_category(data):

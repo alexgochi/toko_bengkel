@@ -74,63 +74,52 @@
         <button style="background-color: red; font-size: 18px;color: white;" onclick="print()"><b>Cetak</b></button>
     </div>
     <div class="container" id="invoice">
-        <h2>Invoice Transaksi</h2>
+        <h2><u>INVOICE</u> {{ data['faktur'] }}</h2>
 
         <!-- Header -->
         <div class="row header">
             <div class="column">
                 <table class="fs12">
                     <tr>
-                        <td>Faktur</td>
-                        <td> : &emsp;</td>
-                        <td>{{ data['faktur'] }}</td>
+                        <td>
+                            <h1 style="margin-bottom: 0px;">{{ data['outlet']['outlet_name'] }}</h1>
+                        </td>
                     </tr>
                     <tr>
-                        <td>Outlet</td>
-                        <td> : &emsp;</td>
-                        <td>{{ data['outlet']['outlet_name'] }}</td>
+                        <td>
+                            <div style="width: 300px;">{{ data['outlet']['address'] }}</div>
+                        </td>
                     </tr>
                     <tr>
-                        <td>Alamat</td>
-                        <td> : &emsp;</td>
-                        <td>{{ data['outlet']['address'] }}</td>
-                    </tr>
-                    <tr>
-                        <td>Telepon</td>
-                        <td> : &emsp;</td>
-                        <td>{{ data['outlet']['phone'] }}</td>
+                        <td>
+                            <div style="margin-top: 2px;">{{ data['outlet']['phone'] }}</div>
+                        </td>
                     </tr>
                 </table>
             </div>
             <div class="column" align="right">
                 <table style="width: 75%;" class="fs12">
-                    {% if data['member_name'] %}
                     <tr>
-                        <td>Nama Pelanggan</td>
-                        <td> : </td>
-                        <td>
-                            {{ data['member_name'] }}
-                            {% if data['phone'] %}
-                            / {{ data['phone'] }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Alamat Pelanggan</td>
-                        <td> : </td>
-                        <td>{{ data['address'] }}</td>
-                    </tr>
-                    {% endif %}
-                    <tr>
-                        <td>Transaksi</td>
-                        <td> : </td>
+                        <td>Tanggal</td>
                         <td>{{ data['date_tx'] }}</td>
                     </tr>
                     <tr>
                         <td>Cetak</td>
-                        <td> : </td>
                         <td>{{ data['print_date'] }}</td>
                     </tr>
+                    {% if data['member_name'] %}
+                    <tr>
+                        <td>
+                            <h3 style="margin-top: 5px;margin-bottom: 0px;">{{ data['member_name'] }}</h3>
+                            <!-- {% if data['phone'] %}
+                            / {{ data['phone'] }}
+                            {% endif %} -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ data['address'] }}</td>
+                    </tr>
+                    {% endif %}
                 </table>
             </div>
         </div>
@@ -138,20 +127,22 @@
         <!-- Product -->
         <table style="margin-top: 20px;width: 100%;margin-right: 50px;border-collapse: collapse;font-size: 12px;">
             <thead>
-                <th>Nama Barang</th>
-                <th>Part Number</th>
-                <th>Merk</th>
                 <th>Qty</th>
-                <th>Harga</th>
+                <th>Satuan</th>
+                <th>Merk</th>
+                <th>Part Number</th>
+                <th>Nama Produk</th>
+                <th>Harga Satuan</th>
                 <th>Subtotal</th>
             </thead>
             <tbody>
                 {% for x in data['product'] %}
                 <tr>
-                    <td>{{ x['product_name'] }}</td>
-                    <td class="center">{{ x['part_number'] }}</td>
-                    <td class="center">{{ x['merk_name'] }}</td>
                     <td class="center">{{ x['qty'] }}</td>
+                    <td class="center">{{ x['satuan'] }}</td>
+                    <td class="center">{{ x['merk_name'] }}</td>
+                    <td class="center">{{ x['part_number'] }}</td>
+                    <td>{{ x['product_name'] }}</td>
                     <td class="right">{{ x['price'] }}</td>
                     <td class="right">{{ x['subtotal'] }}</td>
                 </tr>
@@ -160,16 +151,26 @@
                     <td>&nbsp;</td>
                 </tr>
                 <tr class="right">
-                    <td colspan="5"><b>Biaya Ongkir</b></td>
+                    <td colspan="6"><b>Biaya Ongkir</b></td>
                     <td>{{ data['other_fee'] }}</td>
                 </tr>
                 <tr class="right">
-                    <td colspan="5"><b>Total</b></td>
-                    <td>{{ data['total_faktur'] }}</td>
+                    <td colspan="3" style="text-align: left;">
+                        <i class="fs12">*Barang yang sudah dibeli tidak dapat dikembalikan</i>
+                    </td>
+                    <td colspan="3"><b>Diskon</b></td>
+                    <td><i>{{ data['diskon'] }}</i></td>
+                </tr>
+                <tr class="right">
+                    <td colspan="6">
+                        <h2>Total</h2>
+                    </td>
+                    <td>
+                        <h2>{{ data['total_faktur'] }}</h2>
+                    </td>
                 </tr>
             </tbody>
         </table>
-        <i class="fs12">*Barang yang sudah dibeli tidak dapat dikembalikan</i><br>
         <p style="margin-top: 20px;" class="fs12">Pembayaran <br>
             <b>
                 {% autoescape false %}
@@ -180,7 +181,7 @@
 
         <div class="row" style="margin-top: 20px;">
             <div class="column center fs12">
-                <p>Diterima Oleh,</p>
+                <p style="margin-bottom: 50px;">Diterima Oleh,</p>
                 {% if data['member_name'] %}
                 <p>({{ data['member_name'] }})</p>
                 {% else %}
@@ -188,7 +189,7 @@
                 {% endif %}
             </div>
             <div class="column center fs12">
-                <p>Hormat Kami,</p>
+                <p style="margin-bottom: 50px;">Hormat Kami,</p>
                 <p>({{ current_user.name }})</p>
             </div>
         </div>

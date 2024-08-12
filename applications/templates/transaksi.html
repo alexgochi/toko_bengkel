@@ -3,15 +3,53 @@
 {% block menu %}Transaksi{% endblock %}
 {% block content %}
 
+<style>
+    .select2 {
+        margin: auto;
+    }
+</style>
 <!-- DataTables -->
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/datatables.min.css') }}">
 <script src="{{ url_for('static', filename='assets/js/datatables.min.js') }}"></script>
 
 <div class="d-flex justify-content-between mt-5 mr-5">
-    <div>
-        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">+ Tambah Transaksi</button>
+    <div class="form-row ml-auto justify-content-between p-2 w-75">
+        <select id="filterDate" class="form-control form-control-lg col-2 select2 filterTable">
+            <option value="" selected disabled>Tanggal Transaksi</option>
+            <option value="daily">Hari ini</option>
+            <option value="weekly">Minggu ini</option>
+            <option value="monthly">Bulan ini</option>
+            <option value="all">Semua</option>
+        </select>
+        <select id="filterMember" class="form-control form-control-lg col-3 select2 filterTable">
+            <option value="" selected disabled>Pelanggan</option>
+            <option value="null">Bukan Pelanggan</option>
+            {% for x in data['member'] %}
+            <option value="{{ x['member_name'] }}"> {{ x['member_name'] }}</option>
+            {% endfor %}
+        </select>
+        <select id="filterOutlet" class="form-control form-control-lg col-2 select2 filterTable">
+            <option value="" selected disabled>Outlet</option>
+            {% for x in data['outlet'] %}
+            <option value="{{ x['outlet_id'] }}"> {{ x['outlet_name'] }}</option>
+            {% endfor %}
+        </select>
+        <select id="filterType" class="form-control form-control-lg col-2 select2 filterTable">
+            <option value="" selected disabled>Metode Bayar</option>
+            <option value="all">Semua</option>
+            {% for x in data_type %}
+            <option value="{{ x['type_id'] }}">{{ x['type_name'] }}</option>
+            {% endfor %}
+        </select>
+        <select id="filterStatus" class="form-control col-2 select2 filterTable">
+            <option value="" selected disabled>Status</option>
+            <option value="overdue">Overdue</option>
+            <option value="bon">Bon</option>
+            <option value="done">Done</option>
+            <option value="all">Semua</option>
+        </select>
     </div>
-    <div>
+    <div class="ml-auto p-2 justify-content-between">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="cari transaksi..." id="search_table_trans">
             <div class="input-group-append">
@@ -30,6 +68,7 @@
             <th class="text-center">Tanggal Transaksi</th>
             <th class="text-center">Pelanggan</th>
             <th class="text-center">Total Pembelian</th>
+            <th class="text-center">Metode</th>
             <th class="text-center">Status</th>
             <th class="text-center">Action</th>
         </thead>
@@ -103,9 +142,15 @@
                                 <th class="w-50"></th>
                             </tr>
                             <tr>
-                                <th class="w-25 pr-5 text-danger"><b>Biaya Ongkir</b></th>
+                                <th class="w-25 pr-5 text-dark"><b>Biaya Ongkir</b></th>
+                                <th><b class="text-dark">Rp</b></th>
+                                <th class="w-25 text-right text-dark"><b id="otherFeeDetail">0</b></th>
+                                <th class="w-50"></th>
+                            </tr>
+                            <tr>
+                                <th class="w-25 pr-5 text-danger"><b>Diskon</b></th>
                                 <th><b class="text-danger">Rp</b></th>
-                                <th class="w-25 text-right text-danger"><b id="otherFeeDetail">0</b></th>
+                                <th class="w-25 text-right text-danger"><b id="diskonDetail">0</b></th>
                                 <th class="w-50"></th>
                             </tr>
                             <tr>
@@ -139,14 +184,113 @@
     </div>
 </div>
 
+<!-- Modal Update Payment -->
+<div class="modal fade" id="updatePaymentModal" tabindex="-1" role="dialog" aria-labelledby="updatePaymentModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updatePaymentModalLabel">Update Pembayaran</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body row">
+                <div class="form-group col-12">
+                    <label for="fakturPayment">Faktur</label>
+                    <input type="text" class="form-control" id="fakturPayment" readonly>
+                </div>
+                <div class="form-group col-12">
+                    <label for="metodeBayar" class="col-form-label">Metode Bayar</label>
+                    <select class="form-control" id="metodeBayar">
+                        <option value="" disabled selected> -- Pilih Jenis Bayar</option>
+                        {% for x in data_type %}
+                        <option value="{{ x['type_id'] }}">{{ x['type_name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div id="hidePayment" hidden>
+                <div class="form-group col-12">
+                    <label for="rekeningBayar" class="col-form-label">Metode Bayar</label>
+                    <select class="form-control" id="rekeningBayar">
+                        <option value="" disabled selected> -- Pilih Rekening</option>
+                        {% for x in data_rek %}
+                        <option value="{{ x['rek_bank'] }} - {{ x['rek_no'] }} - {{ x['rek_name'] }}">
+                            {{ x['rek_bank'] }} - {{ x['rek_no'] }} - {{ x['rek_name'] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" onclick="updatePayment()" class="btn btn-primary"
+                    data-dismiss="modal">Simpan</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     $(() => {
         fill_table_trans();
         dt_search("search_table_trans", fill_table_trans);
     });
 
+    $('.filterTable').on('change', function () {
+        fill_table_trans()
+    });
+
+    function getFormFilter() {
+        var query = ""
+        var date = $('#filterDate').val()
+        var member = $('#filterMember').val()
+        var outlet = $('#filterOutlet').val()
+        var status = $('#filterStatus').val()
+        var metode = $('#filterType').val()
+
+        if (date == 'daily') {
+            query += "AND date_tx = current_date "
+        } else if (date == 'weekly') {
+            query += "AND date_tx >= current_date - 7 "
+        } else if (date == 'monthly') {
+            query += "AND date_tx >= current_date - 31 "
+        } else {
+            query = ''
+        }
+
+        if (member == 'null') {
+            query += "AND member_name is null "
+        } else if (member) {
+            query += "AND member_name = '" + member + "' "
+        } else {
+
+        }
+        if (outlet) {
+            query += "AND substring(faktur,1,2) = '" + outlet + "' "
+        }
+
+        if (status == 'overdue') {
+            query += "AND tt.payment_id is null AND current_date > due_date::int + date_tx "
+        } else if (status == 'bon') {
+            query += "AND tt.payment_id is null AND current_date <= due_date::int + date_tx "
+        } else if (status == 'done') {
+            query += "AND tt.payment_id is not null "
+        }
+
+        if (metode && metode != 'all') {
+            query += "AND type_id = '" + metode + "' "
+        }
+        return query
+    }
+
     function fill_table_trans() {
         const idTabel = "table_transaksi";
+        var filter = getFormFilter()
         const dt_options = {
             scrollY: '50vh',
             columns: [
@@ -154,6 +298,7 @@
                 { data: "date_tx" },
                 { data: "member_name" },
                 { data: "total_faktur" },
+                { data: "type_name" },
                 { data: "payment_info" },
                 {
                     className: 'text-center',
@@ -162,6 +307,7 @@
                         <div class="d-flex align-items-center justify-content-center" style="gap: 10px;">
                             <button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
                             <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>
+                            <button class="btn btn-payment btn-danger"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-credit-card"></i></button>
                         </div>
                         `;
                     }
@@ -171,7 +317,8 @@
         const ajax_options = {
             url: "/dt/transaksi",
             data: {
-                "search": $('#search_table_trans').val().trim()
+                "search": $('#search_table_trans').val().trim(),
+                "filter": filter
             }
         }
 
@@ -183,6 +330,68 @@
         const rowData = $('#table_transaksi').DataTable().row(getTr(e)).data();
         getDataTransByFaktur(rowData['faktur'])
     })
+
+    $("#table_transaksi > tbody").on('click', '.btn-payment', e => {
+        const rowData = $('#table_transaksi').DataTable().row(getTr(e)).data();
+        //rowData['faktur']
+        $('#updatePaymentModal').modal('show')
+        $('#fakturPayment').val(rowData['faktur'])
+        $("#metodeBayar").val("")
+        $('#hidePayment').hide()
+        $("#rekeningBayar").val("")
+    })
+
+    $("#metodeBayar").on('change', function (e) {
+        var selected = this.value
+        if (selected == 1) {
+            $('#hidePayment').removeAttr('hidden');
+            $('#hidePayment').show();
+        } else {
+            $("#rekeningBayar").val("")
+            $('#hidePayment').hide();
+        }
+    });
+
+    function updatePayment() {
+        var data = {}
+        data['faktur'] = $('#fakturPayment').val()
+        data['payment_id'] = $("#metodeBayar").val()
+        data['payment_info'] = $("#rekeningBayar").val()
+
+        $.ajax
+            ({
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                url: "/transaksi/updatePayment",
+                success: (e) => {
+                    if (e.status) {
+                        Swal.fire({
+                            icon: "success",
+                            title: e.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function () {
+                            fill_table_trans()
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: e.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Swal.fire({
+                        title: "Gagal",
+                        text: xhr.responseText,
+                        icon: "error"
+                    });
+                }
+            });
+    }
 
     function getDataTransByFaktur(faktur) {
         printWindow = window.open("/transaksi/getDataTransByFaktur/" + faktur, '_blank')
@@ -257,9 +466,10 @@
 
         $('#otherNoteDetail').val(data['other_note'])
         $('#totalBarangDetail').text(numberWithCommas(data['total_faktur']))
+        $('#diskonDetail').text(numberWithCommas(data['diskon']))
         $('#otherFeeDetail').text(numberWithCommas(data['other_fee']))
 
-        totalAll = parseInt(data['total_faktur']) + parseInt(data['other_fee'])
+        totalAll = parseInt(data['total_faktur']) + parseInt(data['other_fee']) - parseInt(data['diskon'])
         $('#totalFakturDetail').text(numberWithCommas(totalAll))
 
         //Add Row Table Detail Product

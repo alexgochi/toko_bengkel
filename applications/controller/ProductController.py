@@ -22,7 +22,8 @@ from applications.lib import dataTableError
 def product():
     category = productDao.get_data_category().result
     outlet = productDao.get_data_outlet().result
-    return render_template("product.html", data_cat=category, data_outlet=outlet)
+    data = productDao.get_data_distinct()
+    return render_template("product.html", data_cat=category, data_outlet=outlet, data=data)
 
 @app.route('/product/generateSku', methods=['GET'])
 @login_required
@@ -40,13 +41,12 @@ def get_merk():
     return jsonify({"status": db_res.status, "message": "Berhasil Get Data", 'result': db_res.result})
 
 
-
 @app.route("/dt/product/", methods=["GET"])
 def dt_product():
     res = productDao.dt_data_product(
         request.args.get("search"),
         request.args.get('start'),
-        request.args.get('order_by')
+        request.args.get('filter')
     )
     if res.is_error:
         return dataTableError()
@@ -89,7 +89,6 @@ def add_product():
     barcode = productDao.generate_barcode()
     data['barcode'] = barcode
     db_res = productDao.add_data_product(data)
-    print("ini db res : ",db_res)
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah data"})

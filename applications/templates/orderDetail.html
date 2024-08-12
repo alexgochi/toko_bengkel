@@ -520,7 +520,7 @@
                             style="white-space: nowrap;">
                             <thead class="thead-dark">
                                 <th class="text-center">SKU</th>
-                                <th class="text-center">Nama Product</th>
+                                <th class="text-center">Nama Produk</th>
                                 <th class="text-center">Kategori</th>
                             </thead>
                             <tbody></tbody>
@@ -598,10 +598,13 @@
         //================================ Product ================================
         const table = new DataTable('#table_product', {
             "bPaginate": false,
-            "bFilter": true,
+            "bFilter": false,
             scrollCollapse: true,
-            scrollY: '30vh',
-            dom: '<"top left"f>r<"top right"i>t<"clear">'
+            ordering: false,
+            scrollY: '60vh',
+            dom: '<"top left"f>r<"top right"i>t<"clear">',
+
+            columnDefs: [{ width: '12%', targets: 4 }, { width: '18%', targets: [5, 6] }]
         })
 
 
@@ -647,7 +650,7 @@
                 data['sku'],
                 data['part_number'],
                 data['product_name'],
-                data['merk_name'],
+                data['category_name'],
                 `<input type="number" min="1" class="form-control font-order qty_product" value="` + qty + `" onfocus="autoSelect(this)">`,
                 `<input type="number" min="1" class="form-control font-order hjual_product" onfocus="autoSelect(this)" value="` + parseInt(data['harga_jual']) + `"> `,
                 numberWithCommas(qty * parseInt(data['harga_jual']))

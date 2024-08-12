@@ -3,35 +3,50 @@
 {% block menu %}Product{% endblock %}
 {% block content %}
 
-
-<div class="d-flex bd-highlight mt-5 mr-5">
-    <div class="p-2 bd-highlight">
+<style>
+    .select2 {
+        margin: auto;
+    }
+</style>
+<div class="d-flex justify-content-between mt-5 mr-5">
+    <div class="p-2 justify-content-between">
         <button class="btn btn-primary " data-toggle="modal" data-target="#addModal">+ Tambah
             Produk</button>
     </div>
-    <div class="form-row ml-auto p-2 bd-highlight">
-        <select name="order" id="orderBy" class="form-control form-control-lg col-8">
-            <option value="product_name" selected disabled>Order By</option>
-            <option value="sku">SKU</option>
-            <option value="part_number">Part Number</option>
-            <option value="product_name">Nama Produk</option>
-            <option value="barcode">Barcode</option>
-            <option value="vehicle">Kendaraan</option>
-            <option value="merk_name">Kategori</option>
-            <option value="category_name">Merk</option>
-            <option value="outlet_name">Outlet</option>
-            <option value="qty">Qty</option>
-            <option value="harga_beli">Harga Beli</option>
-            <option value="harga_jual">Harga Jual</option>
+    <div class="form-row ml-auto justify-content-between p-2 w-75">
+        <select id="filterCategory" class="form-control form-control-lg col-2 select2 filterTable">
+            <option value="" selected disabled>Kategori</option>
+            {% for x in data['merk'] %}
+            <option value="{{ x['merk_name'] }}"> {{ x['merk_name'] }}</option>
+            {% endfor %}
         </select>
-        <select name="order" id="orderByAsc" class="form-control form-control-lg col-4">
+        <select id="filterMerk" class="form-control form-control-lg col-2 select2 filterTable">
+            <option value="" selected disabled>Merk</option>
+            {% for x in data['category'] %}
+            <option value="{{ x['category_name'] }}"> {{ x['category_name'] }}</option>
+            {% endfor %}
+        </select>
+        <select id="filterVehicle" class="form-control form-control-lg col-2 select2 filterTable">
+            <option value="" selected disabled>Kendaraan</option>
+            {% for x in data['vehicle'] %}
+            <option value="{{ x['vehicle'] }}"> {{ x['vehicle'] }}</option>
+            {% endfor %}
+        </select>
+        <select id="filterOutlet" class="form-control form-control-lg col-2 select2 filterTable">
+            <option value="" selected disabled>Outlet</option>
+            {% for x in data['outlet'] %}
+            <option value="{{ x['outlet_name'] }}"> {{ x['outlet_name'] }}</option>
+            {% endfor %}
+        </select>
+        <select id="filterQty" class="form-control form-control-lg col-2 select2 filterTable">
+            <option value="" selected disabled>Qty</option>
             <option value="asc">ASC</option>
             <option value="desc">DESC</option>
         </select>
     </div>
-    <div class="ml-auto p-2 bd-highlight">
+    <div class="ml-auto p-2 justify-content-between">
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="cari produk..." id="search_table_product">
+            <input type="text" class="form-control" placeholder="cari sku, nama ..." id="search_table_product">
             <div class="input-group-append">
                 <span class="input-group-text" id="basic-addon2">
                     <i class="fa fa-search"></i>
@@ -53,6 +68,7 @@
             <th class="text-center">Merk</th>
             <th class="text-center">Outlet</th>
             <th class="text-center">Qty</th>
+            <th class="text-center">Satuan</th>
             <th class="text-center">Harga Beli</th>
             <th class="text-center">Harga Jual</th>
             <th class="text-center">Kategori ID</th>
@@ -96,9 +112,16 @@
                             <label for="barcodeProductEdit">Barcode</label>
                             <input type="number" class="form-control data-edit" id="barcodeProductEdit" required>
                         </div>
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-10">
                             <label for="vehicleProductEdit">Kendaraan</label>
                             <input type="text" class="form-control data-edit" id="vehicleProductEdit" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="printVehicleEdit">Print</label>
+                            <select class="form-control data-add" id="printVehicleEdit">
+                                <option value="true">Ya</option>
+                                <option value="false">Tidak</option>
+                            </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="categoryProductEdit">Merk</label>
@@ -125,9 +148,14 @@
                     <hr class="w-100" style="border: 1px solid gray;">
 
                     <div class="form-row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-2">
                             <label for="qtyProductEdit">Qty</label>
                             <input type="number" class="form-control data-edit" id="qtyProductEdit" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="satuanProductEdit">Satuan</label>
+                            <input type="text" placeholder="Cth. Pcs, Box" class="form-control data-edit"
+                                id="satuanProductEdit" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="hbeliProductEdit">Harga Beli</label>
@@ -181,9 +209,16 @@
                             <label for="barcodeProductAdd">Barcode</label>
                             <input type="number" class="form-control data-add" id="barcodeProductAdd" required>
                         </div>
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-10">
                             <label for="vehicleProductAdd">Kendaraan</label>
                             <input type="text" class="form-control data-add" id="vehicleProductAdd" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="printVehicleAdd">Print</label>
+                            <select class="form-control data-add" id="printVehicleAdd" required>
+                                <option value="true" selected>Ya</option>
+                                <option value="false">Tidak</option>
+                            </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="categoryProductAdd">Merk</label>
@@ -210,9 +245,14 @@
                     <hr class="w-100" style="border: 1px solid gray;">
 
                     <div class="form-row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-2">
                             <label for="qtyProductAdd">Qty</label>
                             <input type="number" class="form-control data-add" id="qtyProductAdd" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="satuanProductAdd">Satuan</label>
+                            <input type="text" placeholder="Cth. Pcs, Box" class="form-control data-add"
+                                id="satuanProductAdd" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="hbeliProductAdd">Harga Beli</label>
@@ -241,14 +281,42 @@
         dt_search("search_table_product", fill_table_product);
     });
 
-    $('#orderBy,#orderByAsc').on('change', function () {
+    function getFormFilter() {
+        var query = ""
+        var data = {}
+        var category = $('#filterCategory').val()
+        var merk = $('#filterMerk').val()
+        var vehicle = $('#filterVehicle').val()
+        var outlet = $('#filterOutlet').val()
+        var qty = $('#filterQty').val()
+
+        if (category) {
+            query += "AND merk_name = '" + category + "' "
+        }
+        if (merk) {
+            query += "AND category_name = '" + merk + "' "
+        }
+        if (vehicle) {
+            query += "AND vehicle = '" + vehicle + "' "
+        }
+        if (outlet) {
+            query += "AND outlet_name = '" + outlet + "' "
+        }
+        if (qty) {
+            query += "ORDER BY qty " + qty + ", sku"
+        } else {
+            query += "ORDER BY sku"
+        }
+        return query
+    }
+
+    $('.filterTable').on('change', function () {
         fill_table_product()
     });
 
     function fill_table_product() {
         const idTabel = "table_product";
-        var column = $('#orderBy').val() || 'product_name'
-        var order = $('#orderByAsc').val() || 'asc'
+        var filter = getFormFilter()
         const dt_options = {
             scrollY: '50vh',
             fixedColumns: {
@@ -262,11 +330,24 @@
                 { data: "part_number" },
                 { data: "product_name" },
                 { data: "barcode" },
-                { data: "vehicle" },
+                {
+                    data: "vehicle",
+                    "render": function (data, type, row) {
+
+                        if (row.f_print_vehicle === true) {
+                            return '<input type="checkbox" checked onclick="return false;"> &nbsp; ' + row.vehicle;
+                        }
+
+                        else {
+                            return '<input type="checkbox" onclick="return false;"> &nbsp;' + row.vehicle;
+                        }
+                    }
+                },
                 { data: "merk_name" },
                 { data: "category_name" },
                 { data: "outlet_name" },
                 { data: "qty", className: 'text-center' },
+                { data: "satuan", className: 'text-center' },
                 { data: "harga_beli" },
                 { data: "harga_jual" },
                 { data: "category_id", searchable: false, visible: false },
@@ -286,7 +367,7 @@
             ],
             columnDefs: [
                 {
-                    target: [9, 10],
+                    target: [10, 11],
                     searchable: false,
                     render: $.fn.dataTable.render.number(',', '.', 0, ''),
                     className: 'text-right'
@@ -297,7 +378,7 @@
             url: "/dt/product/",
             data: {
                 "search": $('#search_table_product').val().trim(),
-                "order_by": column + ' ' + order
+                "filter": filter
             }
         }
 
@@ -318,16 +399,24 @@
         $('#namaProductEdit').val(rowData['product_name'])
         $('#barcodeProductEdit').val(rowData['barcode'])
         $('#vehicleProductEdit').val(rowData['vehicle'])
+        $('#printVehicleEdit').val(String(rowData['f_print_vehicle']))
 
         $('#merkProductEdit').val(rowData['merk_id'])
         $('#outletProductEdit').val(rowData['outlet_id'])
 
         $('#qtyProductEdit').val(rowData['qty'])
+        $('#satuanProductEdit').val(rowData['satuan'])
         $('#hbeliProductEdit').val(rowData['harga_beli'])
         $('#hjualProductEdit').val(rowData['harga_jual'])
     })
 
     $("#btnSaveEditModal").on('click', e => {
+        if (!$('#partNumberProductEdit').val()) {
+            $('#partNumberProductEdit').val("-")
+        }
+        if (!$('#vehicleProductEdit').val()) {
+            $('#vehicleProductEdit').val(" ")
+        }
         var empty = isEmpty("data-edit")
         if (!empty) {
             var sku = $('#skuProductEdit').val()
@@ -335,19 +424,22 @@
             var nama = $('#namaProductEdit').val()
             var barcode = $('#barcodeProductEdit').val()
             var vehicle = $('#vehicleProductEdit').val()
+            var flag = (String($('#printVehicleEdit').val()).toLowerCase() === 'true')
 
             var merk = $('#merkProductEdit').val()
             var category = $('#categoryProductEdit').val()
             var outlet = $('#outletProductEdit').val()
 
             var qty = $('#qtyProductEdit').val()
+            var satuan = $('#satuanProductEdit').val()
             var hbeli = $('#hbeliProductEdit').val()
             var hjual = $('#hjualProductEdit').val()
 
             var data = {
                 sku: sku, product_name: nama, part_number: part_number, barcode: barcode,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
-                qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual)
+                qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
+                satuan: satuan, f_print_vehicle: flag
             }
             edit(data)
         }
@@ -517,7 +609,7 @@
             $('#partNumberProductAdd').val("-")
         }
         if (!$('#vehicleProductAdd').val()) {
-            $('#vehicleProductAdd').val("-")
+            $('#vehicleProductAdd').val(" ")
         }
 
         $('#barcodeProductAdd').val($('#skuProductAdd').val())
@@ -528,19 +620,22 @@
             var nama = $('#namaProductAdd').val()
             var barcode = $('#barcodeProductAdd').val()
             var vehicle = $('#vehicleProductAdd').val()
+            var flag = (String($('#printVehicleAdd').val()).toLowerCase() === 'true')
 
             var merk = $('#merkProductAdd').val()
             var category = $('#categoryProductAdd').val()
             var outlet = $('#outletProductAdd').val()
 
             var qty = $('#qtyProductAdd').val()
+            var satuan = $('#satuanProductAdd').val()
             var hbeli = $('#hbeliProductAdd').val()
             var hjual = $('#hjualProductAdd').val()
 
             var data = {
-                sku: sku, product_name: nama, part_number: part_number,
+                sku: sku, product_name: nama, part_number: part_number, satuan: satuan,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
-                qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual)
+                qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
+                f_print_vehicle: flag
             }
 
             addProduct(data)

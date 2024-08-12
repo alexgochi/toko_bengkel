@@ -18,6 +18,50 @@ def get_data_merk(id):
     }
     return db.execute(query, param)
 
+def get_data_distinct():
+    db = PostgresDatabase()
+    data = {}
+    query = """
+        SELECT *
+        FROM (SELECT DISTINCT ON (upper(category_name)) category_name
+            FROM ms_category)
+        ORDER BY category_name;
+    """
+    data['category'] = db.execute(query).result
+
+    query = """
+        SELECT *
+        FROM (SELECT DISTINCT ON (upper(merk_name)) merk_name
+            FROM ms_merk)
+        ORDER BY merk_name;
+    """
+    data['merk'] = db.execute(query).result
+
+    query = """
+        SELECT *
+        FROM (SELECT DISTINCT ON (upper(outlet_name)) outlet_name
+            FROM ms_outlet)
+        ORDER BY outlet_name;
+    """
+    data['outlet'] = db.execute(query).result
+
+    query = """
+        SELECT *
+        FROM (
+            SELECT 
+                DISTINCT ON (upper(vehicle)) vehicle
+            FROM 
+                ms_product
+            WHERE 
+                vehicle is not null
+                and vehicle <> '-'
+            )
+        ORDER BY 
+            vehicle;
+    """
+    data['vehicle'] = db.execute(query).result
+    return data
+
 def get_data_category():
     db = PostgresDatabase()
     query = """
@@ -40,7 +84,7 @@ def get_data_outlet():
     """
     return db.execute(query)
 
-def dt_data_product(search, offset, orderBy):
+def dt_data_product(search, offset, filter):
     db = PostgresDatabase()
     query = f"""
         SELECT
@@ -49,10 +93,12 @@ def dt_data_product(search, offset, orderBy):
             product_name,
             barcode,
             vehicle,
+            f_print_vehicle,
             merk_name,
             category_name,
             outlet_name,
             qty,
+            satuan,
             harga_beli,
             harga_jual,
             mp.category_id,
@@ -64,25 +110,20 @@ def dt_data_product(search, offset, orderBy):
             INNER JOIN ms_category mc on mc.category_id = mp.category_id
             INNER JOIN ms_outlet mo on mo.outlet_id = mp.outlet_id
         WHERE
+            sku is not null AND (
             sku ILIKE %(search)s OR
             part_number ILIKE %(search)s OR
             product_name ILIKE %(search)s OR
-            CAST(barcode AS TEXT) ILIKE %(search)s OR
-            vehicle ILIKE %(search)s OR
-            merk_name ILIKE %(search)s OR
-            category_name ILIKE %(search)s OR
-            outlet_name ILIKE %(search)s OR
-            CAST(harga_beli AS TEXT) ILIKE %(search)s OR
-            CAST(harga_jual AS TEXT) ILIKE %(search)s
-        ORDER BY
-            {orderBy};
+            CAST(barcode AS TEXT) ILIKE %(search)s)
+            {filter}
+        ;
     """
     param = {
         "search": f"%{search}%",
         "offset": offset
     }
 
-    return db.execute_dt(query, param)
+    return db.execute_dt(query, param, limit=25)
 
 def checkProductdbExist(data):
     db = PostgresDatabase()
@@ -96,10 +137,10 @@ def checkProductdbExist(data):
         AND part_number=%(part_number)s
         AND LOWER(vehicle)=LOWER(%(vehicle)s)
         AND sku != %(sku)s
+        AND outlet_id = %(outlet_id)s
     """
     param = data
     res = db.execute(query, param)
-    print(res.result)
     if res.is_error:
         return {"status": False, "message": res.pgerror}
     if res.result:
@@ -120,9 +161,11 @@ def update_data_product(data):
             category_id = %(category_id)s,
             outlet_id = %(outlet_id)s,
             qty = %(qty)s,
+            satuan = %(satuan)s,
             harga_beli = %(harga_beli)s,
             harga_jual = %(harga_jual)s,
-            barcode = %(barcode)s
+            barcode = %(barcode)s,
+            f_print_vehicle = %(f_print_vehicle)s
         WHERE
             sku = %(sku)s
     """
@@ -151,9 +194,9 @@ def add_data_product(data):
         query = """
             INSERT INTO 
                 ms_product 
-                    (sku, part_number, product_name, vehicle, merk_id, category_id, outlet_id, qty, harga_beli, harga_jual, barcode) 
+                    (sku, part_number, product_name, vehicle, merk_id, category_id, outlet_id, qty, satuan, harga_beli, harga_jual, barcode, f_print_vehicle) 
             VALUES 
-                    (%(sku)s, %(part_number)s, %(product_name)s, %(vehicle)s, %(merk_id)s, %(category_id)s, %(outlet_id)s, %(qty)s, %(harga_beli)s, %(harga_jual)s, %(barcode)s);
+                    (%(sku)s, %(part_number)s, %(product_name)s, %(vehicle)s, %(merk_id)s, %(category_id)s, %(outlet_id)s, %(qty)s, %(satuan)s, %(harga_beli)s, %(harga_jual)s, %(barcode)s, %(f_print_vehicle)s);
         """
         param = data
 

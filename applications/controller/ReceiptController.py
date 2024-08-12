@@ -20,13 +20,15 @@ from applications.lib import dataTableError
 @app.route('/receipt/', methods=['GET'])
 @login_required
 def receipt():
-    return render_template('receipt.html')
+    data = receiptDao.get_data_distinct()
+    return render_template('receipt.html', data=data)
 
 @app.route("/dt/receipt", methods=["GET"])
 def dt_receipt():
     res = receiptDao.dt_data_receipt(
         request.args.get("search"),
-        request.args.get('start')
+        request.args.get('start'),
+        request.args.get('filter')
     )
     if res.is_error:
         return dataTableError()

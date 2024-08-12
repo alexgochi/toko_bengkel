@@ -420,7 +420,7 @@ function dt_server(id_tabel, ajax_options, dt_options) {
     fixedHeader: true,
     scrollX: true,
     lengthChange: false,
-    pageLength: 10,
+    pageLength: 25,
     processing: true,
     serverSide: true,
     ajax: ajax_options,

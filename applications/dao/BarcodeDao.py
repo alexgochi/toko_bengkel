@@ -9,10 +9,13 @@ def getDataBySkuBarcode(search):
             merk_name,
             barcode,
             harga_jual,
-            vehicle,
+            CASE WHEN f_print_vehicle is true
+                THEN COALESCE(vehicle,'')
+                ELSE ' '
+            END vehicle,
             category_name,
             part_number,
-            outlet_name
+            mp.outlet_id as outlet_name
         FROM ms_product mp
             INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
             INNER JOIN ms_category mc on mc.category_id = mp.category_id

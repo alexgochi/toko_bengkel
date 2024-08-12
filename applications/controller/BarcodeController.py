@@ -44,3 +44,10 @@ def printBarcode2():
 def printBarcode1():
     data = request.get_json()
     return jsonify({"status": True, "message": "Berhasil Get Data", "data":render_template('barcode-print60x40.html',data=data)})
+
+
+@app.route('/barcode/printBarcode3', methods=['POST'])
+@login_required
+def printBarcode3():
+    data = request.get_json()
+    return jsonify({"status": True, "message": "Berhasil Get Data", "data":render_template('barcode-print40x30.html',data=data)})
