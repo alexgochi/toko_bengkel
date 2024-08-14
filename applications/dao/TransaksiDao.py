@@ -1,7 +1,7 @@
 import datetime
 from applications.lib import PostgresDatabase
 
-def dt_data_trans(search, offset, filter):
+def dt_data_trans(search, member, offset, filter):
     db = PostgresDatabase()
     query = f"""
         SELECT faktur,
@@ -23,12 +23,14 @@ def dt_data_trans(search, offset, filter):
                 payment_info ILIKE %(search)s OR
                 type_name ILIKE %(search)s 
             )
+            AND coalesce(member_name,'Bukan Pelanggan') ILIKE %(member)s 
             {filter}
         ORDER BY
             faktur;
     """
     param = {
         "search": f"%{search}%",
+        "member": f"%{member}%",
         "offset": offset
     }
 
@@ -116,7 +118,7 @@ def getDataTransByFaktur(faktur):
             mp.part_number,
             tt.product_name,
             mc.category_name  merk_name,
-            mp.satuan,
+            coalesce(mp.satuan,'') satuan,
             tt.qty,
             price,
             tt.qty * price as subtotal

@@ -22,8 +22,7 @@ from applications.lib import dataTableError
 def product():
     category = productDao.get_data_category().result
     outlet = productDao.get_data_outlet().result
-    data = productDao.get_data_distinct()
-    return render_template("product.html", data_cat=category, data_outlet=outlet, data=data)
+    return render_template("product.html", data_cat=category, data_outlet=outlet)
 
 @app.route('/product/generateSku', methods=['GET'])
 @login_required

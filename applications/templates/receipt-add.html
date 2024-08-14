@@ -351,17 +351,17 @@
 
                         <!-- Informasi Lainnya -->
                         <div class="row">
-                            <div class="container col-6">
+                            <div class="container col-12">
                                 <h2 class="my-2 mb-4">Informasi Lainnya</h2>
                                 <div class="form-group row font-form">
-                                    <label for="biayaOngkir" class="col-sm-5 col-form-label">Biaya Pengiriman</label>
+                                    <label for="biayaOngkir" class="col-sm-3 col-form-label">Biaya Pengiriman</label>
                                     <div class="col-sm-7">
                                         <input type="number" onfocus="autoSelect(this)" class="form-control font-form"
                                             id="biayaOngkir" min="0" required value="0">
                                     </div>
                                 </div>
                                 <div class="form-group row font-form">
-                                    <label for="otherInfo" class="col-sm-5 col-form-label">Keterangan</label>
+                                    <label for="otherInfo" class="col-sm-3 col-form-label">Keterangan</label>
                                     <div class="col-sm-7">
                                         <textarea class="form-control font-form" id="otherInfo" rows="3"></textarea>
                                     </div>
@@ -369,15 +369,15 @@
 
                                 <table class="font-order table table-borderless w-100">
                                     <thead>
-                                        <th class="w-50 text-right pr-5 text-danger"><b>Total Harga</b></th>
-                                        <th class="w-50 text-center text-danger" id="totalHjual"><b>Rp 0</b>
+                                        <th class="w-25 text-center pr-5 text-danger"><b>Total Harga</b></th>
+                                        <th class="w-75 text-danger" id="totalHjual"><b>Rp 0</b>
                                         </th>
                                     </thead>
                                 </table>
                             </div>
 
                             <!-- Diskon -->
-                            <div class="container col-6">
+                            <div class="container col-6" hidden>
                                 <h2 class="my-2 mb-4">Diskon</h2>
                                 <div class="form-group row font-form">
                                     <label for="discount" class="col-sm-5 col-form-label">Diskon (Rp)</label>

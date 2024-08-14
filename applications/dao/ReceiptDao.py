@@ -2,7 +2,7 @@ from applications.lib import PostgresDatabase
 from applications.lib.globalFunc import generate_faktur,to_date,update_faktur
 import datetime
 
-def dt_data_receipt(search, offset, filter):
+def dt_data_receipt(search, storeBuy, offset, filter):
     db = PostgresDatabase()
     query = f"""
         SELECT faktur,
@@ -15,12 +15,14 @@ def dt_data_receipt(search, offset, filter):
             (CAST(date_tx AS TEXT) ILIKE %(search)s OR
             store_buy ILIKE %(search)s OR
             faktur ILIKE %(search)s)
+            AND store_buy ILIKE %(storeBuy)s
             {filter}
         ORDER BY
             faktur;
     """
     param = {
         "search": f"%{search}%",
+        "storeBuy": f"%{storeBuy}%",
         "offset": offset
     }
 

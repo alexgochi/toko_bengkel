@@ -17,13 +17,14 @@
         <input type="text" class="form-control col-2 m-auto" id="filterCategory" placeholder="Cari kategori..">
         <input type="text" class="form-control col-2 m-auto" id="filterMerk" placeholder="Cari merk..">
         <input type="text" class="form-control col-2 m-auto" id="filterVehicle" placeholder="Cari kendaraan..">
-        <select id="filterOutlet" class="form-control form-control-lg col-2 select2 filterTable">
+        <select id="filterOutlet" class="form-control form-control-lg col-2 m-auto filterTable">
             <option value="" selected disabled>Outlet</option>
-            {% for x in data['outlet'] %}
+            <option value="">Semua</option>
+            {% for x in data_outlet %}
             <option value="{{ x['outlet_name'] }}"> {{ x['outlet_name'] }}</option>
             {% endfor %}
         </select>
-        <select id="filterQty" class="form-control form-control-lg col-1 select2 filterTable">
+        <select id="filterQty" class="form-control form-control-lg col-1 m-auto filterTable">
             <option value="" selected disabled>Qty</option>
             <option value="asc">ASC</option>
             <option value="desc">DESC</option>
@@ -38,48 +39,7 @@
             </div>
         </div>
     </div>
-    <!-- <div class="form-row ml-auto justify-content-between p-2 w-75"> -->
-    <!-- <select id="filterCategory" class="form-control form-control-lg col-2 select2 filterTable">
-            <option value="" selected disabled>Kategori</option>
-            {% for x in data['merk'] %}
-            <option value="{{ x['merk_name'] }}"> {{ x['merk_name'] }}</option>
-            {% endfor %}
-        </select>
-        <select id="filterMerk" class="form-control form-control-lg col-2 select2 filterTable">
-            <option value="" selected disabled>Merk</option>
-            {% for x in data['category'] %}
-            <option value="{{ x['category_name'] }}"> {{ x['category_name'] }}</option>
-            {% endfor %}
-        </select>
-        <select id="filterVehicle" class="form-control form-control-lg col-2 select2 filterTable">
-            <option value="" selected disabled>Kendaraan</option>
-            {% for x in data['vehicle'] %}
-            <option value="{{ x['vehicle'] }}"> {{ x['vehicle'] }}</option>
-            {% endfor %}
-        </select> -->
-    <!-- 
-        <select id="filterOutlet" class="form-control form-control-lg col-2 select2 filterTable">
-            <option value="" selected disabled>Outlet</option>
-            {% for x in data['outlet'] %}
-            <option value="{{ x['outlet_name'] }}"> {{ x['outlet_name'] }}</option>
-            {% endfor %}
-        </select>
-        <select id="filterQty" class="form-control form-control-lg col-2 select2 filterTable">
-            <option value="" selected disabled>Qty</option>
-            <option value="asc">ASC</option>
-            <option value="desc">DESC</option>
-        </select>
-    </div> -->
-    <!-- <div class="ml-auto p-2 justify-content-between">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="cari sku, nama ..." id="search_table_product">
-            <div class="input-group-append">
-                <span class="input-group-text" id="basic-addon2">
-                    <i class="fa fa-search"></i>
-                </span>
-            </div>
-        </div>
-    </div> -->
+
 </div>
 <div class="table-responsive">
     <table id="table_product" class="table table-hover table-bordered table-striped w-100 mb-2"

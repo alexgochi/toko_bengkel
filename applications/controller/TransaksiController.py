@@ -29,6 +29,7 @@ def transaksi():
 def dt_transaksi():
     res = transaksiDao.dt_data_trans(
         request.args.get("search"),
+        request.args.get("member"),
         request.args.get('start'),
         request.args.get('filter')
     )

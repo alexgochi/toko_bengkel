@@ -74,7 +74,7 @@
         <button style="background-color: red; font-size: 18px;color: white;" onclick="print()"><b>Cetak</b></button>
     </div>
     <div class="container" id="invoice">
-        <h2><u>INVOICE</u> {{ data['faktur'] }}</h2>
+        <h3><u>INVOICE</u> {{ data['faktur'] }}</h3>
 
         <!-- Header -->
         <div class="row header">
@@ -82,7 +82,7 @@
                 <table class="fs12">
                     <tr>
                         <td>
-                            <h1 style="margin-bottom: 0px;">{{ data['outlet']['outlet_name'] }}</h1>
+                            <h3 style="margin-bottom: 0px;">{{ data['outlet']['outlet_name'] }}</h3>
                         </td>
                     </tr>
                     <tr>
@@ -102,10 +102,6 @@
                     <tr>
                         <td>Tanggal</td>
                         <td>{{ data['date_tx'] }}</td>
-                    </tr>
-                    <tr>
-                        <td>Cetak</td>
-                        <td>{{ data['print_date'] }}</td>
                     </tr>
                     {% if data['member_name'] %}
                     <tr>
@@ -128,7 +124,6 @@
         <table style="margin-top: 20px;width: 100%;margin-right: 50px;border-collapse: collapse;font-size: 12px;">
             <thead>
                 <th>Qty</th>
-                <th>Satuan</th>
                 <th>Merk</th>
                 <th>Part Number</th>
                 <th>Nama Produk</th>
@@ -138,31 +133,33 @@
             <tbody>
                 {% for x in data['product'] %}
                 <tr>
-                    <td class="center">{{ x['qty'] }}</td>
-                    <td class="center">{{ x['satuan'] }}</td>
-                    <td class="center">{{ x['merk_name'] }}</td>
-                    <td class="center">{{ x['part_number'] }}</td>
+                    <td class="center" style="width: 5%;">{{ x['qty'] }} {{ x['satuan'] }}</td>
+                    <td class="center" style="width: 15%;">{{ x['merk_name'] }}</td>
+                    <td class="center" style="width: 15%;">{{ x['part_number'] }}</td>
                     <td>{{ x['product_name'] }}</td>
-                    <td class="right">{{ x['price'] }}</td>
-                    <td class="right">{{ x['subtotal'] }}</td>
+                    <td class="right" style="width: 15%;">{{ x['price'] }}</td>
+                    <td class="right" style="width: 15%;">{{ x['subtotal'] }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
                     <td>&nbsp;</td>
                 </tr>
                 <tr class="right">
-                    <td colspan="6"><b>Biaya Ongkir</b></td>
+                    <td colspan="5"><b>Biaya Ongkir</b></td>
                     <td>{{ data['other_fee'] }}</td>
                 </tr>
                 <tr class="right">
-                    <td colspan="3" style="text-align: left;">
+                    <td colspan="2" style="text-align: left;">
                         <i class="fs12">*Barang yang sudah dibeli tidak dapat dikembalikan</i>
                     </td>
+
+                    {% if data['diskon'] != '0' %}
                     <td colspan="3"><b>Diskon</b></td>
                     <td><i>{{ data['diskon'] }}</i></td>
+                    {% endif %}
                 </tr>
                 <tr class="right">
-                    <td colspan="6">
+                    <td colspan="5">
                         <h2>Total</h2>
                     </td>
                     <td>

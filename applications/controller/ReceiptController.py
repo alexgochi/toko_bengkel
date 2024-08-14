@@ -27,6 +27,7 @@ def receipt():
 def dt_receipt():
     res = receiptDao.dt_data_receipt(
         request.args.get("search"),
+        request.args.get("storeBuy"),
         request.args.get('start'),
         request.args.get('filter')
     )

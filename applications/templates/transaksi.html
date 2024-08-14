@@ -3,45 +3,34 @@
 {% block menu %}Transaksi{% endblock %}
 {% block content %}
 
-<style>
-    .select2 {
-        margin: auto;
-    }
-</style>
 <!-- DataTables -->
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/datatables.min.css') }}">
 <script src="{{ url_for('static', filename='assets/js/datatables.min.js') }}"></script>
 
 <div class="d-flex justify-content-between mt-5 mr-5">
     <div class="form-row ml-auto justify-content-between p-2 w-75">
-        <select id="filterDate" class="form-control form-control-lg col-2 select2 filterTable">
+        <select id="filterDate" class="form-control form-control-lg col-2 m-auto filterTable">
             <option value="" selected disabled>Tanggal Transaksi</option>
             <option value="daily">Hari ini</option>
             <option value="weekly">Minggu ini</option>
             <option value="monthly">Bulan ini</option>
             <option value="all">Semua</option>
         </select>
-        <select id="filterMember" class="form-control form-control-lg col-3 select2 filterTable">
-            <option value="" selected disabled>Pelanggan</option>
-            <option value="null">Bukan Pelanggan</option>
-            {% for x in data['member'] %}
-            <option value="{{ x['member_name'] }}"> {{ x['member_name'] }}</option>
-            {% endfor %}
-        </select>
-        <select id="filterOutlet" class="form-control form-control-lg col-2 select2 filterTable">
+        <input type="text" class="form-control col-2 m-auto" id="filterMember" placeholder="Cari pelanggan..">
+        <select id="filterOutlet" class="form-control form-control-lg col-2 m-auto filterTable">
             <option value="" selected disabled>Outlet</option>
             {% for x in data['outlet'] %}
             <option value="{{ x['outlet_id'] }}"> {{ x['outlet_name'] }}</option>
             {% endfor %}
         </select>
-        <select id="filterType" class="form-control form-control-lg col-2 select2 filterTable">
+        <select id="filterType" class="form-control form-control-lg col-2 m-auto filterTable">
             <option value="" selected disabled>Metode Bayar</option>
             <option value="all">Semua</option>
             {% for x in data_type %}
             <option value="{{ x['type_id'] }}">{{ x['type_name'] }}</option>
             {% endfor %}
         </select>
-        <select id="filterStatus" class="form-control col-2 select2 filterTable">
+        <select id="filterStatus" class="form-control form-control-lg col-2 m-auto filterTable">
             <option value="" selected disabled>Status</option>
             <option value="overdue">Overdue</option>
             <option value="bon">Bon</option>
@@ -49,8 +38,8 @@
             <option value="all">Semua</option>
         </select>
     </div>
-    <div class="ml-auto p-2 justify-content-between">
-        <div class="input-group mb-3">
+    <div class="ml-auto p-2 mt-2 justify-content-between">
+        <div class="input-group mb-2">
             <input type="text" class="form-control" placeholder="cari transaksi..." id="search_table_trans">
             <div class="input-group-append">
                 <span class="input-group-text" id="basic-addon2">
@@ -239,6 +228,7 @@
     $(() => {
         fill_table_trans();
         dt_search("search_table_trans", fill_table_trans);
+        dt_search("filterMember", fill_table_trans);
     });
 
     $('.filterTable').on('change', function () {
@@ -248,7 +238,6 @@
     function getFormFilter() {
         var query = ""
         var date = $('#filterDate').val()
-        var member = $('#filterMember').val()
         var outlet = $('#filterOutlet').val()
         var status = $('#filterStatus').val()
         var metode = $('#filterType').val()
@@ -263,13 +252,6 @@
             query = ''
         }
 
-        if (member == 'null') {
-            query += "AND member_name is null "
-        } else if (member) {
-            query += "AND member_name = '" + member + "' "
-        } else {
-
-        }
         if (outlet) {
             query += "AND substring(faktur,1,2) = '" + outlet + "' "
         }
@@ -327,6 +309,7 @@
             url: "/dt/transaksi",
             data: {
                 "search": $('#search_table_trans').val().trim(),
+                "member": $('#filterMember').val().trim(),
                 "filter": filter
             }
         }
