@@ -45,6 +45,9 @@ def get_merk():
 def dt_product():
     res = productDao.dt_data_product(
         request.args.get("search"),
+        request.args.get("category"),
+        request.args.get("merk"),
+        request.args.get("vehicle"),
         request.args.get('start'),
         request.args.get('filter')
     )

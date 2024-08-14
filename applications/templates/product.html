@@ -8,13 +8,38 @@
         margin: auto;
     }
 </style>
-<div class="d-flex justify-content-between mt-5 mr-5">
-    <div class="p-2 justify-content-between">
-        <button class="btn btn-primary " data-toggle="modal" data-target="#addModal">+ Tambah
+<div class="mt-5 mr-5">
+    <div class="p-2">
+        <button class="btn btn-primary m-auto" data-toggle="modal" data-target="#addModal">+ Tambah
             Produk</button>
     </div>
-    <div class="form-row ml-auto justify-content-between p-2 w-75">
-        <select id="filterCategory" class="form-control form-control-lg col-2 select2 filterTable">
+    <div class="p-2 row">
+        <input type="text" class="form-control col-2 m-auto" id="filterCategory" placeholder="Cari kategori..">
+        <input type="text" class="form-control col-2 m-auto" id="filterMerk" placeholder="Cari merk..">
+        <input type="text" class="form-control col-2 m-auto" id="filterVehicle" placeholder="Cari kendaraan..">
+        <select id="filterOutlet" class="form-control form-control-lg col-2 select2 filterTable">
+            <option value="" selected disabled>Outlet</option>
+            {% for x in data['outlet'] %}
+            <option value="{{ x['outlet_name'] }}"> {{ x['outlet_name'] }}</option>
+            {% endfor %}
+        </select>
+        <select id="filterQty" class="form-control form-control-lg col-1 select2 filterTable">
+            <option value="" selected disabled>Qty</option>
+            <option value="asc">ASC</option>
+            <option value="desc">DESC</option>
+        </select>
+        <div class="input-group mb-3 col-2 m-auto">
+            <input type="text" class="form-control filterTable" placeholder="cari sku, nama ..."
+                id="search_table_product">
+            <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">
+                    <i class="fa fa-search"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="form-row ml-auto justify-content-between p-2 w-75"> -->
+    <!-- <select id="filterCategory" class="form-control form-control-lg col-2 select2 filterTable">
             <option value="" selected disabled>Kategori</option>
             {% for x in data['merk'] %}
             <option value="{{ x['merk_name'] }}"> {{ x['merk_name'] }}</option>
@@ -31,7 +56,8 @@
             {% for x in data['vehicle'] %}
             <option value="{{ x['vehicle'] }}"> {{ x['vehicle'] }}</option>
             {% endfor %}
-        </select>
+        </select> -->
+    <!-- 
         <select id="filterOutlet" class="form-control form-control-lg col-2 select2 filterTable">
             <option value="" selected disabled>Outlet</option>
             {% for x in data['outlet'] %}
@@ -43,8 +69,8 @@
             <option value="asc">ASC</option>
             <option value="desc">DESC</option>
         </select>
-    </div>
-    <div class="ml-auto p-2 justify-content-between">
+    </div> -->
+    <!-- <div class="ml-auto p-2 justify-content-between">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="cari sku, nama ..." id="search_table_product">
             <div class="input-group-append">
@@ -53,7 +79,7 @@
                 </span>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 <div class="table-responsive">
     <table id="table_product" class="table table-hover table-bordered table-striped w-100 mb-2"
@@ -279,33 +305,24 @@
     $(() => {
         fill_table_product();
         dt_search("search_table_product", fill_table_product);
+        dt_search("filterCategory", fill_table_product);
+        dt_search("filterMerk", fill_table_product);
+        dt_search("filterVehicle", fill_table_product);
     });
 
     function getFormFilter() {
         var query = ""
         var data = {}
-        var category = $('#filterCategory').val()
-        var merk = $('#filterMerk').val()
-        var vehicle = $('#filterVehicle').val()
         var outlet = $('#filterOutlet').val()
         var qty = $('#filterQty').val()
 
-        if (category) {
-            query += "AND merk_name = '" + category + "' "
-        }
-        if (merk) {
-            query += "AND category_name = '" + merk + "' "
-        }
-        if (vehicle) {
-            query += "AND vehicle = '" + vehicle + "' "
-        }
         if (outlet) {
             query += "AND outlet_name = '" + outlet + "' "
         }
         if (qty) {
-            query += "ORDER BY qty " + qty + ", sku"
+            query += "ORDER BY qty " + qty + ", CASE WHEN sku < 'A' THEN lpad(sku, 255, '0') ELSE sku END;"
         } else {
-            query += "ORDER BY sku"
+            query += "ORDER BY CASE WHEN sku < 'A' THEN lpad(sku, 255, '0') ELSE sku END;"
         }
         return query
     }
@@ -378,6 +395,9 @@
             url: "/dt/product/",
             data: {
                 "search": $('#search_table_product').val().trim(),
+                "category": $('#filterCategory').val().trim(),
+                "merk": $('#filterMerk').val().trim(),
+                "vehicle": $('#filterVehicle').val().trim(),
                 "filter": filter
             }
         }

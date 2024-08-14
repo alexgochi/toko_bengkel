@@ -101,8 +101,11 @@ def dt_lovProduct(search, offset):
             CAST(sku AS TEXT) ILIKE %(search)s OR
             product_name ILIKE %(search)s OR
             merk_name ILIKE %(search)s 
-        ORDER BY
-            sku;
+        ORDER BY 
+            CASE WHEN sku < 'A'
+                THEN lpad(sku, 255, '0')
+            ELSE sku
+                END;;
     """
     param = {
         "search": f"%{search}%",
@@ -134,6 +137,7 @@ def getDataBySkuBarcode(search):
         WHERE
             UPPER(sku) = %(search)s OR
             CAST(barcode AS TEXT) =  %(search)s
+            
     """
     param = {
         'search' : search

@@ -70,7 +70,7 @@
             <th class="text-center">Total Pembelian</th>
             <th class="text-center">Metode</th>
             <th class="text-center">Status</th>
-            <th class="text-center">Action</th>
+            <th class="text-center">&nbsp;</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -301,15 +301,24 @@
                 { data: "type_name" },
                 { data: "payment_info" },
                 {
-                    className: 'text-center',
-                    render: data => {
-                        return `
-                        <div class="d-flex align-items-center justify-content-center" style="gap: 10px;">
-                            <button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
-                            <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>
-                            <button class="btn btn-payment btn-danger"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-credit-card"></i></button>
-                        </div>
-                        `;
+                    "render": function (data, type, row) {
+                        if (row.type_name.toLowerCase() == 'bon') {
+                            return `
+                            <div class="d-flex align-items-center justify-content-start" style="gap: 10px;">
+                                <button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
+                                <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>
+                                <button class="btn btn-payment btn-danger"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-credit-card"></i></button>
+                            </div>
+                            `;
+                        }
+                        else {
+                            return `
+                            <div class="d-flex align-items-center justify-content-start" style="gap: 10px;">
+                                <button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
+                                <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>
+                            </div>
+                            `;
+                        }
                     }
                 }
             ]

@@ -1007,7 +1007,9 @@
             if (selected > 0) {
                 $('#hideMember').removeAttr('hidden');
                 $('#hideMember').show();
-                $('.select2').select2();
+                $('.select2').select2({
+                    maximumSelectionSize: 5
+                });
             } else {
                 $("#memberInvoice").val("");
                 $("#addressMember").val("")

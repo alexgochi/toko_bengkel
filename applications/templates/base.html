@@ -215,7 +215,9 @@
     <!-- Global Func -->
     <script>
 
-        $('.select2').select2();
+        $('.select2').select2({
+            maximumSelectionSize: 5
+        });
 
         $('.modal').on("shown.bs.modal", function () {
             $('input:visible:first', this).focus();

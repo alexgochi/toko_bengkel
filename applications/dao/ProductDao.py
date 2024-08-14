@@ -84,7 +84,7 @@ def get_data_outlet():
     """
     return db.execute(query)
 
-def dt_data_product(search, offset, filter):
+def dt_data_product(search, category, merk, vehicle, offset, filter):
     db = PostgresDatabase()
     query = f"""
         SELECT
@@ -115,14 +115,18 @@ def dt_data_product(search, offset, filter):
             part_number ILIKE %(search)s OR
             product_name ILIKE %(search)s OR
             CAST(barcode AS TEXT) ILIKE %(search)s)
+            AND merk_name ILIKE %(category)s
+            AND category_name ILIKE %(merk)s
+            AND vehicle ILIKE %(vehicle)s
             {filter}
-        ;
     """
     param = {
         "search": f"%{search}%",
+        "category": f"%{category}%",
+        "merk": f"%{merk}%",
+        "vehicle": f"%{vehicle}%",
         "offset": offset
     }
-
     return db.execute_dt(query, param, limit=25)
 
 def checkProductdbExist(data):

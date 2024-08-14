@@ -162,14 +162,17 @@ def getDataRecByFaktur(faktur):
     data = db.execute(query, param).result[0]
     if not data:
         return {'status': False, 'message': 'Data Tidak ditemukan', 'data': {}}
-    print(data)
     
     query = """
         SELECT 
             sku, part_number, product_name, merk_name, qty, price, qty*price as subtotal
         FROM tx_receipt_detail
         WHERE faktur = %(faktur)s
-        ORDER BY sku;
+        ORDER BY 
+            CASE WHEN sku < 'A'
+                THEN lpad(sku, 255, '0')
+            ELSE sku
+                END;
     """
     param = {
         "faktur" : faktur
