@@ -19,7 +19,7 @@
         <input type="text" class="form-control col-2 m-auto" id="filterMember" placeholder="Cari pelanggan..">
         <select id="filterOutlet" class="form-control form-control-lg col-2 m-auto filterTable">
             <option value="" selected disabled>Outlet</option>
-            {% for x in data['outlet'] %}
+            {% for x in data_outlet %}
             <option value="{{ x['outlet_id'] }}"> {{ x['outlet_name'] }}</option>
             {% endfor %}
         </select>

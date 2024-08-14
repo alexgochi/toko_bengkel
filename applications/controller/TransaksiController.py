@@ -15,15 +15,16 @@ from flask import current_app as app
 from flask import request, render_template, make_response, jsonify, redirect, Blueprint, url_for, session
 from applications.dao import TransaksiDao as transaksiDao
 from applications.dao import DashboardDao as dashboardDao
+from applications.dao import ProductDao as productDao
 from applications.lib import dataTableError
 
 @app.route('/transaksi/', methods=['GET'])
 @login_required
 def transaksi():
-    data = transaksiDao.get_data_distinct()
     paymentType = dashboardDao.getPaymentType().result
     rekening = dashboardDao.getRekening().result
-    return render_template('transaksi.html', data=data, data_rek=rekening, data_type=paymentType)
+    outlet = productDao.get_data_outlet().result
+    return render_template('transaksi.html',data_outlet=outlet, data_rek=rekening, data_type=paymentType)
 
 @app.route("/dt/transaksi", methods=["GET"])
 def dt_transaksi():
