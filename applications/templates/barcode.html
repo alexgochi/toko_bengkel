@@ -75,6 +75,7 @@
                         style="white-space: nowrap;">
                         <thead class="thead-dark">
                             <th class="text-center">SKU</th>
+                            <th class="text-center">Part Number</th>
                             <th class="text-center">Nama Product</th>
                             <th class="text-center">Merk</th>
                             <th class="text-center">QTY</th>
@@ -274,7 +275,9 @@
     dt_search("search_table_lov", fill_table_lov_product);
     $('#lovModal').on('shown.bs.modal', function (e) {
         $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        $('#search_table_lov').val('')
         fill_table_lov_product()
+        $('#search_table_lov').focus()
     });
 
     function fill_table_lov_product() {
@@ -283,6 +286,7 @@
             scrollY: '50vh',
             columns: [
                 { data: "sku" },
+                { data: "part_number" },
                 { data: "product_name" },
                 { data: "category_name" },
                 { data: "qty" }

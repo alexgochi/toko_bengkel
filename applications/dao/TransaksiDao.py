@@ -135,7 +135,7 @@ def getDataTransByFaktur(faktur):
 
     query = """
         SELECT 
-            *
+            outlet_id, UPPER(outlet_name) outlet_name, address, phone
         FROM ms_outlet
         WHERE outlet_id = %(outlet)s;
     """

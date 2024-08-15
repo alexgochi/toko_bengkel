@@ -74,7 +74,7 @@
         <button style="background-color: red; font-size: 18px;color: white;" onclick="print()"><b>Cetak</b></button>
     </div>
     <div class="container" id="invoice">
-        <h3><u>INVOICE</u> {{ data['faktur'] }}</h3>
+        <h4 style="font-size: 15px;"><u>INVOICE</u> {{ data['faktur'] }}</h4>
 
         <!-- Header -->
         <div class="row header">
@@ -82,7 +82,9 @@
                 <table class="fs12">
                     <tr>
                         <td>
-                            <h3 style="margin-bottom: 0px;">{{ data['outlet']['outlet_name'] }}</h3>
+                            {% if data['outlet']['outlet_name'] != 'GUDANG TOKO' %}
+                            <h3 style="margin-bottom: 0px;font-size: 20px;">{{ data['outlet']['outlet_name'] }}</h3>
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>

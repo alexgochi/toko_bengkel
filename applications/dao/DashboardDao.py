@@ -90,6 +90,7 @@ def dt_lovProduct(search, offset):
             END product_name,
             merk_name,
             category_name,
+            part_number,
             qty
         FROM
             ms_product mp
@@ -100,7 +101,8 @@ def dt_lovProduct(search, offset):
         WHERE
             CAST(sku AS TEXT) ILIKE %(search)s OR
             product_name ILIKE %(search)s OR
-            merk_name ILIKE %(search)s 
+            merk_name ILIKE %(search)s OR
+            part_number ILIKE %(search)s 
         ORDER BY 
             CASE WHEN sku < 'A'
                 THEN lpad(sku, 255, '0')

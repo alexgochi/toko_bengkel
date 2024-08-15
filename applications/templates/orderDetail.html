@@ -789,7 +789,9 @@
 
         $('#lovModal').on('shown.bs.modal', function (e) {
             $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+            $('#search_table_lov').val('')
             getDataLovProduct()
+            $('#search_table_lov').focus()
         });
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
