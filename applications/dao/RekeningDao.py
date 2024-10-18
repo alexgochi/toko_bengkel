@@ -78,3 +78,21 @@ def add_data_rekening(data):
     param = data
 
     return db.execute(query, param)
+
+
+def get_all_rek():
+    db = PostgresDatabase()
+    query = """
+        SELECT
+            rek_no,
+            rek_name,
+            rek_bank,
+            case when status is true Then 'Aktif'
+            when status is false THEN 'Tidak Aktif' 
+            END status
+        FROM
+            ms_rekening
+        ORDER BY
+            rek_bank;
+    """
+    return db.execute(query)

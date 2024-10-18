@@ -108,3 +108,20 @@ def add_data_category(data):
     if res.is_error:
         return jsonify({"status": res.status, "message": str(res.pgerror)})
     return jsonify({"status": True, "message": "Berhasil Tambah data"})
+
+def get_all_merk():
+    db = PostgresDatabase()
+    query = """
+        SELECT
+            mc.category_name merk,
+            count(*) +
+                max(case when mm.category_id is null then -1 else 0 end)
+            as jumlah_kategori
+        FROM ms_category mc
+        LEFT JOIN ms_merk mm on mc.category_id = mm.category_id
+        GROUP BY
+            mc.category_name
+        ORDER BY
+            mc.category_name
+    """
+    return db.execute(query)

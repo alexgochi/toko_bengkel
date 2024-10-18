@@ -263,6 +263,36 @@
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
+        function generatePdf(url) {
+            $.ajax
+                ({
+                    type: "GET",
+                    contentType: "application/json",
+                    url: url,
+                    async: false,
+                    success: (e) => {
+                        if (e.status) {
+                            printJS({
+                                type: "raw-html",
+                                printable: e.data
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Gagal",
+                                text: e.message,
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function (xhr, status, err) {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: xhr.responseText,
+                            icon: "error"
+                        });
+                    }
+                });
+        }
     </script>
 
     <!-- bootstrap 4 js -->

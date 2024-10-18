@@ -318,7 +318,7 @@ def save_order(data,type = 'draft'):
             
             # Kalau fix dia ngurangin qty nya
             if type == 'invoice':
-                hasil = update_qty_product(i['sku'], int(i['qty']), db)
+                hasil = update_qty_product(i['sku'], float(i['qty']), db)
                 if hasil.is_error:
                     return hasil
                 

@@ -15,7 +15,7 @@ from flask import current_app as app
 from flask import request, render_template, make_response, jsonify, redirect, Blueprint, url_for, session
 from applications.dao import OutletDao as outletDao
 from applications.lib import dataTableError
-
+from applications.controller.DashboardController import generate_pdf
 
 @app.route('/outlet/', methods=['GET'])
 @login_required
@@ -74,3 +74,12 @@ def add_outlet():
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah data"})
+
+@app.route('/outlet/downloadAllOutlet', methods=['GET'])
+@login_required
+def download_all_outlet():
+    db_res = outletDao.get_all_outlet()
+    data = db_res.result
+    if len(data) > 0:
+        return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
+    return jsonify({"status": False, "message": "Tidak Ada Data"})

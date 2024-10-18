@@ -578,7 +578,7 @@
             let hbeli = $(hbeli_raw).val()
             let qty = $(qty_raw).val()
 
-            $(td).text(numberWithCommas(parseInt(hbeli) * parseInt(qty)))
+            $(td).text(numberWithCommas(parseInt(hbeli) * parseFloat(qty)))
 
             getSubTotal()
         }

@@ -156,3 +156,13 @@ def add_dashboard():
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah data"})
+
+def generate_pdf(data, orientation='potrait'):
+    head = list()
+    tothead = 0
+    head = list(data[0].keys())
+    tothead = len(head)
+    if orientation=='potrait':
+        return render_template('download-pdf.html',data=data, head=head, tothead=tothead)
+    else:
+        return render_template('download-pdf-land.html',data=data, head=head, tothead=tothead)

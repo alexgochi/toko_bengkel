@@ -76,3 +76,16 @@ def check_id_outlet(id):
     """
     param = {'id': id }
     return db.execute(query, param)
+
+
+def get_all_outlet():
+    db = PostgresDatabase()
+    query = """
+        SELECT
+            *
+        FROM
+            ms_outlet
+        ORDER BY
+            outlet_name
+    """
+    return db.execute(query)

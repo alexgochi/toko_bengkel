@@ -86,3 +86,17 @@ def check_id_member(id):
     """
     param = {'id': id }
     return db.execute(query, param)
+
+def get_all_member():
+    db = PostgresDatabase()
+    query = """
+        SELECT
+            member_name nama_member,
+            phone telepon,
+            address alamat
+        FROM
+            ms_member
+        ORDER BY
+            member_name;
+    """
+    return db.execute(query)

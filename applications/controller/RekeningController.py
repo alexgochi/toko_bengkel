@@ -15,7 +15,7 @@ from flask import current_app as app
 from flask import request, render_template, make_response, jsonify, redirect, Blueprint, url_for, session
 from applications.dao import RekeningDao as rekDao
 from applications.lib import dataTableError
-
+from applications.controller.DashboardController import generate_pdf
 
 @app.route('/rekening/', methods=['GET'])
 @login_required
@@ -65,3 +65,13 @@ def add_rek():
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah Data"})
+
+
+@app.route('/rek/downloadAllRek', methods=['GET'])
+@login_required
+def download_all_rek():
+    db_res = rekDao.get_all_rek()
+    data = db_res.result
+    if len(data) > 0:
+        return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
+    return jsonify({"status": False, "message": "Tidak Ada Data"})

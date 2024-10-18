@@ -798,7 +798,7 @@
             let hjual = $(hjual_raw).val()
             let qty = $(qty_raw).val()
 
-            $(td).text(numberWithCommas(parseInt(hjual) * parseInt(qty)))
+            $(td).text(numberWithCommas(parseInt(hjual) * parseFloat(qty)))
 
             getSubTotal()
         }

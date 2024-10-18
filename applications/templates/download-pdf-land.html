@@ -1,0 +1,57 @@
+<html>
+
+<head>
+
+    <title>{{ data['faktur'] }}</title>
+
+    <style>
+        @media print {
+            @page {
+                size: landscape;
+                margin: 30px;
+                padding: 30px;
+                overflow: hidden;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            table {
+                white-space: nowrap;
+                border: 1px solid black;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th,
+            td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <thead class="thead-light">
+            {% for valHead in head %}
+            <th class="text-center">{{ valHead.replace('_', ' ').title() }}</th>
+            {% endfor %}
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                {% for i in range(0,tothead) %}
+                <td>{{ row[head[i]] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>

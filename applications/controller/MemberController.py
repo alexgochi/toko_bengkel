@@ -13,8 +13,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 from flask import current_app as app
 from flask import request, render_template, make_response, jsonify, redirect, Blueprint, url_for, session
-from applications.dao.MemberDao import dt_data_member, update_data_member, delete_data_member, add_data_member, check_id_member
+from applications.dao.MemberDao import get_all_member, dt_data_member, update_data_member, delete_data_member, add_data_member, check_id_member
 from applications.lib import dataTableError
+from applications.controller.DashboardController import generate_pdf
 
 
 @app.route('/member/', methods=['GET'])
@@ -76,3 +77,13 @@ def add_member():
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah data Member"})
+
+
+@app.route('/member/downloadAllMember', methods=['GET'])
+@login_required
+def download_all_member():
+    db_res = get_all_member()
+    data = db_res.result
+    if len(data) > 0:
+        return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
+    return jsonify({"status": False, "message": "Tidak Ada Data"})

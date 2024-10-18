@@ -131,7 +131,7 @@
             var data = {
                 sku: sku, dashboard_name: nama, part_number: part_number, barcode: barcode,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
-                qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual)
+                qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual)
             }
             edit(data)
         }

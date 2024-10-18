@@ -15,6 +15,7 @@ from flask import current_app as app
 from flask import request, render_template, make_response, jsonify, redirect, Blueprint, url_for, session
 from applications.dao import CategoryDao as categoryDao
 from applications.lib import dataTableError
+from applications.controller.DashboardController import generate_pdf
 
 
 @app.route('/category/', methods=['GET'])
@@ -63,3 +64,12 @@ def add_category():
     data = request.form.to_dict()
     db_res = categoryDao.add_data_category(data)
     return db_res
+
+@app.route('/category/downloadAllMerk', methods=['GET'])
+@login_required
+def download_all_merk():
+    db_res = categoryDao.get_all_merk()
+    data = db_res.result
+    if len(data) > 0:
+        return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
+    return jsonify({"status": False, "message": "Tidak Ada Data"})

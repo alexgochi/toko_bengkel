@@ -12,6 +12,8 @@
     <div class="p-2">
         <button class="btn btn-primary m-auto" data-toggle="modal" data-target="#addModal">+ Tambah
             Produk</button>
+        <button class="btn btn-danger mr-2" style="color: white;"
+            onclick="generatePdf('/product/downloadAllProduct')"><i class="fa fa-download"></i>Download</button>
     </div>
     <div class="p-2 row">
         <input type="text" class="form-control col-2 m-auto" id="filterCategory" placeholder="Cari kategori..">
@@ -418,7 +420,7 @@
             var data = {
                 sku: sku, product_name: nama, part_number: part_number, barcode: barcode,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
-                qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
+                qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
                 satuan: satuan, f_print_vehicle: flag
             }
             edit(data)
@@ -614,7 +616,7 @@
             var data = {
                 sku: sku, product_name: nama, part_number: part_number, satuan: satuan,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
-                qty: parseInt(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
+                qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
                 f_print_vehicle: flag
             }
 

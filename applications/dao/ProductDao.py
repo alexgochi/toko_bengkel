@@ -281,3 +281,28 @@ def update_sku(conn,num):
             """
     param = {'ordinal_number': str(num)}
     return conn.execute_preserve(query, param)
+
+def get_all_product():
+    db = PostgresDatabase()
+    query = f"""
+        SELECT
+            sku SKU,
+            part_number Part_Number,
+            product_name Nama_Produk,
+            barcode Barcode,
+            vehicle Kendaraan,
+            merk_name as Kategori,
+            category_name as Merk,
+            outlet_name nama_outlet,
+            qty,
+            satuan,
+            harga_beli Beli,
+            harga_jual jual
+        FROM
+            ms_product mp
+            INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
+            INNER JOIN ms_category mc on mc.category_id = mp.category_id
+            INNER JOIN ms_outlet mo on mo.outlet_id = mp.outlet_id
+        ORDER BY CASE WHEN sku < 'A' THEN lpad(sku, 255, '0') ELSE sku END;
+        """
+    return db.execute(query)
