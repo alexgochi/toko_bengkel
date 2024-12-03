@@ -410,7 +410,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title" id="lovModalLabel">LOV Product</h3>
+                    <h3 class="modal-title" id="lovModalLabel">Cari Product</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -433,7 +433,7 @@
                                 <th class="text-center">SKU</th>
                                 <th class="text-center">Part Number</th>
                                 <th class="text-center">Nama Produk</th>
-                                <th class="text-center">Kategori</th>
+                                <th class="text-center">Merk</th>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -640,7 +640,7 @@
                     { data: "sku" },
                     { data: "part_number" },
                     { data: "product_name" },
-                    { data: "merk_name" }
+                    { data: "category_name" }
                 ]
             }
             const ajax_options = {
@@ -664,7 +664,7 @@
                     var item = [
                         data[i]['sku'],
                         data[i]['product_name'],
-                        data[i]['merk_name']
+                        data[i]['category_name']
                     ]
                     tableLov.row.add(item).draw().node()
                 }
@@ -772,7 +772,7 @@
                 item['sku'] = $(product[i]).find('td').eq(0).text();
                 item['part_number'] = $(product[i]).find('td').eq(1).text();
                 item['product_name'] = $(product[i]).find('td').eq(2).text();
-                item['merk_name'] = $(product[i]).find('td').eq(3).text();
+                item['category_name'] = $(product[i]).find('td').eq(3).text();
                 item['qty'] = $(product[i]).find('.qty_product').val();
                 item['price'] = $(product[i]).find('.hbeli_product').val();
                 item['hjual'] = $(product[i]).find('.hjual_product').val();
