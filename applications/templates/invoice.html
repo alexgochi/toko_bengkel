@@ -74,7 +74,7 @@
         <button style="background-color: red; font-size: 18px;color: white;" onclick="print()"><b>Cetak</b></button>
     </div>
     <div class="container" id="invoice">
-        <h4 style="font-size: 15px;"><u>INVOICE</u> {{ data['faktur'] }}</h4>
+        <h3 style="font-size: 20px;">INVOICE<br /><u>{{ data['faktur'] }}</u></h3>
 
         <!-- Header -->
         <div class="row header">
@@ -82,7 +82,7 @@
                 <table class="fs12">
                     <tr>
                         <td>
-                            {% if data['outlet']['outlet_name'] != 'GUDANG TOKO' %}
+                            {% if data['outlet']['outlet_name'] != 'NOTA POLOS' %}
                             <h3 style="margin-bottom: 0px;font-size: 20px;">{{ data['outlet']['outlet_name'] }}</h3>
                             {% endif %}
                         </td>
@@ -100,15 +100,14 @@
                 </table>
             </div>
             <div class="column" align="right">
-                <table style="width: 75%;" class="fs12">
+                <table style="width: 80%;" class="fs12">
                     <tr>
-                        <td>Tanggal</td>
-                        <td>{{ data['date_tx'] }}</td>
+						<td><h4 style="margin-bottom: 0px;font-size: 20px;">{{ data['date_tx'] }}</h4></td>
                     </tr>
                     {% if data['member_name'] %}
                     <tr>
                         <td>
-                            <h3 style="margin-top: 5px;margin-bottom: 0px;">{{ data['member_name'] }}</h3>
+                            <h3 style="margin-top: 5px;margin-bottom: 0px;font-size: 20px;">{{ data['member_name'] }}</h3>
                             <!-- {% if data['phone'] %}
                             / {{ data['phone'] }}
                             {% endif %} -->
