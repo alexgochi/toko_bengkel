@@ -36,7 +36,7 @@ def getProductBySkuBarcode():
 @login_required
 def printBarcode2():
     data = request.get_json()
-    return jsonify({"status": True, "message": "Berhasil Get Data", "data":render_template('barcode-print.html',data=data)})
+    return jsonify({"status": True, "message": "Berhasil Get Data", "data":render_template('barcode-print40x20.html',data=data)})
 
 
 @app.route('/barcode/printBarcode1', methods=['POST'])
