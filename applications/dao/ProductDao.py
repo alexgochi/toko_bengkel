@@ -90,6 +90,7 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
         SELECT
             sku,
             part_number,
+            descriptions_product,
             product_name,
             barcode,
             vehicle,
@@ -160,6 +161,7 @@ def update_data_product(data):
         SET
             part_number = %(part_number)s,
             product_name = %(product_name)s,
+            descriptions_product = %(descriptions_product)s,
             vehicle = %(vehicle)s,
             merk_id = %(merk_id)s,
             category_id = %(category_id)s,
@@ -198,9 +200,9 @@ def add_data_product(data):
         query = """
             INSERT INTO 
                 ms_product 
-                    (sku, part_number, product_name, vehicle, merk_id, category_id, outlet_id, qty, satuan, harga_beli, harga_jual, barcode, f_print_vehicle) 
+                    (sku, part_number, descriptions_product, product_name, vehicle, merk_id, category_id, outlet_id, qty, satuan, harga_beli, harga_jual, barcode, f_print_vehicle) 
             VALUES 
-                    (%(sku)s, %(part_number)s, %(product_name)s, %(vehicle)s, %(merk_id)s, %(category_id)s, %(outlet_id)s, %(qty)s, %(satuan)s, %(harga_beli)s, %(harga_jual)s, %(barcode)s, %(f_print_vehicle)s);
+                    (%(sku)s, %(part_number)s, %(descriptions_product)s, %(product_name)s, %(vehicle)s, %(merk_id)s, %(category_id)s, %(outlet_id)s, %(qty)s, %(satuan)s, %(harga_beli)s, %(harga_jual)s, %(barcode)s, %(f_print_vehicle)s);
         """
         param = data
 
@@ -288,6 +290,7 @@ def get_all_product():
         SELECT
             sku SKU,
             part_number Part_Number,
+            descriptions_product Descriptions_Product,
             product_name Nama_Produk,
             barcode Barcode,
             vehicle Kendaraan,
