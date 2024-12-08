@@ -21,6 +21,7 @@
         </div>
     </div>
 </div>
+
 <div class="table-responsive">
     <table id="table_outlet" class="table table-hover table-bordered table-striped w-100 mb-2"
         style="white-space: nowrap;">
@@ -29,6 +30,7 @@
             <th class="text-center">Nama Outlet</th>
             <th class="text-center">Alamat</th>
             <th class="text-center">Telepon</th>
+            <th class="text-center">Status</th>
             <th class="text-center"></th>
         </thead>
         <tbody></tbody>
@@ -63,6 +65,13 @@
                     <div class="form-group">
                         <label for="teleponOutletEdit">Telepon</label>
                         <input type="text" class="form-control" id="teleponOutletEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="statusOutletEdit">Status</label>
+                        <select class="form-control" id="statusOutletEdit">
+                            <option value="1">Aktif</option>
+                            <option value="0">Tidak Aktif</option>
+                        </select>
                     </div>
                 </form>
             </div>
@@ -104,6 +113,13 @@
                         <label for="teleponOutletAdd">Telepon</label>
                         <input type="text" class="form-control" id="teleponOutletAdd">
                     </div>
+                    <div class="form-group">
+                        <label for="statusOutletAdd">Status</label>
+                        <select class="form-control" id="statusOutletAdd">
+                            <option value="1">Aktif</option>
+                            <option value="0">Tidak Aktif</option>
+                        </select>
+                    </div>
                 </form>
             </div>
 
@@ -131,6 +147,7 @@
                 { data: "outlet_name" },
                 { data: "address" },
                 { data: "phone" },
+                { data: "status" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -168,6 +185,11 @@
         $('#namaOutletEdit').val(rowData['outlet_name'])
         $('#alamatOutletEdit').val(rowData['address'])
         $('#teleponOutletEdit').val(rowData['phone'])
+        if (rowData['status'] == 'Aktif') {
+            $('#statusOutletEdit').val('1')
+        } else {
+            $('#statusOutletEdit').val('0')
+        }
     })
 
     $("#btnSaveEditModal").on('click', e => {
@@ -175,9 +197,9 @@
         var name = $('#namaOutletEdit').val()
         var address = $('#alamatOutletEdit').val()
         var phone = $('#teleponOutletEdit').val()
-        var data = { outlet_id: id, outlet_name: name, address: address, phone: phone }
+        var status = $('#statusOutletEdit').val()
+        var data = { outlet_id: id, outlet_name: name, address: address, phone: phone, status: status }
         edit(data)
-
     })
 
     var edit = (dataEdit) => {
@@ -268,7 +290,8 @@
         var name = $('#namaOutletAdd').val()
         var address = $('#alamatOutletAdd').val()
         var phone = $('#teleponOutletAdd').val()
-        var data = { outlet_id: id, outlet_name: name, address: address, phone: phone }
+        var status = $('#statusOutletAdd').val()
+        var data = { outlet_id: id, outlet_name: name, address: address, phone: phone, status:status }
         console.log(data)
 
         var check = checkId(id)
@@ -329,7 +352,6 @@
                 }
             });
     }
-
 
 </script>
 {% endblock %}

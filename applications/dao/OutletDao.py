@@ -4,13 +4,21 @@ def dt_data_outlet(search, offset):
     db = PostgresDatabase()
     query = """
         SELECT
-            *
+            outlet_id,
+            outlet_name,
+            address,
+            phone,
+            case when status is true Then 'Aktif'
+            when status is false THEN 'Tidak Aktif' 
+            END status
         FROM
             ms_outlet
         WHERE
             phone ILIKE %(search)s OR
             outlet_name ILIKE %(search)s OR
             address ILIKE %(search)s
+        ORDER BY
+            outlet_name;    
     """
     param = {
         "search": f"%{search}%",
@@ -28,25 +36,32 @@ def update_data_outlet(data):
         SET
             outlet_name = %(outlet_name)s,
             address = %(address)s,
-            phone = %(phone)s
+            phone = %(phone)s,
+            status = %(status)s
         WHERE
             outlet_id = %(outlet_id)s
     """
-    param = data
+    param = {
+        "outlet_id" : data['outlet_id'],
+        "address" : data['address'],
+        "outlet_name" : data['outlet_name'],
+        "phone" : data['phone'],
+        "status" : data['status']
+    }
 
     return db.execute(query, param)
 
-def delete_data_outlet(id):
+def delete_data_outlet(outlet_id):
     db = PostgresDatabase()
     query = """
         DELETE
         FROM 
             ms_outlet
         WHERE
-            outlet_id = %(id)s
+            outlet_id = %(outlet_id)s
     """
     param = {
-        "id" : id
+        "outlet_id" : outlet_id
     }
 
     return db.execute(query, param)
@@ -56,9 +71,9 @@ def add_data_outlet(data):
     query = """
         INSERT INTO 
             ms_outlet 
-                (outlet_id, outlet_name, phone, address) 
+                (outlet_id, outlet_name, phone, address, status) 
         VALUES 
-                (%(outlet_id)s, %(outlet_name)s, %(phone)s, %(address)s);
+                (%(outlet_id)s, %(outlet_name)s, %(phone)s, %(address)s, %(status)s);
     """
     param = data
 
@@ -82,7 +97,13 @@ def get_all_outlet():
     db = PostgresDatabase()
     query = """
         SELECT
-            *
+            outlet_id,
+            outlet_name,
+            address,
+            phone,
+            case when status is true Then 'Aktif'
+            when status is false THEN 'Tidak Aktif' 
+            END status
         FROM
             ms_outlet
         ORDER BY

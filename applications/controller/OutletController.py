@@ -26,7 +26,7 @@ def outlet():
 @login_required
 def check_id_outlet():
     data = request.form.to_dict()
-    db_res = outletDao.check_id_outlet(data['id'])
+    db_res = outletDao.check_id_outlet(data['outlet_id'])
     print(db_res)
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
@@ -60,7 +60,7 @@ def edit_outlet():
 @login_required
 def delete_outlet():
     data = request.form.to_dict()
-    db_res = outletDao.delete_data_outlet(data['id'])
+    db_res = outletDao.delete_data_outlet(data['outlet_id'])
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Hapus data"})

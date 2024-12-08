@@ -3,14 +3,20 @@ from applications.lib.globalFunc import generate_faktur,to_date,update_faktur
 import datetime
 from flask import request
 
-def getDataOutlet():
+def getDataOutlet(id=''):
     db = PostgresDatabase()
-    query = """
+    param=''
+    if id:
+        param = f"AND outlet_id = {id}"
+    query = f"""
         SELECT 
             outlet_id, 
             outlet_name
         FROM 
-            ms_outlet;
+            ms_outlet
+        WHERE 
+            status = true
+        {param};
     """
     return db.execute(query)
 
@@ -40,13 +46,16 @@ def getRekening(id=''):
     if id:
         param = f"AND rek_no = {id}"
     query = f"""
-        select rek_no,
+        SELECT 
+            rek_no,
             rek_name,
             rek_bank
-        from ms_rekening
-        where status = true
+        FROM 
+            ms_rekening
+        WHERE 
+            status = true
         {param}
-        order by rek_bank;
+        ORDER BY rek_bank;
     """
     return db.execute(query)
 
