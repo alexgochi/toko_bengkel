@@ -114,6 +114,7 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
             sku is not null AND (
             sku ILIKE %(search)s OR
             part_number ILIKE %(search)s OR
+            descriptions_product ILIKE %(search)s OR
             product_name ILIKE %(search)s OR
             CAST(barcode AS TEXT) ILIKE %(search)s)
             AND merk_name ILIKE %(category)s

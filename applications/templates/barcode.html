@@ -33,6 +33,7 @@
         <thead class="thead-dark">
             <th class="text-center">SKU</th>
             <th class="text-center">Nama Product</th>
+            <th class="text-center">Part Number</th>
             <th class="text-center">Kategori</th>
             <th class="text-center">Barcode</th>
             <th class="text-center">Harga Jual</th>
@@ -223,6 +224,7 @@
                 var item = [
                     data['sku'],
                     data['product_name'],
+                    data['part_number'],
                     data['merk_name'],
                     data['barcode'],
                     numberWithCommas(parseInt(data['harga_jual'])),
@@ -352,14 +354,15 @@
                 var barcode = {}
                 barcode['sku'] = rowData[i][0]
                 barcode['product_name'] = rowData[i][1]
-                barcode['merk_name'] = rowData[i][2]
-                barcode['barcode'] = rowData[i][3]
-                barcode['price'] = rowData[i][4]
-                barcode['vehicle'] = rowData[i][5]
-                barcode['category_name'] = rowData[i][6]
-                barcode['outlet_name'] = rowData[i][7]
+                barcode['part_number'] = rowData[i][2]
+                barcode['merk_name'] = rowData[i][3]
+                barcode['barcode'] = rowData[i][4]
+                barcode['price'] = rowData[i][5]
+                barcode['vehicle'] = rowData[i][6]
+                barcode['category_name'] = rowData[i][7]
+                barcode['outlet_name'] = rowData[i][8]
                 barcode['print_date'] = getTodayDate()
-                barcode['img_barcode'] = textToBase64Barcode(rowData[i][3])
+                barcode['img_barcode'] = textToBase64Barcode(rowData[i][4])
                 dataBarcode.push(barcode)
             }
             $.ajax
