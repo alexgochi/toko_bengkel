@@ -248,7 +248,7 @@
         } else if (date == 'weekly') {
             query += "AND date_tx >= current_date - 7 "
         } else if (date == 'monthly') {
-            query += "AND date_tx >= current_date - 31 "
+            query += "AND date_tx >= current_date - 30 "
         } else {
             query = ''
         }
