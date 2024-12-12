@@ -62,7 +62,7 @@ def save_receipt(data):
     faktur = ''
     if "faktur" not in data:
         date = to_date(data['tanggal'])
-        head = f"P-{data['outletId']}-{date.strftime('%d%m%y')}"
+        head = f"P-{data['outletId']}{date.strftime('%m%y')}"
         faktur = generate_faktur(head)
         data['faktur'] = faktur
 

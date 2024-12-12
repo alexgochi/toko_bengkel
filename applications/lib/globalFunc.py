@@ -26,12 +26,12 @@ def generate_faktur(head):
         param = {'head_fak': head}
         db.execute(query, param)
         ordinal_num = 1
-    faktur = f"{head}-{format(ordinal_num,'04')}"
+    faktur = f"{head}{format(ordinal_num,'03')}"
     return faktur
 
 def update_faktur(faktur,conn):
-    head = faktur[:-5]
-    ordinal = int(faktur[-4:])
+    head = faktur[:-3]
+    ordinal = int(faktur[-3:])
 
     query = """
             INSERT INTO

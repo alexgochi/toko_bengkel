@@ -259,7 +259,7 @@ def save_order(data,type = 'draft'):
     faktur = ''
     if "faktur" not in data:
         date = to_date(data['tanggal'])
-        head = f"{data['outletId']}-{date.strftime('%d%m%y')}"
+        head = f"{data['outletId']}{date.strftime('%m%y')}"
         faktur = generate_faktur(head)
         data['faktur'] = faktur
     else:

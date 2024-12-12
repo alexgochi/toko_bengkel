@@ -26,7 +26,7 @@ def dt_data_audit(search, member, offset, filter):
             AND coalesce(member_name,'Bukan Pelanggan') ILIKE %(member)s 
             {filter}
         ORDER BY
-            faktur;
+            date_tx, time_tx desc;
     """
     param = {
         "search": f"%{search}%",
@@ -71,7 +71,7 @@ def getAllDataAudit():
         LEFT JOIN ms_payment_type mpt on mpt.type_id = tt.payment_id
         LEFT JOIN ms_member mm on mm.member_id = tt.member_id
         WHERE status = true
-        ORDER BY faktur;
+        ORDER BY date_tx, time_tx desc;
     """
     return db.execute(query)
 
@@ -103,7 +103,7 @@ def getDataAuditByFaktur(faktur):
             LEFT JOIN ms_member mm on mm.member_id = tt.member_id
         WHERE status = true
         AND faktur = %(faktur)s
-        ORDER BY faktur;
+        ORDER BY date_tx, time_tx desc;
     """
     param = {
         "faktur" : faktur
@@ -126,7 +126,7 @@ def getDataAuditByFaktur(faktur):
             INNER JOIN ms_product mp on tt.sku = mp.sku
             INNER JOIN ms_category mc on mc.category_id = mp.category_id
         WHERE faktur = %(faktur)s
-        ORDER BY faktur;
+        ORDER BY date_tx, time_tx desc;
     """
     param = {
         "faktur" : faktur
