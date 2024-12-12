@@ -7,7 +7,8 @@ def dt_data_member(search, offset):
             member_id,
             member_name,
             phone,
-            address
+            address,
+            notes
         FROM
             ms_member
         WHERE
@@ -32,14 +33,16 @@ def update_data_member(data):
         SET
             member_name = %(name)s,
             phone = %(phone)s,
-            address = %(addr)s
+            address = %(address)s,
+            notes = %(notes)s
         WHERE
             member_id = %(id)s
     """
     param = {
         "name" : data['name'],
         "phone" : data['phone'],
-        "addr" : data['addr'],
+        "address" : data['address'],
+        "notes" : data['notes'],
         "id" : data['id']
     }
 
@@ -65,9 +68,9 @@ def add_data_member(data):
     query = """
         INSERT INTO 
             ms_member 
-                (member_name, phone, address) 
+                (member_name, phone, address, notes) 
         VALUES 
-                (%(member_name)s, %(phone)s, %(address)s);
+                (%(member_name)s, %(phone)s, %(address)s, %(notes)s);
 
     """
     param = data
@@ -93,7 +96,8 @@ def get_all_member():
         SELECT
             member_name nama_member,
             phone telepon,
-            address alamat
+            address alamat,
+            notes catatan
         FROM
             ms_member
         ORDER BY

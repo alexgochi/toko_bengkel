@@ -3,7 +3,6 @@
 {% block menu %}Daftar Pelanggan{% endblock %}
 {% block content %}
 
-
 <div class="d-flex justify-content-between mt-5 mr-5">
     <div>
         <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">+ Tambah Pelanggan</button>
@@ -21,6 +20,7 @@
         </div>
     </div>
 </div>
+
 <div class="table-responsive">
     <table id="table_member" class="table table-hover table-bordered table-striped w-100 mb-2"
         style="white-space: nowrap;">
@@ -29,6 +29,7 @@
             <th>Nama</th>
             <th>Telepon</th>
             <th>Alamat</th>
+            <th>Catatan</th>
             <th>&nbsp;</th>
         </thead>
         <tbody></tbody>
@@ -63,6 +64,10 @@
                     <div class="form-group">
                         <label for="alamatMemberEdit">Alamat</label>
                         <input type="text" class="form-control" id="alamatMemberEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="catatanMemberEdit">Catatan</label>
+                        <input type="text" class="form-control" id="catatanMemberEdit">
                     </div>
                 </form>
             </div>
@@ -104,6 +109,10 @@
                         <label for="alamatMemberAdd">Alamat</label>
                         <input type="text" class="form-control" id="alamatMemberAdd">
                     </div>
+                    <div class="form-group">
+                        <label for="catatanMemberAdd">Catatan</label>
+                        <input type="text" class="form-control" id="catatanMemberAdd">
+                    </div>
                 </form>
             </div>
 
@@ -132,6 +141,7 @@
                 { data: "member_name" },
                 { data: "phone" },
                 { data: "address" },
+                { data: "notes" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -158,7 +168,6 @@
                 "search": $('#search_table_member').val().trim()
             }
         }
-
         dt_server(idTabel, ajax_options, dt_options);
     }
 
@@ -169,15 +178,17 @@
         $('#namaMemberEdit').val(rowData['member_name'])
         $('#phoneMemberEdit').val(rowData['phone'])
         $('#alamatMemberEdit').val(rowData['address'])
+        $('#catatanMemberEdit').val(rowData['notes'])
     })
+
     $("#btnSaveEditModal").on('click', e => {
         var id = $('#idMemberEdit').val()
         var name = $('#namaMemberEdit').val()
         var phone = $('#phoneMemberEdit').val()
-        var addr = $('#alamatMemberEdit').val()
-        var data = { id: id, name: name, phone: phone, addr: addr }
+        var address = $('#alamatMemberEdit').val()
+        var notes = $('#catatanMemberEdit').val()
+        var data = { id: id, name: name, phone: phone, address: address, notes:notes }
         edit(data)
-
     })
 
     var edit = (dataEdit) => {
@@ -194,11 +205,9 @@
                         icon: "success"
                     });
                     fill_table_member()
-
                 },
                 error: function (xhr, status, err) {
                     alert(xhr.responseText);
-
                 }
             });
     }
@@ -231,7 +240,6 @@
                                 icon: "success"
                             });
                             fill_table_member()
-
                         },
                         error: function (xhr, status, err) {
                             alert(xhr.responseText);
@@ -245,16 +253,16 @@
         $('#idMemberAdd').val('')
         $('#namaMemberAdd').val('')
         $('#phoneMemberAdd').val('')
-        $('#emailMemberAdd').val('')
         $('#alamatMemberAdd').val('')
+        $('#catatanMemberAdd').val('')
     });
 
     $("#btnSaveAddModal").on('click', e => {
         var name = $('#namaMemberAdd').val()
         var phone = $('#phoneMemberAdd').val()
-        var email = $('#emailMemberAdd').val()
-        var addr = $('#alamatMemberAdd').val()
-        var data = { member_name: name, phone: phone, email: email, address: addr }
+        var address = $('#alamatMemberAdd').val()
+        var notes = $('#catatanMemberAdd').val()
+        var data = { member_name: name, phone: phone, address: address, notes:notes }
 
         addMember(data)
     })
@@ -281,7 +289,6 @@
                 }
             });
     }
-
 
 </script>
 {% endblock %}
