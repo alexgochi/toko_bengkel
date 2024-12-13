@@ -71,10 +71,10 @@
 
 <body>
     <div class="right">
-        <button style="background-color: red; font-size: 18px;color: white;" onclick="print()"><b>Cetak</b></button>
+        <button style="background-color: red; font-size: 20px;color: white;" onclick="print()"><b>Cetak</b></button>
     </div>
     <div class="container" id="invoice">
-        <h3 style="font-size: 20px;">INVOICE<br /><u>{{ data['faktur'] }}</u></h3>
+        <h3 style="margin-bottom: 10px;font-size: 16px;">Tanggal Transaksi: {{ data['date_tx'] }}</h3>
 
         <!-- Header -->
         <div class="row header">
@@ -82,8 +82,8 @@
                 <table class="fs12">
                     <tr>
                         <td>
-                            {% if data['outlet']['outlet_name'] != 'NOTA POLOS' %}
-                            <h3 style="margin-bottom: 0px;font-size: 20px;">{{ data['outlet']['outlet_name'] }}</h3>
+                            {% if data['outlet']['outlet_name'] != 'Nota Polos' %}
+                            <h4 style="margin-bottom: 0px;font-size: 20px;">{{ data['outlet']['outlet_name'] }}</h4>
                             {% endif %}
                         </td>
                     </tr>
@@ -102,15 +102,18 @@
             <div class="column" align="right">
                 <table style="width: 80%;" class="fs12">
                     <tr>
-						<td><h4 style="margin-bottom: 0px;font-size: 20px;">{{ data['date_tx'] }}</h4></td>
+                        <td>
+                            <h3 style="margin-bottom: 0px;font-size: 16px;">No. Faktur: {{ data['faktur'] }}</h3>
+                        </td>
                     </tr>
+
                     {% if data['member_name'] %}
                     <tr>
                         <td>
                             <h3 style="margin-top: 5px;margin-bottom: 0px;font-size: 20px;">{{ data['member_name'] }}</h3>
-                            <!-- {% if data['phone'] %}
-                            / {{ data['phone'] }}
-                            {% endif %} -->
+                            {% if data['phone'] %}
+                                {{ data['phone'] }}
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
@@ -169,12 +172,14 @@
                 </tr>
             </tbody>
         </table>
-        <p style="margin-top: 20px;" class="fs12">Pembayaran <br>
-            <b>
-                {% autoescape false %}
-                {{ data['type_name'] }} {{data['payment_info'] | replace("-", "<br />") }}
-                {% endautoescape %}
-            </b>
+        <p style="margin-top: 20px;" class="fs12">Pembayaran <br />
+            {% if data['due_date'] != ''%}
+                <b>{{ data['type_name'] }} {{data['payment_info'] }}</b>
+                {% if data['due_date'] %}
+                <p style="margin-top: 10px;margin-bottom: 20px;" class="fs12">Tanggal Jatuh Tempo<br /> 
+                <b>{{ data['due_date'] }}</b></p>
+                {% endif %}
+            {% endif %} 
         </p>
 
         <div class="row" style="margin-top: 20px;">

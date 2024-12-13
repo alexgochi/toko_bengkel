@@ -21,7 +21,7 @@ def getDataBySkuBarcode(search):
             INNER JOIN ms_category mc on mc.category_id = mp.category_id
             INNER JOIN ms_outlet mo on mp.outlet_id = mo.outlet_id
         WHERE
-            UPPER(sku) = %(search)s OR
+            sku = %(search)s OR
             CAST(barcode AS TEXT) =  %(search)s
     """
     param = {

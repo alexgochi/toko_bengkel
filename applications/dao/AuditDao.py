@@ -6,11 +6,9 @@ def dt_data_audit(search, member, offset, filter):
     query = f"""
         SELECT faktur,
             to_char(date_tx, 'dd-mm-yyyy') as date_tx,
-            to_char(date_tx + due_date::int,'dd-mm-yyyy') as due_date,
             coalesce(member_name,'Bukan Pelanggan') as member_name,
             to_char(total_faktur + other_fee - diskon, 'fm999G999G999G999') as total_faktur,
             coalesce(mpt.type_name,'Bon') as type_name,
-            to_char(update_date, 'dd-mm-yyyy') as update_date,
             CASE WHEN current_date > due_date::int + date_tx and type_name is null
                 THEN 'Overdue ' || current_date - (due_date::int + date_tx) ||' hari'
             ELSE coalesce(payment_info,' ') END as payment_info
@@ -28,7 +26,7 @@ def dt_data_audit(search, member, offset, filter):
             AND coalesce(member_name,'Bukan Pelanggan') ILIKE %(member)s 
             {filter}
         ORDER BY
-            update_date desc, time_tx desc;
+            date_tx desc, time_tx desc;
     """
     param = {
         "search": f"%{search}%",
@@ -43,7 +41,7 @@ def get_data_distinct():
     data = {}
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON (upper(member_name)) member_name
+        FROM (SELECT DISTINCT ON member_name
             FROM ms_member)
         ORDER BY member_name;
     """
@@ -51,7 +49,7 @@ def get_data_distinct():
 
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON (upper(outlet_name)) outlet_name, outlet_id
+        FROM (SELECT DISTINCT ON outlet_name, outlet_id
             FROM ms_outlet)
         ORDER BY outlet_name;
     """
@@ -64,9 +62,7 @@ def getAllDataAudit():
         SELECT faktur,
             to_char(date_tx, 'dd-mm-yyyy') as date_tx,
             coalesce(member_name,'Bukan Pelanggan') as member_name,
-            to_char(date_tx + due_date::int,'dd-mm-yyyy') as due_date,
             total_faktur + other_fee - diskon as total_faktur,
-            to_char(update_date, 'dd-mm-yyyy') as update_date,
             coalesce(mpt.type_name,' ') as type_name,
             CASE WHEN current_date > due_date::int + date_tx and type_name is null
                 THEN 'Overdue ' || current_date- (due_date::int + date_tx) ||' hari'
@@ -75,7 +71,7 @@ def getAllDataAudit():
         LEFT JOIN ms_payment_type mpt on mpt.type_id = tt.payment_id
         LEFT JOIN ms_member mm on mm.member_id = tt.member_id
         WHERE status = true
-        ORDER BY update_date desc, time_tx desc;
+        ORDER BY date_tx desc, time_tx desc;
     """
     return db.execute(query)
 
@@ -107,7 +103,7 @@ def getDataAuditByFaktur(faktur):
             LEFT JOIN ms_member mm on mm.member_id = tt.member_id
         WHERE status = true
         AND faktur = %(faktur)s
-        ORDER BY update_date desc, time_tx desc;
+        ORDER BY date_tx desc, time_tx desc;
     """
     param = {
         "faktur" : faktur
@@ -139,7 +135,7 @@ def getDataAuditByFaktur(faktur):
 
     query = """
         SELECT 
-            outlet_id, UPPER(outlet_name) outlet_name, address, phone
+            outlet_id, outlet_name, address, phone
         FROM ms_outlet
         WHERE outlet_id = %(outlet)s;
     """

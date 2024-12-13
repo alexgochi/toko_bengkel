@@ -36,7 +36,13 @@ def getDataMember():
 def getPaymentType():
     db = PostgresDatabase()
     query = """
-        select * from ms_payment_type
+        SELECT 
+            type_id, 
+            type_name
+        FROM 
+            ms_payment_type
+        WHERE
+            type_status = true
     """
     return db.execute(query)
 
@@ -146,7 +152,7 @@ def getDataBySkuBarcode(search):
         INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
         INNER JOIN ms_category mc on mm.category_id = mc.category_id
         WHERE
-            UPPER(sku) = %(search)s OR
+            sku = %(search)s OR
             CAST(barcode AS TEXT) =  %(search)s
             
     """

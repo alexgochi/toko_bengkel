@@ -23,7 +23,7 @@ def get_data_distinct():
     data = {}
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON (upper(category_name)) category_name
+        FROM (SELECT DISTINCT ON category_name
             FROM ms_category)
         ORDER BY category_name;
     """
@@ -31,7 +31,7 @@ def get_data_distinct():
 
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON (upper(merk_name)) merk_name
+        FROM (SELECT DISTINCT ON merk_name
             FROM ms_merk)
         ORDER BY merk_name;
     """
@@ -39,7 +39,7 @@ def get_data_distinct():
 
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON (upper(outlet_name)) outlet_name
+        FROM (SELECT DISTINCT ON outlet_name
             FROM ms_outlet)
         ORDER BY outlet_name;
     """
@@ -49,7 +49,7 @@ def get_data_distinct():
         SELECT *
         FROM (
             SELECT 
-                DISTINCT ON (upper(vehicle)) vehicle
+                DISTINCT ON vehicle
             FROM 
                 ms_product
             WHERE 
