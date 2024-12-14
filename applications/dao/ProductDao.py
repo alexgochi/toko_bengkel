@@ -90,6 +90,7 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
         SELECT
             sku,
             part_number,
+            alternative_part_number,
             descriptions_product,
             product_name,
             barcode,
@@ -114,6 +115,7 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
             sku is not null AND (
             sku ILIKE %(search)s OR
             part_number ILIKE %(search)s OR
+            alternative_part_number ILIKE %(search)s OR
             descriptions_product ILIKE %(search)s OR
             product_name ILIKE %(search)s OR
             CAST(barcode AS TEXT) ILIKE %(search)s)
@@ -161,6 +163,7 @@ def update_data_product(data):
             ms_product
         SET
             part_number = %(part_number)s,
+            alternative_part_number = %(alternative_part_number)s,
             product_name = %(product_name)s,
             descriptions_product = %(descriptions_product)s,
             vehicle = %(vehicle)s,
@@ -201,9 +204,9 @@ def add_data_product(data):
         query = """
             INSERT INTO 
                 ms_product 
-                    (sku, part_number, descriptions_product, product_name, vehicle, merk_id, category_id, outlet_id, qty, satuan, harga_beli, harga_jual, barcode, f_print_vehicle) 
+                    (sku, part_number, alternative_part_number, descriptions_product, product_name, vehicle, merk_id, category_id, outlet_id, qty, satuan, harga_beli, harga_jual, barcode, f_print_vehicle) 
             VALUES 
-                    (%(sku)s, %(part_number)s, %(descriptions_product)s, %(product_name)s, %(vehicle)s, %(merk_id)s, %(category_id)s, %(outlet_id)s, %(qty)s, %(satuan)s, %(harga_beli)s, %(harga_jual)s, %(barcode)s, %(f_print_vehicle)s);
+                    (%(sku)s, %(part_number)s, %(alternative_part_number)s, %(descriptions_product)s, %(product_name)s, %(vehicle)s, %(merk_id)s, %(category_id)s, %(outlet_id)s, %(qty)s, %(satuan)s, %(harga_beli)s, %(harga_jual)s, %(barcode)s, %(f_print_vehicle)s);
         """
         param = data
 
@@ -238,8 +241,6 @@ def generate_barcode():
     else:   
         return temp
 
-
-
 def check_id_product(id):
     db = PostgresDatabase()
     query = """
@@ -252,7 +253,6 @@ def check_id_product(id):
     """
     param = {'sku': id }
     return db.execute(query, param)
-
 
 def generate_sku():
     db = PostgresDatabase()
@@ -270,7 +270,6 @@ def generate_sku():
     return ordinal_num
 
 def update_sku(conn,num):
-
     query = """
             INSERT INTO
                 tx_ofaktur (head_fak, ordinal_number)
@@ -291,17 +290,18 @@ def get_all_product():
         SELECT
             sku SKU,
             part_number Part_Number,
+            alternative_part_number Alternative_Part_Number,
             descriptions_product Descriptions_Product,
             product_name Nama_Produk,
             barcode Barcode,
             vehicle Kendaraan,
             merk_name as Kategori,
             category_name as Merk,
-            outlet_name nama_outlet,
+            outlet_name Nama_Outlet,
             qty,
             satuan,
             harga_beli Beli,
-            harga_jual jual
+            harga_jual Jual
         FROM
             ms_product mp
             INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id

@@ -91,9 +91,15 @@
                             <input type="text" class="form-control data-edit" id="namaProductEdit" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="partNumberProductEdit">Part Number</label>
-                        <input type="text" class="form-control data-edit" id="partNumberProductEdit" required>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="partNumberProductEdit">Part Number</label>
+                            <input type="text" class="form-control data-edit" id="partNumberProductEdit" required>
+                        </div>
+                        <div class="form-group col-md-7">
+                            <label for="alternativePartNumberProductEdit">Alternative Part Number</label>
+                            <input type="text" class="form-control data-edit" id="alternativePartNumberProductEdit" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="descriptionsProductEdit">Deskripsi Produk</label>
@@ -137,7 +143,8 @@
                             </select>
                         </div>
                     </div>
-                    <hr class="w-100" style="border: 1px solid gray;">
+
+                    <hr class="w-100" style="border: 1px solid darkgray;">
 
                     <div class="form-row">
                         <div class="form-group col-md-2">
@@ -192,9 +199,15 @@
                             <input type="text" class="form-control data-add" id="namaProductAdd" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="partNumberProductAdd">Part Number</label>
-                        <input type="text" class="form-control data-add" id="partNumberProductAdd" required>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="partNumberProductAdd">Part Number</label>
+                            <input type="text" class="form-control data-add" id="partNumberProductAdd" required>
+                        </div>
+                        <div class="form-group col-md-7">
+                            <label for="alternativePartNumberProductAdd">Alternative Part Number</label>
+                            <input type="text" class="form-control data-add" id="alternativePartNumberProductAdd" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="descriptionsProductAdd">Deskripsi Produk</label>
@@ -238,7 +251,7 @@
                             </select>
                         </div>
                     </div>
-                    <hr class="w-100" style="border: 1px solid gray;">
+                    <hr class="w-100" style="border: 1px solid darkgray;">
 
                     <div class="form-row">
                         <div class="form-group col-md-2">
@@ -386,6 +399,7 @@
 
         $('#skuProductEdit').val(rowData['sku'])
         $('#partNumberProductEdit').val(rowData['part_number'])
+        $('#alternativePartNumberProductEdit').val(rowData['alternative_part_number'])
         $('#descriptionsProductEdit').val(rowData['descriptions_product'])
         $('#namaProductEdit').val(rowData['product_name'])
         $('#barcodeProductEdit').val(rowData['barcode'])
@@ -402,16 +416,23 @@
     })
 
     $("#btnSaveEditModal").on('click', e => {
+        if (!$('#descriptionsProductEdit').val()) {
+            $('#descriptionsProductEdit').val("-")
+        }
         if (!$('#partNumberProductEdit').val()) {
             $('#partNumberProductEdit').val("-")
         }
+        if (!$('#alternativePartNumberProductEdit').val()) {
+            $('#alternativePartNumberProductEdit').val("-")
+        }
         if (!$('#vehicleProductEdit').val()) {
-            $('#vehicleProductEdit').val(" ")
+            $('#vehicleProductEdit').val("-")
         }
         var empty = isEmpty("data-edit")
         if (!empty) {
             var sku = $('#skuProductEdit').val()
             var part_number = $('#partNumberProductEdit').val()
+            var alternative_part_number = $('#alternativePartNumberProductEdit').val()
             var descriptions_product = $('#descriptionsProductEdit').val()
             var nama = $('#namaProductEdit').val()
             var barcode = $('#barcodeProductEdit').val()
@@ -428,7 +449,8 @@
             var hjual = $('#hjualProductEdit').val()
 
             var data = {
-                sku: sku, product_name: nama, part_number: part_number, descriptions_product:descriptions_product, barcode: barcode,
+                sku: sku, product_name: nama, part_number: part_number, alternative_part_number: alternative_part_number, 
+                descriptions_product:descriptions_product, barcode: barcode,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
                 qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
                 satuan: satuan, f_print_vehicle: flag
@@ -595,11 +617,17 @@
     }
 
     $("#btnSaveAddModal").on('click', e => {
+        if (!$('#descriptionsProductAdd').val()) {
+            $('#descriptionsProductAdd').val("-")
+        }
         if (!$('#partNumberProductAdd').val()) {
             $('#partNumberProductAdd').val("-")
         }
+        if (!$('#alternativePartNumberProductAdd').val()) {
+            $('#alternativePartNumberProductAdd').val("-")
+        }
         if (!$('#vehicleProductAdd').val()) {
-            $('#vehicleProductAdd').val(" ")
+            $('#vehicleProductAdd').val("-")
         }
 
         $('#barcodeProductAdd').val($('#skuProductAdd').val())
@@ -623,7 +651,8 @@
             var hjual = $('#hjualProductAdd').val()
 
             var data = {
-                sku: sku, product_name: nama, part_number: part_number, descriptions_product:descriptions_product, satuan: satuan,
+                sku: sku, product_name: nama, part_number: part_number, alternative_part_number: alternative_part_number, 
+                descriptions_product:descriptions_product, satuan: satuan,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
                 qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
                 f_print_vehicle: flag
