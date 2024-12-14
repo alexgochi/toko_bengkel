@@ -151,7 +151,7 @@ def update_payment_trans(param):
     query = """
         UPDATE
             tx_trans
-        SET tx_type = 0,
+        SET tx_type = 2,
             payment_id = %(payment_id)s,
             payment_info= %(payment_info)s,
             update_date= current_date

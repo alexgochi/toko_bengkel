@@ -285,23 +285,12 @@
                 { data: "payment_info" },
                 {
                     "render": function (data, type, row) {
-                        if (row.type_name.toLowerCase() == 'bon') {
-                            return `
-                            <div class="d-flex align-items-center justify-content-start" style="gap: 10px;">
-                                <button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
-                                <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>
-                                <button class="btn btn-payment btn-danger"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-credit-card"></i></button>
-                            </div>
-                            `;
-                        }
-                        else {
-                            return `
-                            <div class="d-flex align-items-center justify-content-start" style="gap: 10px;">
-                                <button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
-                                <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>
-                            </div>
-                            `;
-                        }
+                        return `
+                        <div class="d-flex align-items-center justify-content-start" style="gap: 10px;">
+                            <button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>
+                            <button class="btn btn-print btn-primary"data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa fa-print"></i></button>
+                        </div>
+                        `;
                     }
                 }
             ]
@@ -314,10 +303,8 @@
                 "filter": filter
             }
         }
-
         dt_server(idTabel, ajax_options, dt_options);
     }
-
 
     $("#table_audit > tbody").on('click', '.btn-print', e => {
         const rowData = $('#table_audit').DataTable().row(getTr(e)).data();
@@ -344,47 +331,6 @@
             $('#hidePayment').hide();
         }
     });
-
-    function updatePayment() {
-        var data = {}
-        data['faktur'] = $('#fakturPayment').val()
-        data['payment_id'] = $("#metodeBayar").val()
-        data['payment_info'] = $("#rekeningBayar").val()
-
-        $.ajax
-            ({
-                type: "POST",
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                url: "/audit/updatePaymentAudit",
-                success: (e) => {
-                    if (e.status) {
-                        Swal.fire({
-                            icon: "success",
-                            title: e.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(function () {
-                            fill_table_trans()
-                        });
-                    }
-                    else {
-                        Swal.fire({
-                            title: "Gagal",
-                            text: e.message,
-                            icon: "error"
-                        });
-                    }
-                },
-                error: function (xhr, status, err) {
-                    Swal.fire({
-                        title: "Gagal",
-                        text: xhr.responseText,
-                        icon: "error"
-                    });
-                }
-            });
-    }
 
     function getDataAuditByFaktur(faktur) {
         printWindow = window.open("/audit/getDataAuditByFaktur/" + faktur, '_blank')
@@ -447,11 +393,14 @@
         $('#outletNameDetail').val(data['outlet']['outlet_name'])
         $('#jatuhTempoDetail').val(data['due_date'] || '-')
 
-        if (data['tx_type'] == '1') {
-            $('#jenisFakturDetail').val('Bon')
-        } else {
+        if (data['tx_type'] == '0') {
             $('#jenisFakturDetail').val('Kontan')
+        } else if (data['tx_type'] == '1') {
+            $('#jenisFakturDetail').val('BON')
+        } else if (data['tx_type'] == '2') {
+            $('#jenisFakturDetail').val('Lunas')
         }
+
         $('#memberNameDetail').val(data['member_name'] || 'Bukan Pelanggan')
         $('#paymentTypeDetail').val(data['type_name'] || '-')
         $('#paymentInfoDetail').val(data['payment_info'] || '-')

@@ -884,7 +884,9 @@
             dataSave['payment_id'] = $("#typePaymentInvoice").val();
             dataSave['payment_info'] = $("#rekInvoice").val();
             dataSave['diskon'] = $("#diskon").val();
-            if (jenisFaktur == '1') {
+            if (jenisFaktur == '0') {
+                dataSave['jatuhTempo'] = null
+            } else if (jenisFaktur == '1') {
                 dataSave['payment_info'] = 'BON - ' + $('#jatuhTempo').val() + ' Hari'
             }
             var dataProduct = []

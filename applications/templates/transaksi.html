@@ -447,11 +447,14 @@
         $('#outletNameDetail').val(data['outlet']['outlet_name'])
         $('#jatuhTempoDetail').val(data['due_date'] || '-')
 
-        if (data['tx_type'] == '1') {
-            $('#jenisFakturDetail').val('Bon')
-        } else {
+        if (data['tx_type'] == '0') {
             $('#jenisFakturDetail').val('Kontan')
+        } else if (data['tx_type'] == '1') {
+            $('#jenisFakturDetail').val('BON')
+        } else if (data['tx_type'] == '2') {
+            $('#jenisFakturDetail').val('Lunas')
         }
+        
         $('#memberNameDetail').val(data['member_name'] || 'Bukan Pelanggan')
         $('#paymentTypeDetail').val(data['type_name'] || '-')
         $('#paymentInfoDetail').val(data['payment_info'] || '-')

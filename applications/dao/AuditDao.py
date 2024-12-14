@@ -144,18 +144,3 @@ def getDataAuditByFaktur(faktur):
     }
     data['outlet'] = db.execute(query, param).result[0]
     return {'status': True, 'message': 'Berhasil get data', 'data': data}
-
-
-def update_payment_audit(param):
-    db = PostgresDatabase()
-    query = """
-        UPDATE
-            tx_trans_audit
-        SET tx_type = false,
-            payment_id = %(payment_id)s,
-            payment_info= %(payment_info)s,
-            update_date= current_date
-        WHERE
-            faktur = %(faktur)s;
-        """
-    return db.execute(query, param)

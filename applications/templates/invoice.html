@@ -25,13 +25,13 @@
         }
 
         .container {
-            padding-left: 20px;
+            padding-left: 10px;
             margin-top: 10px;
         }
 
         header {
-            margin-top: 20px;
-            margin-bottom: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         .column {
@@ -66,66 +66,90 @@
         .fs12 {
             font-size: 12px;
         }
+
+        .fs14 {
+            font-size: 14px;
+        }
     </style>
 </head>
 
 <body>
     <div class="right">
-        <button style="background-color: red; font-size: 20px;color: white;" onclick="print()"><b>Cetak</b></button>
+        <button style="background-color: red; color: white;" class="fs14" onclick="print()"><b>Cetak</b></button>
     </div>
+
     <div class="container" id="invoice">
-        <h3 style="margin-bottom: 10px;font-size: 16px;">Tanggal Transaksi: {{ data['date_tx'] }}</h3>
-
         <!-- Header -->
-        <div class="row header">
-            <div class="column">
-                <table class="fs12">
-                    <tr>
-                        <td>
-                            {% if data['outlet']['outlet_name'] != 'Nota Polos' %}
-                            <h4 style="margin-bottom: 0px;font-size: 20px;">{{ data['outlet']['outlet_name'] }}</h4>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div style="width: 300px;">{{ data['outlet']['address'] }}</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div style="margin-top: 2px;">{{ data['outlet']['phone'] }}</div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="column" align="right">
-                <table style="width: 80%;" class="fs12">
-                    <tr>
-                        <td>
-                            <h3 style="margin-bottom: 0px;font-size: 16px;">No. Faktur: {{ data['faktur'] }}</h3>
-                        </td>
-                    </tr>
+        <div class="column">
+            <table class="fs12" style="width: 500px; margin-bottom: 10px;">
+                <tr>
+                    <td>
+                        <h3 style="margin-bottom: 5px;">Tanggal: {{ data['date_tx'] }}</h3>
+                    </td>
+                </tr>
 
-                    {% if data['member_name'] %}
-                    <tr>
-                        <td>
-                            <h3 style="margin-top: 5px;margin-bottom: 0px;font-size: 20px;">{{ data['member_name'] }}</h3>
-                            {% if data['phone'] %}
-                                {{ data['phone'] }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{{ data['address'] }}</td>
-                    </tr>
-                    {% endif %}
-                </table>
-            </div>
+                <tr>
+                    <td>
+                        {% if data['outlet']['outlet_name'] != 'Nota Polos' %}
+                        <h3 style="margin-bottom: 0px;">{{ data['outlet']['outlet_name'] }}</h3>
+                        {% endif %}
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td>
+                        {% if data['outlet']['outlet_name'] == 'CV Multi Diesel' %}
+                        <div style="margin-top: 2px;">NPWP: <b>86.102.608.6-541.000</b></div>
+                        {% endif %}
+                    </td>
+                </tr> -->
+                <tr>
+                    <td>
+                        {{ data['outlet']['address'] }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {{ data['outlet']['phone'] }}
+                    </td>
+                </tr>
+            </table>
         </div>
 
+        <div class="column">
+            <table class="fs12" style="width: 500px; margin-bottom: 10px;">
+                <tr>
+                    <td>
+                        <h3 style="margin-bottom: 5px;">No. Faktur: {{ data['faktur'] }}</h3>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {% if data['member_name'] %}
+                        <h3 style="margin-bottom: 0px;">{{ data['member_name'] }}</h3>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {{ data['address'] }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {% if data['phone'] != '' %}
+                        {{ data['phone'] }}
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
         <!-- Product -->
-        <table style="margin-top: 20px;width: 100%;margin-right: 50px;border-collapse: collapse;font-size: 12px;">
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;" class="fs12">
             <thead>
                 <th>Qty</th>
                 <th>Merk</th>
@@ -134,6 +158,7 @@
                 <th>Harga Satuan</th>
                 <th>Subtotal</th>
             </thead>
+            
             <tbody>
                 {% for x in data['product'] %}
                 <tr>
@@ -145,62 +170,63 @@
                     <td class="right" style="width: 15%;">{{ x['subtotal'] }}</td>
                 </tr>
                 {% endfor %}
+
                 <tr>
                     <td>&nbsp;</td>
                 </tr>
+                
                 <tr class="right">
+                    {% if data['other_fee'] != '0' %}
                     <td colspan="5"><b>Biaya Ongkir</b></td>
                     <td>{{ data['other_fee'] }}</td>
+                    {% endif %}
                 </tr>
+
                 <tr class="right">
-                    <td colspan="2" style="text-align: left;">
+                    <td colspan="5" style="text-align: left;">
                         <i class="fs12">*Barang yang sudah dibeli tidak dapat dikembalikan</i>
                     </td>
 
                     {% if data['diskon'] != '0' %}
-                    <td colspan="3"><b>Diskon</b></td>
-                    <td><i>{{ data['diskon'] }}</i></td>
+                    <td colspan="5"><b>Diskon</b></td>
+                    <td>{{ data['diskon'] }}</td>
                     {% endif %}
                 </tr>
+
                 <tr class="right">
-                    <td colspan="5">
-                        <h2>Total</h2>
-                    </td>
-                    <td>
-                        <h2>{{ data['total_faktur'] }}</h2>
-                    </td>
+                    <td colspan="5"><h3>Total</h3></td>
+                    <td><h3>{{ data['total_faktur'] }}</h3></td>
                 </tr>
             </tbody>
         </table>
-        <p style="margin-top: 20px;" class="fs12">Pembayaran <br />
+
+        <p style="margin-top: 10px;" class="fs12">Pembayaran <br />
             {% if data['due_date'] != ''%}
                 <b>{{ data['type_name'] }} {{data['payment_info'] }}</b>
                 {% if data['due_date'] %}
-                <p style="margin-top: 10px;margin-bottom: 20px;" class="fs12">Tanggal Jatuh Tempo<br /> 
+                <p style="margin-top: 5px;margin-bottom: 10px;" class="fs12">Tanggal Jatuh Tempo<br /> 
                 <b>{{ data['due_date'] }}</b></p>
                 {% endif %}
             {% endif %} 
         </p>
 
-        <div class="row" style="margin-top: 20px;">
+        <div class="row" style="margin-top: 10px;">
             <div class="column center fs12">
-                <p style="margin-bottom: 50px;">Diterima Oleh,</p>
-                {% if data['member_name'] %}
+                <p style="margin-bottom: 40px;">Diterima Oleh,</p>
+                {% if data['member_name'] != ''%}
                 <p>({{ data['member_name'] }})</p>
                 {% else %}
                 <p>(. . . . . . . . . . . . . . . . . .)</p>
                 {% endif %}
             </div>
             <div class="column center fs12">
-                <p style="margin-bottom: 50px;">Hormat Kami,</p>
+                <p style="margin-bottom: 40px;">Hormat Kami,</p>
                 <p>({{ current_user.name }})</p>
             </div>
-        </div>
-
-    </div>
+        </div> 
+   </div>
 
     <script>
-
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }

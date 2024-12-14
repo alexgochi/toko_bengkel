@@ -82,13 +82,3 @@ def getDetailDataAudit():
             x['subtotal'] = '{:,}'.format(x['subtotal'])
 
     return jsonify(db_res)
-
-
-@app.route('/audit/updatePaymentAudit', methods=['POST'])
-@login_required
-def updatePaymentAudit():
-    data = request.get_json()
-    db_res = auditDao.update_payment_audit(data)
-    if db_res.is_error:
-        return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Update Data Pembayaran"})
