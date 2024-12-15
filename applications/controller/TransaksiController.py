@@ -83,7 +83,6 @@ def getDetailDataTrans():
 
     return jsonify(db_res)
 
-
 @app.route('/transaksi/updatePayment', methods=['POST'])
 @login_required
 def updatePaymentTrans():

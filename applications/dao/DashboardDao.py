@@ -46,11 +46,11 @@ def getPaymentType():
     """
     return db.execute(query)
 
-def getRekening(id=''):
+def getRekening(rekening_no=''):
     db = PostgresDatabase()
     param = ''
-    if id:
-        param = f"AND rekening_no = {id}"
+    if rekening_no:
+        param = f"AND rekening_no = {rekening_no}"
     query = f"""
         SELECT 
             rekening_no,
@@ -61,23 +61,23 @@ def getRekening(id=''):
         WHERE 
             rekening_status = true
         {param}
-        ORDER BY rek_bank;
+        ORDER BY rekening_bank;
     """
     return db.execute(query)
 
-def getDataMemberById(id):
+def getDataMemberById(member_id):
     db = PostgresDatabase()
     query = """
         SELECT
             member_id,
             member_name,
-            address,
-            phone
+            member_address,
+            member_phone
         FROM 
             ms_member
-        WHERE member_id = %(id)s;
+        WHERE member_id = %(member_id)s;
     """
-    param = { "id" : id }
+    param = { "member_id" : member_id }
     return db.execute(query, param)
 
 def getDataLovProduct():
@@ -154,7 +154,6 @@ def getDataBySkuBarcode(search):
         WHERE
             sku = %(search)s OR
             CAST(barcode AS TEXT) =  %(search)s
-            
     """
     param = {
         'search' : search
@@ -404,4 +403,3 @@ def getTransDraftData(faktur):
     dataFaktur['product'] = db.execute(query, param).result
 
     return dataFaktur
-

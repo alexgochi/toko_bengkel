@@ -86,8 +86,8 @@ def getDataTransByFaktur(faktur):
             tx_type,
             to_char(date_tx + due_date::int,'dd-mm-yyyy') as due_date,
             member_name,
-            address,
-            phone,
+            member_address,
+            member_phone,
             other_fee,
             other_note,
             to_char(update_date, 'dd-mm-yyyy') as update_date,
@@ -123,7 +123,7 @@ def getDataTransByFaktur(faktur):
             price,
             tt.qty * price as subtotal
         FROM tx_trans_detail tt
-            INNER JOIN ms_product mp on tt.sku = mp.sku
+            INNER JOIN ms_product mp on tt.sku::integer = mp.sku::integer
             INNER JOIN ms_category mc on mc.category_id = mp.category_id
         WHERE faktur = %(faktur)s
         ORDER BY faktur;

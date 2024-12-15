@@ -139,9 +139,9 @@
             columns: [
                 { data: "member_id" },
                 { data: "member_name" },
-                { data: "phone" },
-                { data: "address" },
-                { data: "notes" },
+                { data: "member_phone" },
+                { data: "member_address" },
+                { data: "member_notes" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -176,18 +176,18 @@
         const rowData = $('#table_member').DataTable().row(getTr(e)).data();
         $('#idMemberEdit').val(rowData['member_id'])
         $('#namaMemberEdit').val(rowData['member_name'])
-        $('#phoneMemberEdit').val(rowData['phone'])
-        $('#alamatMemberEdit').val(rowData['address'])
-        $('#catatanMemberEdit').val(rowData['notes'])
+        $('#phoneMemberEdit').val(rowData['member_phone'])
+        $('#alamatMemberEdit').val(rowData['member_address'])
+        $('#catatanMemberEdit').val(rowData['member_notes'])
     })
 
     $("#btnSaveEditModal").on('click', e => {
-        var id = $('#idMemberEdit').val()
-        var name = $('#namaMemberEdit').val()
-        var phone = $('#phoneMemberEdit').val()
-        var address = $('#alamatMemberEdit').val()
-        var notes = $('#catatanMemberEdit').val()
-        var data = { id: id, name: name, phone: phone, address: address, notes:notes }
+        var member_id = $('#idMemberEdit').val()
+        var member_name = $('#namaMemberEdit').val()
+        var member_phone = $('#phoneMemberEdit').val()
+        var member_address = $('#alamatMemberEdit').val()
+        var member_notes = $('#catatanMemberEdit').val()
+        var member_data = { member_id: member_id, member_name: member_name, member_phone: member_phone, member_address: member_address, member_notes: member_notes }
         edit(data)
     })
 
@@ -215,8 +215,8 @@
     // Delete
     $("#table_member > tbody").on('click', '.btn-delete', e => {
         const rowData = $('#table_member').DataTable().row(getTr(e)).data();
-        id = rowData['member_id']
-        console.log(id)
+        member_id = rowData['member_id']
+        console.log(member_id)
         Swal.fire({
             title: "Yakin Hapus Data?",
             text: "Data Tidak akan bisa dipulihkan",
@@ -231,7 +231,7 @@
                 $.ajax
                     ({
                         type: "POST",
-                        data: { id: id },
+                        data: { member_id: member_id },
                         url: "/member/delete",
                         success: (e) => {
                             Swal.fire({
@@ -258,11 +258,11 @@
     });
 
     $("#btnSaveAddModal").on('click', e => {
-        var name = $('#namaMemberAdd').val()
-        var phone = $('#phoneMemberAdd').val()
-        var address = $('#alamatMemberAdd').val()
-        var notes = $('#catatanMemberAdd').val()
-        var data = { member_name: name, phone: phone, address: address, notes:notes }
+        var member_name = $('#namaMemberAdd').val()
+        var member_phone = $('#phoneMemberAdd').val()
+        var member_address = $('#alamatMemberAdd').val()
+        var member_notes = $('#catatanMemberAdd').val()
+        var data = { member_name: member_name, member_phone: member_phone, member_address: member_address, member_notes: member_notes }
 
         addMember(data)
     })

@@ -17,7 +17,6 @@ from applications.dao.MemberDao import get_all_member, dt_data_member, update_da
 from applications.lib import dataTableError
 from applications.controller.DashboardController import generate_pdf
 
-
 @app.route('/member/', methods=['GET'])
 @login_required
 def member():
@@ -48,7 +47,6 @@ def edit_member():
     index_0 = db_res.first
     return jsonify({"status": True, "message": "Berhasil Update data Member"})
 
-
 @app.route('/member/delete', methods=['POST'])
 @login_required
 def delete_member():
@@ -57,7 +55,6 @@ def delete_member():
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Hapus data Member"})
-
 
 @app.route('/member/checkId', methods=['POST'])
 @login_required
@@ -68,7 +65,6 @@ def check_id():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Get Data", 'result': db_res.first})
 
-
 @app.route('/member/add', methods=['POST'])
 @login_required
 def add_member():
@@ -77,7 +73,6 @@ def add_member():
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah data Member"})
-
 
 @app.route('/member/downloadAllMember', methods=['GET'])
 @login_required
