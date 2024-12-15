@@ -2,7 +2,7 @@ from applications.lib import PostgresDatabase
 import random
 from flask import jsonify
 
-def get_data_merk(id):
+def get_data_merk(category_id):
     db = PostgresDatabase()
     query = """
         SELECT
@@ -14,7 +14,7 @@ def get_data_merk(id):
             category_id = %(category_id)s
     """
     param = {
-        "category_id" : id
+        "category_id" : category_id
     }
     return db.execute(query, param)
 
@@ -112,8 +112,7 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
             INNER JOIN ms_category mc on mc.category_id = mp.category_id
             INNER JOIN ms_outlet mo on mo.outlet_id = mp.outlet_id
         WHERE
-            sku is not null AND (
-            sku ILIKE %(search)s OR
+            CAST(sku AS TEXT) ILIKE %(search)s AND (
             part_number ILIKE %(search)s OR
             alternative_part_number ILIKE %(search)s OR
             descriptions_product ILIKE %(search)s OR
@@ -213,7 +212,6 @@ def add_data_product(data):
         if hasil.is_error:
             return hasil
         
-        
         hasil = update_sku(db, data['sku'])
         if hasil.is_error:
             return hasil
@@ -240,7 +238,7 @@ def generate_barcode():
     else:   
         return temp
 
-def check_id_product(id):
+def check_id_product(sku):
     db = PostgresDatabase()
     query = """
         SELECT
@@ -250,7 +248,7 @@ def check_id_product(id):
         WHERE
             sku = %(sku)s
     """
-    param = {'sku': id }
+    param = {'sku': sku }
     return db.execute(query, param)
 
 def generate_sku():
@@ -306,6 +304,7 @@ def get_all_product():
             INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
             INNER JOIN ms_category mc on mc.category_id = mp.category_id
             INNER JOIN ms_outlet mo on mo.outlet_id = mp.outlet_id
-        ORDER BY CASE WHEN sku < 'A' THEN lpad(sku, 255, '0') ELSE sku END;
+        ORDER BY 
+            sku desc;
         """
     return db.execute(query)

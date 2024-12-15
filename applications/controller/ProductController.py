@@ -39,7 +39,6 @@ def get_merk():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Get Data", 'result': db_res.result})
 
-
 @app.route("/dt/product/", methods=["GET"])
 def dt_product():
     res = productDao.dt_data_product(

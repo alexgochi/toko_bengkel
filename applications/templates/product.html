@@ -304,9 +304,9 @@
             query += "AND outlet_name = '" + outlet + "' "
         }
         if (qty) {
-            query += "ORDER BY qty " + qty + ", CASE WHEN sku < 'A' THEN lpad(sku, 255, '0') ELSE sku END;"
+            query += "ORDER BY qty " + qty + ", sku desc;"
         } else {
-            query += "ORDER BY CASE WHEN sku < 'A' THEN lpad(sku, 255, '0') ELSE sku END;"
+            query += "ORDER BY sku desc;"
         }
         return query
     }
