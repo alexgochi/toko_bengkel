@@ -96,7 +96,7 @@
                             <label for="partNumberProductEdit">Part Number</label>
                             <input type="text" class="form-control data-edit" id="partNumberProductEdit" required>
                         </div>
-                        <div class="form-group col-md-7">
+                        <div class="form-group col-md-8">
                             <label for="alternativePartNumberProductEdit">Alternative Part Number</label>
                             <input type="text" class="form-control data-edit" id="alternativePartNumberProductEdit" required>
                         </div>
@@ -204,7 +204,7 @@
                             <label for="partNumberProductAdd">Part Number</label>
                             <input type="text" class="form-control data-add" id="partNumberProductAdd" required>
                         </div>
-                        <div class="form-group col-md-7">
+                        <div class="form-group col-md-8">
                             <label for="alternativePartNumberProductAdd">Alternative Part Number</label>
                             <input type="text" class="form-control data-add" id="alternativePartNumberProductAdd" required>
                         </div>
@@ -251,6 +251,7 @@
                             </select>
                         </div>
                     </div>
+
                     <hr class="w-100" style="border: 1px solid darkgray;">
 
                     <div class="form-row">
@@ -333,12 +334,9 @@
                 {
                     data: "vehicle",
                     "render": function (data, type, row) {
-
                         if (row.f_print_vehicle === true) {
                             return '<input type="checkbox" checked onclick="return false;"> &nbsp; ' + row.vehicle;
-                        }
-
-                        else {
+                        } else {
                             return '<input type="checkbox" onclick="return false;"> &nbsp;' + row.vehicle;
                         }
                     }
@@ -384,7 +382,6 @@
                 "filter": filter
             }
         }
-
         dt_server(idTabel, ajax_options, dt_options);
     }
 
@@ -393,7 +390,6 @@
         const rowData = $('#table_product').DataTable().row(getTr(e)).data();
 
         // get Data Merk by Category
-
         $('#categoryProductEdit').val(rowData['category_id'])
         getMerkByCategory(rowData['category_id'], $('#merkProductEdit'))
 
@@ -416,14 +412,8 @@
     })
 
     $("#btnSaveEditModal").on('click', e => {
-        if (!$('#descriptionsProductEdit').val()) {
-            $('#descriptionsProductEdit').val("-")
-        }
         if (!$('#partNumberProductEdit').val()) {
             $('#partNumberProductEdit').val("-")
-        }
-        if (!$('#alternativePartNumberProductEdit').val()) {
-            $('#alternativePartNumberProductEdit').val("-")
         }
         if (!$('#vehicleProductEdit').val()) {
             $('#vehicleProductEdit').val("-")
@@ -450,7 +440,7 @@
 
             var data = {
                 sku: sku, product_name: nama, part_number: part_number, alternative_part_number: alternative_part_number, 
-                descriptions_product:descriptions_product, barcode: barcode,
+                descriptions_product: descriptions_product, barcode: barcode,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
                 qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
                 satuan: satuan, f_print_vehicle: flag
@@ -498,7 +488,6 @@
         if (this.id == 'categoryProductAdd') {
             merkSelect = $('#merkProductAdd')
         }
-
         getMerkByCategory(this.value, merkSelect);
     });
 
@@ -617,14 +606,8 @@
     }
 
     $("#btnSaveAddModal").on('click', e => {
-        if (!$('#descriptionsProductAdd').val()) {
-            $('#descriptionsProductAdd').val("-")
-        }
         if (!$('#partNumberProductAdd').val()) {
             $('#partNumberProductAdd').val("-")
-        }
-        if (!$('#alternativePartNumberProductAdd').val()) {
-            $('#alternativePartNumberProductAdd').val("-")
         }
         if (!$('#vehicleProductAdd').val()) {
             $('#vehicleProductAdd').val("-")
@@ -635,6 +618,7 @@
         if (!empty) {
             var sku = $('#skuProductAdd').val()
             var part_number = $('#partNumberProductAdd').val()
+            var alternative_part_number = $('#alternativePartNumberProductAdd').val()
             var descriptions_product = $('#descriptionsProductAdd').val()
             var nama = $('#namaProductAdd').val()
             var barcode = $('#barcodeProductAdd').val()
@@ -652,7 +636,7 @@
 
             var data = {
                 sku: sku, product_name: nama, part_number: part_number, alternative_part_number: alternative_part_number, 
-                descriptions_product:descriptions_product, satuan: satuan,
+                descriptions_product: descriptions_product, satuan: satuan,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
                 qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
                 f_print_vehicle: flag
@@ -704,4 +688,5 @@
     }
 
 </script>
+
 {% endblock %}

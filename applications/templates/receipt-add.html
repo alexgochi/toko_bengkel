@@ -728,7 +728,6 @@
         })
 
         //============================ Save Draft ===========================
-
         function saveInvoice() {
             if (checkProductExist()) {
                 var dataSave = getFormDataAddRec()
@@ -772,7 +771,7 @@
                 item['sku'] = $(product[i]).find('td').eq(0).text();
                 item['part_number'] = $(product[i]).find('td').eq(1).text();
                 item['product_name'] = $(product[i]).find('td').eq(2).text();
-                item['category_name'] = $(product[i]).find('td').eq(3).text();
+                item['merk_name'] = $(product[i]).find('td').eq(3).text();
                 item['qty'] = $(product[i]).find('.qty_product').val();
                 item['price'] = $(product[i]).find('.hbeli_product').val();
                 item['hjual'] = $(product[i]).find('.hjual_product').val();

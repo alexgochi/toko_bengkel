@@ -155,7 +155,6 @@ def checkProductdbExist(data):
         return {"status": False, "message": "Error, Ket : Nama Produk Bentrok / Duplikat"}
     return {"status": True, "message": ""}
 
-
 def update_data_product(data):
     db = PostgresDatabase()
     query = """

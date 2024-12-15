@@ -17,7 +17,6 @@ from applications.dao import ProductDao as productDao
 from applications.lib import dataTableError
 from applications.controller.DashboardController import generate_pdf
 
-
 @app.route('/product/', methods=['GET'])
 @login_required
 def product():
