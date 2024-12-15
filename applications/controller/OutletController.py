@@ -55,7 +55,6 @@ def edit_outlet():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Update data"})
 
-
 @app.route('/outlet/delete', methods=['POST'])
 @login_required
 def delete_outlet():
@@ -64,7 +63,6 @@ def delete_outlet():
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Hapus data"})
-
 
 @app.route('/outlet/add', methods=['POST'])
 @login_required

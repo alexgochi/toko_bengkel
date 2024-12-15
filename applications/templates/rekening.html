@@ -100,7 +100,7 @@
                     </div>
                     <div class="form-group">
                         <label for="noRekAdd">No Rekening</label>
-                        <input type="number" class="form-control" id="noRekAdd">
+                        <input type="text" class="form-control" id="noRekAdd">
                     </div>
                     <div class="form-group">
                         <label for="namaRekAdd">Nama Rekening</label>
@@ -140,11 +140,11 @@
         const dt_options = {
             scrollY: '50vh',
             columns: [
-                { data: "id" },
-                { data: "rek_no" },
-                { data: "rek_bank" },
-                { data: "rek_name" },
-                { data: "status" },
+                { data: "rekening_id" },
+                { data: "rekening_no" },
+                { data: "rekening_bank" },
+                { data: "rekening_name" },
+                { data: "rekening_status" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -171,18 +171,17 @@
                 "search": $('#search_table_rek').val().trim()
             }
         }
-
         dt_server(idTabel, ajax_options, dt_options);
     }
 
     // Edit
     $("#table_rek > tbody").on('click', '.btn-edit', e => {
         const rowData = $('#table_rek').DataTable().row(getTr(e)).data();
-        $('#idRekEdit').val(rowData['id'])
-        $('#noRekEdit').val(rowData['rek_no'])
-        $('#namaRekEdit').val(rowData['rek_name'])
-        $('#bankRekEdit').val(rowData['rek_bank'])
-        if (rowData['status'] == 'Aktif') {
+        $('#idRekEdit').val(rowData['rekening_id'])
+        $('#noRekEdit').val(rowData['rekening_no'])
+        $('#namaRekEdit').val(rowData['rekening_name'])
+        $('#bankRekEdit').val(rowData['rekening_bank'])
+        if (rowData['rekening_status'] == 'Aktif') {
             $('#statusRekEdit').val('1')
         } else {
             $('#statusRekEdit').val('0')
@@ -190,14 +189,13 @@
     })
 
     $("#btnSaveEditModal").on('click', e => {
-        var id = $('#idRekEdit').val()
-        var rek_no = $('#noRekEdit').val()
-        var rek_bank = $('#bankRekEdit').val()
-        var rek_name = $('#namaRekEdit').val()
-        var status = $('#statusRekEdit').val()
-        var data = { id: id, rek_no: rek_no, rek_bank: rek_bank, rek_name: rek_name, status: status }
+        var rekening_id = $('#idRekEdit').val()
+        var rekening_no = $('#noRekEdit').val()
+        var rekening_bank = $('#bankRekEdit').val()
+        var rekening_name = $('#namaRekEdit').val()
+        var rekening_status = $('#statusRekEdit').val()
+        var data = { rekening_id: rekening_id, rekening_no: rekening_no, rekening_bank: rekening_bank, rekening_name: rekening_name, rekening_status: rekening_status }
         edit(data)
-
     })
 
     var edit = (dataEdit) => {
@@ -258,15 +256,14 @@
     })
 
     $("#btnSaveAddModal").on('click', e => {
-        var rek_no = $('#noRekAdd').val()
-        var rek_bank = $('#bankRekAdd').val()
-        var rek_name = $('#namaRekAdd').val()
-        var status = $('#statusRekAdd').val()
-        var data = { rek_no: rek_no, rek_bank: rek_bank, rek_name: rek_name, status: status }
+        var rekening_no = $('#noRekAdd').val()
+        var rekening_bank = $('#bankRekAdd').val()
+        var rekening_name = $('#namaRekAdd').val()
+        var rekening_status = $('#statusRekAdd').val()
+        var data = { rekening_no: rekening_no, rekening_bank: rekening_bank, rekening_name: rekening_name, rekening_status: rekening_status }
         console.log(data)
 
         addRekening(data)
-
     })
 
     function addRekening(data) {
@@ -293,6 +290,6 @@
             });
     }
 
-
 </script>
+
 {% endblock %}

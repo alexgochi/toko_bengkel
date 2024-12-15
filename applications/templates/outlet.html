@@ -145,9 +145,9 @@
             columns: [
                 { data: "outlet_id" },
                 { data: "outlet_name" },
-                { data: "address" },
-                { data: "phone" },
-                { data: "status" },
+                { data: "outlet_address" },
+                { data: "outlet_phone" },
+                { data: "outlet_status" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -183,9 +183,9 @@
         const rowData = $('#table_outlet').DataTable().row(getTr(e)).data();
         $('#idOutletEdit').val(rowData['outlet_id'])
         $('#namaOutletEdit').val(rowData['outlet_name'])
-        $('#alamatOutletEdit').val(rowData['address'])
-        $('#teleponOutletEdit').val(rowData['phone'])
-        if (rowData['status'] == 'Aktif') {
+        $('#alamatOutletEdit').val(rowData['outlet_address'])
+        $('#teleponOutletEdit').val(rowData['outlet_phone'])
+        if (rowData['outlet_status'] == 'Aktif') {
             $('#statusOutletEdit').val('1')
         } else {
             $('#statusOutletEdit').val('0')
@@ -193,12 +193,12 @@
     })
 
     $("#btnSaveEditModal").on('click', e => {
-        var id = $('#idOutletEdit').val()
-        var name = $('#namaOutletEdit').val()
-        var address = $('#alamatOutletEdit').val()
-        var phone = $('#teleponOutletEdit').val()
-        var status = $('#statusOutletEdit').val()
-        var data = { outlet_id: id, outlet_name: name, address: address, phone: phone, status: status }
+        var outlet_id = $('#idOutletEdit').val()
+        var outlet_name = $('#namaOutletEdit').val()
+        var outlet_address = $('#alamatOutletEdit').val()
+        var outlet_phone = $('#teleponOutletEdit').val()
+        var outlet_status = $('#statusOutletEdit').val()
+        var data = { outlet_id: outlet_id, outlet_name: outlet_name, outlet_address: outlet_address, outlet_phone: outlet_phone, outlet_status: outlet_status }
         edit(data)
     })
 
@@ -239,7 +239,7 @@
     // Delete
     $("#table_outlet > tbody").on('click', '.btn-delete', e => {
         const rowData = $('#table_outlet').DataTable().row(getTr(e)).data();
-        id = rowData['outlet_id']
+        outlet_id = rowData['outlet_id']
         Swal.fire({
             title: "Yakin Hapus Data?",
             text: "Data Tidak akan bisa dipulihkan",
@@ -254,7 +254,7 @@
                 $.ajax
                     ({
                         type: "POST",
-                        data: { id: id },
+                        data: { outlet_id: outlet_id },
                         url: "/outlet/delete",
                         success: (e) => {
                             if (e.status) {
@@ -286,26 +286,26 @@
     })
 
     $("#btnSaveAddModal").on('click', e => {
-        var id = $('#idOutletAdd').val()
-        var name = $('#namaOutletAdd').val()
-        var address = $('#alamatOutletAdd').val()
-        var phone = $('#teleponOutletAdd').val()
-        var status = $('#statusOutletAdd').val()
-        var data = { outlet_id: id, outlet_name: name, address: address, phone: phone, status:status }
+        var outlet_id = $('#idOutletAdd').val()
+        var outlet_name = $('#namaOutletAdd').val()
+        var outlet_address = $('#alamatOutletAdd').val()
+        var outlet_phone = $('#teleponOutletAdd').val()
+        var outlet_status = $('#statusOutletAdd').val()
+        var data = { outlet_id: outlet_id, outlet_name: outlet_name, outlet_address: outlet_address, outlet_phone: outlet_phone, outlet_status: outlet_status }
         console.log(data)
 
-        var check = checkId(id)
+        var check = checkId(outlet_id)
         if (check) {
             addOutlet(data)
         }
     })
 
-    function checkId(id) {
+    function checkId(outlet_id) {
         var status = true
         $.ajax
             ({
                 type: "POST",
-                data: { id: id },
+                data: { outlet_id: outlet_id },
                 url: "/outlet/checkId/",
                 async: false,
                 success: (e) => {

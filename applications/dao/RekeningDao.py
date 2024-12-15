@@ -4,21 +4,21 @@ def dt_data_rekening(search, offset):
     db = PostgresDatabase()
     query = """
         SELECT
-            id,
-            rek_no,
-            rek_name,
-            rek_bank,
-            case when status is true Then 'Aktif'
-            when status is false THEN 'Tidak Aktif' 
-            END status
+            rekening_id,
+            rekening_no,
+            rekening_name,
+            rekening_bank,
+            case when rekening_status is true Then 'Aktif'
+            when rekening_status is false THEN 'Tidak Aktif' 
+            END rekening_status
         FROM
             ms_rekening
         WHERE
-            CAST(rek_no AS TEXT) ILIKE %(search)s OR
-            rek_name ILIKE %(search)s OR
-            rek_bank ILIKE %(search)s
+            CAST(rekening_no AS TEXT) ILIKE %(search)s OR
+            rekening_name ILIKE %(search)s OR
+            rekening_bank ILIKE %(search)s
         ORDER BY
-            rek_bank;
+            rekening_id desc;
     """
     param = {
         "search": f"%{search}%",
@@ -34,34 +34,34 @@ def update_data_rekening(data):
         UPDATE 
             ms_rekening
         SET
-            rek_no = %(rek_no)s,
-            rek_name = %(rek_name)s,
-            rek_bank = %(rek_bank)s,
-            status = %(status)s
+            rekening_no = %(rekening_no)s,
+            rekening_name = %(rekening_name)s,
+            rekening_bank = %(rekening_bank)s,
+            rekening_status = %(rekening_status)s
         WHERE
-            id = %(id)s
+            rekening_id = %(rekening_id)s
     """
     param = {
-        "rek_no" : data['rek_no'],
-        "rek_name" : data['rek_name'],
-        "rek_bank" : data['rek_bank'],
-        "status" : data['status'],
-        "id" : data['id']
+        "rekening_no" : data['rekening_no'],
+        "rekening_name" : data['rekening_name'],
+        "rekening_bank" : data['rekening_bank'],
+        "rekening_status" : data['rekening_status'],
+        "rekening_id" : data['rekening_id']
     }
 
     return db.execute(query, param)
 
-def delete_data_rekening(id):
+def delete_data_rekening(rekening_id):
     db = PostgresDatabase()
     query = """
         DELETE
         FROM 
             ms_rekening
         WHERE
-            id = %(id)s
+            rekening_id = %(rekening_id)s
     """
     param = {
-        "id" : id
+        "rekening_id" : rekening_id
     }
 
     return db.execute(query, param)
@@ -71,28 +71,27 @@ def add_data_rekening(data):
     query = """
         INSERT INTO 
             ms_rekening 
-                (rek_no, rek_name, status, rek_bank) 
+                (rekening_no, rekening_name, rekening_status, rekening_bank) 
         VALUES 
-                (%(rek_no)s, %(rek_name)s, %(status)s, %(rek_bank)s);
+                (%(rekening_no)s, %(rekening_name)s, %(rekening_status)s, %(rekening_bank)s);
     """
     param = data
 
     return db.execute(query, param)
 
-
 def get_all_rek():
     db = PostgresDatabase()
     query = """
         SELECT
-            rek_no,
-            rek_name,
-            rek_bank,
-            case when status is true Then 'Aktif'
-            when status is false THEN 'Tidak Aktif' 
-            END status
+            rekening_no,
+            rekening_name,
+            rekening_bank,
+            case when rekening_status is true Then 'Aktif'
+            when rekening_status is false THEN 'Tidak Aktif' 
+            END rekening_status
         FROM
             ms_rekening
         ORDER BY
-            rek_bank;
+            rekening_id desc;
     """
     return db.execute(query)

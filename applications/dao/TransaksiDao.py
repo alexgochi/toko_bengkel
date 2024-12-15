@@ -135,7 +135,7 @@ def getDataTransByFaktur(faktur):
 
     query = """
         SELECT 
-            outlet_id, outlet_name, address, phone
+            outlet_id, outlet_name, outlet_address, outlet_phone
         FROM ms_outlet
         WHERE outlet_id = %(outlet)s;
     """
@@ -143,8 +143,8 @@ def getDataTransByFaktur(faktur):
         "outlet" : outlet
     }
     data['outlet'] = db.execute(query, param).result[0]
+    
     return {'status': True, 'message': 'Berhasil get data', 'data': data}
-
 
 def update_payment_trans(param):
     db = PostgresDatabase()

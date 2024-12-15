@@ -15,7 +15,7 @@ def getDataOutlet(id=''):
         FROM 
             ms_outlet
         WHERE 
-            status = true
+            outlet_status = true
         {param};
     """
     return db.execute(query)
@@ -50,16 +50,16 @@ def getRekening(id=''):
     db = PostgresDatabase()
     param = ''
     if id:
-        param = f"AND rek_no = {id}"
+        param = f"AND rekening_no = {id}"
     query = f"""
         SELECT 
-            rek_no,
-            rek_name,
-            rek_bank
+            rekening_no,
+            rekening_name,
+            rekening_bank
         FROM 
             ms_rekening
         WHERE 
-            status = true
+            rekening_status = true
         {param}
         ORDER BY rek_bank;
     """

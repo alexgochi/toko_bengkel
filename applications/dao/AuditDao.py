@@ -135,7 +135,7 @@ def getDataAuditByFaktur(faktur):
 
     query = """
         SELECT 
-            outlet_id, outlet_name, address, phone
+            outlet_id, outlet_name, outlet_address, outlet_phone, outlet_status
         FROM ms_outlet
         WHERE outlet_id = %(outlet)s;
     """
