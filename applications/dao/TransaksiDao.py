@@ -41,16 +41,14 @@ def get_data_distinct():
     data = {}
     query = """
         SELECT *
-        FROM (SELECT DISTINCT member_name
-            FROM ms_member)
+        FROM (SELECT DISTINCT member_name FROM ms_member) AS member_name
         ORDER BY member_name;
     """
     data['member'] = db.execute(query).result
 
     query = """
         SELECT *
-        FROM (SELECT DISTINCT outlet_name, outlet_id
-            FROM ms_outlet)
+        FROM (SELECT DISTINCT outlet_name, outlet_id FROM ms_outlet) AS outlet_name, outlet_id
         ORDER BY outlet_name;
     """
     data['outlet'] = db.execute(query).result

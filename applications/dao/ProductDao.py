@@ -23,40 +23,29 @@ def get_data_distinct():
     data = {}
     query = """
         SELECT *
-        FROM (SELECT DISTINCT category_name
-            FROM ms_category)
+        FROM (SELECT DISTINCT category_name FROM ms_category) AS category_name
         ORDER BY category_name;
     """
     data['category'] = db.execute(query).result
 
     query = """
         SELECT *
-        FROM (SELECT DISTINCT merk_name
-            FROM ms_merk)
+        FROM (SELECT DISTINCT merk_name FROM ms_merk) AS merk_name
         ORDER BY merk_name;
     """
     data['merk'] = db.execute(query).result
 
     query = """
         SELECT *
-        FROM (SELECT DISTINCT outlet_name
-            FROM ms_outlet)
+        FROM (SELECT DISTINCT outlet_name FROM ms_outlet) AS outlet_name
         ORDER BY outlet_name;
     """
     data['outlet'] = db.execute(query).result
 
     query = """
         SELECT *
-        FROM (
-            SELECT DISTINCT vehicle
-            FROM 
-                ms_product
-            WHERE 
-                vehicle is not null
-                and vehicle <> '-'
-            )
-        ORDER BY 
-            vehicle;
+        FROM (SELECT DISTINCT vehicle FROM ms_product WHERE vehicle is not null AND vehicle <> '-') AS vehicle
+        ORDER BY vehicle;
     """
     data['vehicle'] = db.execute(query).result
     return data
