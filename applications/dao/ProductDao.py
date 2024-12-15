@@ -23,7 +23,7 @@ def get_data_distinct():
     data = {}
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON category_name
+        FROM (SELECT DISTINCT category_name
             FROM ms_category)
         ORDER BY category_name;
     """
@@ -31,7 +31,7 @@ def get_data_distinct():
 
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON merk_name
+        FROM (SELECT DISTINCT merk_name
             FROM ms_merk)
         ORDER BY merk_name;
     """
@@ -39,7 +39,7 @@ def get_data_distinct():
 
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON outlet_name
+        FROM (SELECT DISTINCT outlet_name
             FROM ms_outlet)
         ORDER BY outlet_name;
     """
@@ -48,8 +48,7 @@ def get_data_distinct():
     query = """
         SELECT *
         FROM (
-            SELECT 
-                DISTINCT ON vehicle
+            SELECT DISTINCT vehicle
             FROM 
                 ms_product
             WHERE 
@@ -138,11 +137,11 @@ def checkProductdbExist(data):
     query = """
         SELECT product_name
         FROM ms_product
-        WHERE LOWER(product_name)=LOWER(%(product_name)s)
-        AND merk_id=%(merk_id)s
-        AND category_id=%(category_id)s
-        AND part_number=%(part_number)s
-        AND LOWER(vehicle)=LOWER(%(vehicle)s)
+        WHERE product_name = %(product_name)s
+        AND merk_id = %(merk_id)s
+        AND category_id = %(category_id)s
+        AND part_number = %(part_number)s
+        AND vehicle = %(vehicle)s
         AND sku != %(sku)s
         AND outlet_id = %(outlet_id)s
     """

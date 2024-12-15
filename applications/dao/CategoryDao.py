@@ -44,7 +44,7 @@ def update_data_category(data):
     query = """
         SELECT category_name
         FROM ms_category
-        where LOWER(category_name) = LOWER(%(category_name)s);
+        where category_name) = %(category_name)s;
     """
     param = data
     
@@ -87,7 +87,7 @@ def add_data_category(data):
     query = """
         SELECT category_name
         FROM ms_category
-        where LOWER(category_name) = LOWER(%(category_name)s);
+        where category_name = %(category_name)s;
     """
     param = data
     

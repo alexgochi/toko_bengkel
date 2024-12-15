@@ -26,8 +26,8 @@ def getDataMember():
         SELECT
             member_id,
             member_name,
-            address,
-            phone
+            member_address,
+            member_phone
         FROM 
             ms_member;
     """

@@ -41,7 +41,7 @@ def get_data_distinct():
     data = {}
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON member_name
+        FROM (SELECT DISTINCT member_name
             FROM ms_member)
         ORDER BY member_name;
     """
@@ -49,7 +49,7 @@ def get_data_distinct():
 
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON outlet_name, outlet_id
+        FROM (SELECT DISTINCT outlet_name, outlet_id
             FROM ms_outlet)
         ORDER BY outlet_name;
     """

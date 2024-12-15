@@ -33,7 +33,7 @@ def get_data_distinct():
     data = {}
     query = """
         SELECT *
-        FROM (SELECT DISTINCT ON store_buy
+        FROM (SELECT DISTINCT store_buy
             FROM tx_receipt)
         WHERE
             store_buy is not null 

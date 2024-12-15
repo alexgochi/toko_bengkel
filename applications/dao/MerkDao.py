@@ -51,8 +51,8 @@ def update_data_merk(data):
     query = """
         SELECT merk_name
         FROM ms_merk
-        WHERE LOWER(merk_name)= LOWER(%(merk_name)s)
-        AND category_id= %(category_id)s
+        WHERE merk_name = %(merk_name)s
+        AND category_id = %(category_id)s
     """
     param = data
     res = db.execute(query, param)
@@ -95,8 +95,8 @@ def add_data_merk(data):
     query = """
         SELECT merk_name
         FROM ms_merk
-        WHERE LOWER(merk_name)= LOWER(%(merk_name)s)
-        AND category_id= %(category_id)s
+        WHERE merk_name = %(merk_name)s
+        AND category_id = %(category_id)s
     """
     param = data
     res = db.execute(query, param)

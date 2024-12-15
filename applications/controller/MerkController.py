@@ -47,7 +47,6 @@ def edit_merk():
     db_res = merkDao.update_data_merk(data)
     return db_res
 
-
 @app.route('/merk/delete', methods=['POST'])
 @login_required
 def delete_merk():
@@ -57,14 +56,12 @@ def delete_merk():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Hapus data"})
 
-
 @app.route('/merk/add', methods=['POST'])
 @login_required
 def add_merk():
     data = request.form.to_dict()
     db_res = merkDao.add_data_merk(data)
     return db_res
-
 
 @app.route('/merk/downloadAllCategory', methods=['GET'])
 @login_required
