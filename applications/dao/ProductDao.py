@@ -100,10 +100,9 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
             INNER JOIN ms_category mc on mc.category_id = mp.category_id
             INNER JOIN ms_outlet mo on mo.outlet_id = mp.outlet_id
         WHERE
-            CAST(sku AS TEXT) ILIKE %(search)s AND (
-            part_number ILIKE %(search)s OR
-            alternative_part_number ILIKE %(search)s OR
-            descriptions_product ILIKE %(search)s OR
+            sku is not null AND (
+            CAST (sku AS TEXT) ILIKE %(search)s OR
+            part_number ILIKE %(search)s OR										
             product_name ILIKE %(search)s OR
             CAST(barcode AS TEXT) ILIKE %(search)s)
             AND merk_name ILIKE %(category)s
