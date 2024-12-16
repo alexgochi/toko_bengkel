@@ -104,6 +104,8 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
             CAST (sku AS TEXT) ILIKE %(search)s OR
             part_number ILIKE %(search)s OR										
             product_name ILIKE %(search)s OR
+            descriptions_product ILIKE %(search)s OR
+            alternative_part_number ILIKE %(search)s OR
             CAST(barcode AS TEXT) ILIKE %(search)s)
             AND merk_name ILIKE %(category)s
             AND category_name ILIKE %(merk)s

@@ -116,8 +116,10 @@ def dt_lovProduct(search, offset):
         WHERE
             CAST(sku AS TEXT) ILIKE %(search)s OR
             product_name ILIKE %(search)s OR
+            descriptions_product ILIKE %(search)s OR
             merk_name ILIKE %(search)s OR
-            part_number ILIKE %(search)s 
+            part_number ILIKE %(search)s OR
+            alternative_part_number ILIKE %(search)s
         ORDER BY sku;
     """
     param = {
