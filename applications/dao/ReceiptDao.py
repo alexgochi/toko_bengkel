@@ -169,11 +169,7 @@ def getDataRecByFaktur(faktur):
             sku, part_number, product_name, merk_name, qty, price, qty*price as subtotal
         FROM tx_receipt_detail
         WHERE faktur = %(faktur)s
-        ORDER BY 
-            CASE WHEN sku < 'A'
-                THEN lpad(sku, 255, '0')
-            ELSE sku
-                END;
+        ORDER BY sku;
     """
     param = {
         "faktur" : faktur

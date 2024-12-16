@@ -118,11 +118,7 @@ def dt_lovProduct(search, offset):
             product_name ILIKE %(search)s OR
             merk_name ILIKE %(search)s OR
             part_number ILIKE %(search)s 
-        ORDER BY 
-            CASE WHEN sku < 'A'
-                THEN lpad(sku, 255, '0')
-            ELSE sku
-                END;;
+        ORDER BY sku;
     """
     param = {
         "search": f"%{search}%",
@@ -152,8 +148,8 @@ def getDataBySkuBarcode(search):
         INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
         INNER JOIN ms_category mc on mm.category_id = mc.category_id
         WHERE
-            sku = %(search)s OR
-            CAST(barcode AS TEXT) =  %(search)s
+            CAST(sku AS TEXT) ILIKE %(search)s OR
+            CAST(barcode AS TEXT) ILIKE %(search)s
     """
     param = {
         'search' : search
