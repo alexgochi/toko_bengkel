@@ -29,7 +29,8 @@ def getDataMember():
             member_address,
             member_phone
         FROM 
-            ms_member;
+            ms_member
+        ORDER BY member_name;
     """
     return db.execute(query)
 

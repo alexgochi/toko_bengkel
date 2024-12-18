@@ -369,7 +369,7 @@
                                         <option value="" disabled selected> -- Pilih Pelanggan</option>
                                         {% for x in data_member %}
                                         <option value="{{ x['member_id'] }}">
-                                            {{ x['member_id'] }} - {{ x['member_name'] }}
+                                            {{ x['member_name'] }}
                                         </option>
                                         {% endfor %}
                                     </select>
@@ -1044,8 +1044,8 @@
                     url: "/dashboard/getMemberById",
                     success: (e) => {
                         if (e.status) {
-                            $("#addressMember").val(e.result[0]['address'])
-                            $("#phoneMember").val(e.result[0]['phone'])
+                            $("#addressMember").val(e.result[0]['member_address'])
+                            $("#phoneMember").val(e.result[0]['member_phone'])
                         }
                         else {
                             Swal.fire({
