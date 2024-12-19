@@ -98,9 +98,9 @@
                         {% if data['outlet']['outlet_name'] != 'Nota Polos' %}
                         <h3 style="margin-bottom: 0px; font-size: 16px;">{{ data['outlet']['outlet_name'] }}</h3>
                         <div style="margin-top: 5px;">
-                            {{ data['outlet']['address'] }}
+                            {{ data['outlet']['outlet_address'] }}
                         </div>
-                        {{ data['outlet']['phone'] }}
+                        {{ data['outlet']['outlet_phone'] }}
                         {% endif %}
                     </td>
                 </tr>
@@ -120,9 +120,9 @@
                         {% if data['member_name'] %}
                         <h3 style="margin-bottom: 0px; font-size: 16px;">{{ data['member_name'] }}</h3>
                         <div style="margin-top: 5px;">
-                            {{ data['address'] }}
+                            {{ data['member_address'] }}
                         </div>
-                        {{ data['phone'] }}
+                        {{ data['member_phone'] }}
                         {% endif %}
                     </td>
                 </tr>
