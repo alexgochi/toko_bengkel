@@ -26,6 +26,31 @@ def dt_data_member(search, offset):
 
     return db.execute_dt(query, param, limit=25)
 
+def get_data_member_filter(search):
+    db = PostgresDatabase()
+    query = """
+        SELECT
+            member_id as "ID Pelanggan",
+            member_name as "Nama Pelanggan",
+            member_phone as "Telepon Pelanggan",
+            member_address as "Alamat",
+            member_notes as "Catatan Pelanggan"
+        FROM
+            ms_member
+        WHERE
+            CAST(member_id AS TEXT) ILIKE %(search)s OR
+            member_name ILIKE %(search)s OR
+            member_phone ILIKE %(search)s OR
+            member_notes ILIKE %(search)s
+        ORDER BY
+            member_id;
+    """
+    param = {
+        "search": f"%{search}%"
+    }
+
+    return db.execute(query, param)
+
 def update_data_member(data):
     db = PostgresDatabase()
     query = """

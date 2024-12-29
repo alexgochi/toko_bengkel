@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-between mt-5 mr-5">
     <div>
         <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">+ Tambah Pelanggan</button>
-        <button class="btn btn-danger mr-2" style="color: white;" onclick="generatePdf('/member/downloadAllMember')"><i
+        <button class="btn btn-danger mr-2" style="color: white;" id="btnDownloadMember"><i
                 class="fa fa-download"></i>Download</button>
     </div>
     <div>
@@ -126,6 +126,15 @@
 
 <script type="text/javascript">
     // Show Data
+    $('#btnDownloadMember').on('click', function () {
+        var url = '/member/downloadAllMember'
+        var data = {
+            "search": $('#search_table_member').val().trim()
+        }
+
+        generateExcel(url, data)
+    });
+    
     $(() => {
         fill_table_member();
         dt_search("search_table_member", fill_table_member);

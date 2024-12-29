@@ -1,4 +1,5 @@
 from flask_login import current_user, login_user, login_required, logout_user
+from applications.controller import GlobalFunction
 from ..dao import LoginDao as loginDao
 from .. import login_manager
 from io import StringIO
@@ -16,7 +17,6 @@ from flask import request, render_template, make_response, jsonify, redirect, Bl
 from applications.dao import CategoryDao as categoryDao
 from applications.lib import dataTableError
 from applications.controller.DashboardController import generate_pdf
-
 
 @app.route('/category/', methods=['GET'])
 @login_required
@@ -47,7 +47,6 @@ def edit_category():
     db_res = categoryDao.update_data_category(data)
     return db_res
 
-
 @app.route('/category/delete', methods=['POST'])
 @login_required
 def delete_category():
@@ -57,7 +56,6 @@ def delete_category():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Hapus data"})
 
-
 @app.route('/category/add', methods=['POST'])
 @login_required
 def add_category():
@@ -65,11 +63,29 @@ def add_category():
     db_res = categoryDao.add_data_category(data)
     return db_res
 
-@app.route('/category/downloadAllMerk', methods=['GET'])
+@app.route('/category/downloadAllMerkPdf', methods=['GET'])
 @login_required
-def download_all_merk():
+def download_all_merk_pdf():
     db_res = categoryDao.get_all_merk()
     data = db_res.result
     if len(data) > 0:
         return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
     return jsonify({"status": False, "message": "Tidak Ada Data"})
+
+@app.route('/category/downloadAllMerk', methods=['GET'])
+@login_required
+def download_all_merk():
+    res = categoryDao.get_data_category_filter(
+        request.args.get("search"),
+        request.args.get('order_by')
+    )
+    data = res.result
+    for x in data:
+        x['ID Merk'] = int(x['ID Merk'])
+        x['Jumlah Kategori'] = int(x['Jumlah Kategori'])
+    message = ""
+    if len(data) > 0:
+        download, message = GlobalFunction.generateExcel('Merk', data)
+        if download:
+            return jsonify({"status": True, "message": "Berhasil Download File"})
+    return jsonify({"status": False, "message": f"Gagal Download File\n{message}"})

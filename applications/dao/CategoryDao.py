@@ -38,6 +38,30 @@ def dt_data_category(search, offset, orderBy):
 
     return db.execute_dt(query, param, limit=25)
 
+def get_data_category_filter(search, orderBy):
+    db = PostgresDatabase()
+    query = f"""
+        SELECT
+            mc.category_id as "ID Merk",
+            mc.category_name as "Nama Merk",
+            count(*) +
+                max(case when mm.category_id is null then -1 else 0 end)
+            as "Jumlah Kategori"
+        FROM ms_category mc
+        LEFT JOIN ms_merk mm on mc.category_id = mm.category_id
+        WHERE
+            category_name ILIKE %(search)s
+        GROUP BY
+            mc.category_id,
+            mc.category_name
+        ORDER BY
+            {orderBy};
+    """
+    param = {
+        "search": f"%{search}%"
+    }
+
+    return db.execute(query, param)
 
 def update_data_category(data):
     db = PostgresDatabase()

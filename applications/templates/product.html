@@ -12,8 +12,7 @@
     <div class="p-2">
         <button class="btn btn-primary m-auto" data-toggle="modal" data-target="#addModal">+ Tambah
             Produk</button>
-        <button class="btn btn-danger mr-2" style="color: white;"
-            onclick="generatePdf('/product/downloadAllProduct')"><i class="fa fa-download"></i>Download</button>
+        <button class="btn btn-danger mr-2" style="color: white;" id="btnDownloadProduct"><i class="fa fa-download"></i>Download</button>
     </div>
     <div class="p-2 row">
         <input type="text" class="form-control col-2 m-auto" id="filterCategory" placeholder="Cari kategori..">
@@ -286,6 +285,19 @@
 
 <script type="text/javascript">
     // Show Data
+    $('#btnDownloadProduct').on('click', function () {
+        var url = '/product/downloadAllProduct'
+        var data = {
+            "search": $('#search_table_product').val().trim(),
+            "category": $('#filterCategory').val().trim(),
+            "merk": $('#filterMerk').val().trim(),
+            "vehicle": $('#filterVehicle').val().trim(),
+            "filter": getFormFilter()
+        }
+
+        generateExcel(url, data)
+    });
+
     $(() => {
         fill_table_product();
         dt_search("search_table_product", fill_table_product);
@@ -320,6 +332,17 @@
         var filter = getFormFilter()
         const dt_options = {
             scrollY: '50vh',
+            /* layout: {
+                bottomStart: {
+                    buttons: [{
+                        extend: 'excel',
+                        footer: false,
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }]
+                }
+            }, */
             fixedColumns: {
                 leftColumns: 3,
                 rightColumns: 1

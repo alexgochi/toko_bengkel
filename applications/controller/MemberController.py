@@ -1,4 +1,5 @@
 from flask_login import current_user, login_user, login_required, logout_user
+from applications.controller import GlobalFunction
 from ..dao import LoginDao as loginDao
 from .. import login_manager
 from io import StringIO
@@ -13,7 +14,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 from flask import current_app as app
 from flask import request, render_template, make_response, jsonify, redirect, Blueprint, url_for, session
-from applications.dao.MemberDao import get_all_member, dt_data_member, update_data_member, delete_data_member, add_data_member, check_id_member
+from applications.dao.MemberDao import get_all_member, dt_data_member, get_data_member_filter, update_data_member, delete_data_member, add_data_member, check_id_member
 from applications.lib import dataTableError
 from applications.controller.DashboardController import generate_pdf
 
@@ -74,11 +75,27 @@ def add_member():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah data Member"})
 
-@app.route('/member/downloadAllMember', methods=['GET'])
+@app.route('/member/downloadAllMemberPdf', methods=['GET'])
 @login_required
-def download_all_member():
+def download_all_member_pdf():
     db_res = get_all_member()
     data = db_res.result
     if len(data) > 0:
         return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
     return jsonify({"status": False, "message": "Tidak Ada Data"})
+
+@app.route('/member/downloadAllMember', methods=['GET'])
+@login_required
+def download_all_member():
+    res = get_data_member_filter(
+        request.args.get("search")
+    )
+    data = res.result
+    for x in data:
+        x['ID Pelanggan'] = int(x['ID Pelanggan'])
+    message = ""
+    if len(data) > 0:
+        download, message = GlobalFunction.generateExcel('Pelanggan', data)
+        if download:
+            return jsonify({"status": True, "message": "Berhasil Download File"})
+    return jsonify({"status": False, "message": f"Gagal Download File\n{message}"})

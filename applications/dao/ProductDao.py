@@ -121,6 +121,50 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
     }
     return db.execute_dt(query, param, limit=25)
 
+def get_data_product_filter(search, category, merk, vehicle, filter):
+    db = PostgresDatabase()
+    query = f"""
+        SELECT
+            sku "SKU",
+            part_number as "Part Number",
+            alternative_part_number as "Alternatif Part Number",
+            descriptions_product as "Deskripsi Produk",
+            product_name as "Nama Produk",
+            barcode as "Barcode",
+            vehicle as "Kendaraan",
+            merk_name  as "Nama Kategori",
+            category_name as "Nama Merk",
+            outlet_name as "Nama Outlet",
+            qty as "Qty",
+            satuan as "Satuan",
+            harga_beli as "Harga Beli",
+            harga_jual as "Harga Jual"
+        FROM
+            ms_product mp
+            INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
+            INNER JOIN ms_category mc on mc.category_id = mp.category_id
+            INNER JOIN ms_outlet mo on mo.outlet_id = mp.outlet_id
+        WHERE
+            sku is not null AND (
+            CAST (sku AS TEXT) ILIKE %(search)s OR
+            part_number ILIKE %(search)s OR
+            alternative_part_number ILIKE %(search)s OR
+            descriptions_product ILIKE %(search)s OR
+            product_name ILIKE %(search)s OR
+            CAST(barcode AS TEXT) ILIKE %(search)s)
+            AND merk_name ILIKE %(category)s
+            AND category_name ILIKE %(merk)s
+            AND vehicle ILIKE %(vehicle)s
+            {filter}
+    """
+    param = {
+        "search": f"%{search}%",
+        "category": f"%{category}%",
+        "merk": f"%{merk}%",
+        "vehicle": f"%{vehicle}%"
+    }
+    return db.execute(query, param)
+
 def checkProductdbExist(data):
     db = PostgresDatabase()
     print(data)

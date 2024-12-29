@@ -27,6 +27,31 @@ def dt_data_rekening(search, offset):
 
     return db.execute_dt(query, param, limit=25)
 
+def get_data_rek_filter(search):
+    db = PostgresDatabase()
+    query = """
+        SELECT
+            rekening_id as "ID Rekening",
+            rekening_no as "Nomor Rekening",
+            rekening_name as "Nama Rekening",
+            rekening_bank as "Nama Bank",
+            case when rekening_status is true Then 'Aktif'
+            when rekening_status is false THEN 'Tidak Aktif' 
+            END as "Status Rekening"
+        FROM
+            ms_rekening
+        WHERE
+            CAST(rekening_no AS TEXT) ILIKE %(search)s OR
+            rekening_name ILIKE %(search)s OR
+            rekening_bank ILIKE %(search)s
+        ORDER BY
+            rekening_id;
+    """
+    param = {
+        "search": f"%{search}%"
+    }
+
+    return db.execute(query, param)
 
 def update_data_rekening(data):
     db = PostgresDatabase()

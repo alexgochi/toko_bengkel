@@ -1,4 +1,5 @@
 from flask_login import current_user, login_user, login_required, logout_user
+from applications.controller import GlobalFunction
 from ..dao import LoginDao as loginDao
 from .. import login_manager
 from io import StringIO
@@ -73,11 +74,25 @@ def add_outlet():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah data"})
 
-@app.route('/outlet/downloadAllOutlet', methods=['GET'])
+@app.route('/outlet/downloadAllOutletPdf', methods=['GET'])
 @login_required
-def download_all_outlet():
+def download_all_outlet_pdf():
     db_res = outletDao.get_all_outlet()
     data = db_res.result
     if len(data) > 0:
         return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
     return jsonify({"status": False, "message": "Tidak Ada Data"})
+
+@app.route('/outlet/downloadAllOutlet', methods=['GET'])
+@login_required
+def download_all_outlet():
+    res = outletDao.get_data_outlet_filter(
+        request.args.get("search")
+    )
+    data = res.result
+    message = ""
+    if len(data) > 0:
+        download, message = GlobalFunction.generateExcel('Outlet', data)
+        if download:
+            return jsonify({"status": True, "message": "Berhasil Download File"})
+    return jsonify({"status": False, "message": f"Gagal Download File\n{message}"})

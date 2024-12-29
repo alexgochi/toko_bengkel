@@ -45,6 +45,37 @@ def dt_data_merk(search, offset, orderBy):
 
     return db.execute_dt(query, param, limit=25)
 
+def get_data_merk_filter(search, orderBy):
+    db = PostgresDatabase()
+    query = f"""
+        SELECT
+            me.merk_id "ID Kategori",
+            merk_name "Nama Kategori",
+            mc.category_id "ID Merk",
+            mc.category_name "Nama Merk",
+            count(*)
+                + max(case when mp.merk_id is null then -1 else 0 end)
+            as "Jumlah Produk"
+        FROM ms_merk me
+        INNER JOIN ms_category mc on mc.category_id = me.category_id
+        LEFT JOIN ms_product mp
+            ON me.merk_id = mp.merk_id
+        WHERE
+            merk_name ILIKE %(search)s OR
+            category_name ILIKE %(search)s
+        GROUP BY
+            me.merk_name,
+            me.merk_id,
+            category_name,
+            mc.category_id
+        ORDER BY
+            {orderBy};
+    """
+    param = {
+        "search": f"%{search}%"
+    }
+
+    return db.execute(query, param)
 
 def update_data_merk(data):
     db = PostgresDatabase()

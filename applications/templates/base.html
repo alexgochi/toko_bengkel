@@ -28,6 +28,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/datatables.min.css') }}">
     <link rel="stylesheet" type="text/css"
         href="{{ url_for('static', filename='assets/css/fixedColumns.dataTables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/buttons.dataTables.css') }}">
     <!-- SweetAlert 2 -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/sweetalert2.min.css') }}">
 
@@ -296,6 +297,39 @@
                     }
                 });
         }
+
+        function generateExcel(url, data) {
+            $.ajax
+                ({
+                    type: "GET",
+                    contentType: "application/json",
+                    data: data,
+                    url: url,
+                    async: false,
+                    success: (e) => {
+                        if (e.status) {
+                            Swal.fire({
+                                title: "Sukses",
+                                text: e.message,
+                                icon: "success"
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Gagal",
+                                text: e.message,
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function (xhr, status, err) {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: xhr.responseText,
+                            icon: "error"
+                        });
+                    }
+                });
+        }
     </script>
 
     <!-- bootstrap 4 js -->
@@ -319,7 +353,13 @@
     <!-- DataTables -->
     <script src="{{ url_for('static', filename='assets/js/datatables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/dataTables.fixedColumns.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/fixedColumns.dataTables.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/dataTables.buttons.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/buttons.dataTables.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/jszip.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/pdfmake.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/vfs_fonts.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/buttons.print.min.js') }}"></script>
 
 </body>
 

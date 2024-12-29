@@ -8,7 +8,7 @@
     <div>
         <button class="btn btn-primary btn-sm" id="btn-AddModal" data-toggle="modal" data-target="#addModal">+ Tambah
             Kategori</button>
-        <button class="btn btn-danger mr-2" style="color: white;" onclick="generatePdf('/merk/downloadAllCategory')"><i
+        <button class="btn btn-danger mr-2" style="color: white;" id="btnDownloadCategory"><i
                 class="fa fa-download"></i>Download</button>
     </div>
     <div class="form-row">
@@ -128,6 +128,18 @@
 
 <script type="text/javascript">
     // Show Data
+    $('#btnDownloadCategory').on('click', function () {
+        var column = $('#orderBy').val() || 'merk_name'
+        var order = $('#orderByAsc').val() || 'asc'
+        var url = '/merk/downloadAllCategory'
+        var data = {
+            "search": $('#search_table_merk').val().trim(),
+            "order_by": column + ' ' + order
+        }
+
+        generateExcel(url, data)
+    });
+    
     $(() => {
         fill_table_merk();
         dt_search("search_table_merk", fill_table_merk);
