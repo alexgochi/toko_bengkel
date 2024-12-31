@@ -63,14 +63,14 @@ def add_merk():
     db_res = merkDao.add_data_merk(data)
     return db_res
 
-@app.route('/merk/downloadAllCategoryPdf', methods=['GET'])
-@login_required
-def download_all_category_pdf():
-    db_res = merkDao.get_all_category()
-    data = db_res.result
-    if len(data) > 0:
-        return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
-    return jsonify({"status": False, "message": "Tidak Ada Data"})
+# @app.route('/merk/downloadAllCategoryPdf', methods=['GET'])
+# @login_required
+# def download_all_category_pdf():
+#     db_res = merkDao.get_all_category()
+#     data = db_res.result
+#     if len(data) > 0:
+#         return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
+#     return jsonify({"status": False, "message": "Tidak Ada Data"})
 
 @app.route('/merk/downloadAllCategory', methods=['GET'])
 @login_required

@@ -63,14 +63,14 @@ def add_category():
     db_res = categoryDao.add_data_category(data)
     return db_res
 
-@app.route('/category/downloadAllMerkPdf', methods=['GET'])
-@login_required
-def download_all_merk_pdf():
-    db_res = categoryDao.get_all_merk()
-    data = db_res.result
-    if len(data) > 0:
-        return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
-    return jsonify({"status": False, "message": "Tidak Ada Data"})
+# @app.route('/category/downloadAllMerkPdf', methods=['GET'])
+# @login_required
+# def download_all_merk_pdf():
+#     db_res = categoryDao.get_all_merk()
+#     data = db_res.result
+#     if len(data) > 0:
+#         return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
+#     return jsonify({"status": False, "message": "Tidak Ada Data"})
 
 @app.route('/category/downloadAllMerk', methods=['GET'])
 @login_required

@@ -74,14 +74,14 @@ def add_outlet():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah data"})
 
-@app.route('/outlet/downloadAllOutletPdf', methods=['GET'])
-@login_required
-def download_all_outlet_pdf():
-    db_res = outletDao.get_all_outlet()
-    data = db_res.result
-    if len(data) > 0:
-        return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
-    return jsonify({"status": False, "message": "Tidak Ada Data"})
+# @app.route('/outlet/downloadAllOutletPdf', methods=['GET'])
+# @login_required
+# def download_all_outlet_pdf():
+#     db_res = outletDao.get_all_outlet()
+#     data = db_res.result
+#     if len(data) > 0:
+#         return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
+#     return jsonify({"status": False, "message": "Tidak Ada Data"})
 
 @app.route('/outlet/downloadAllOutlet', methods=['GET'])
 @login_required

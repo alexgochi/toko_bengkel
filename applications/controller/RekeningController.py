@@ -65,14 +65,14 @@ def add_rek():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah Data"})
 
-@app.route('/rek/downloadAllRekPdf', methods=['GET'])
-@login_required
-def download_all_rek_pdf():
-    db_res = rekDao.get_all_rek()
-    data = db_res.result
-    if len(data) > 0:
-        return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
-    return jsonify({"status": False, "message": "Tidak Ada Data"})
+# @app.route('/rek/downloadAllRekPdf', methods=['GET'])
+# @login_required
+# def download_all_rek_pdf():
+#     db_res = rekDao.get_all_rek()
+#     data = db_res.result
+#     if len(data) > 0:
+#         return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
+#     return jsonify({"status": False, "message": "Tidak Ada Data"})
 
 @app.route('/rek/downloadAllRek', methods=['GET'])
 @login_required

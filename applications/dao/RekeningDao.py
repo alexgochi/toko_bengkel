@@ -66,13 +66,7 @@ def update_data_rekening(data):
         WHERE
             rekening_id = %(rekening_id)s
     """
-    param = {
-        "rekening_no" : data['rekening_no'],
-        "rekening_name" : data['rekening_name'],
-        "rekening_bank" : data['rekening_bank'],
-        "rekening_status" : data['rekening_status'],
-        "rekening_id" : data['rekening_id']
-    }
+    param = data
 
     return db.execute(query, param)
 

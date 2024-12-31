@@ -91,6 +91,9 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
             satuan,
             harga_beli,
             harga_jual,
+            case when f_stock_opname is true Then 'Valid'
+            when f_stock_opname is false THEN 'Invalid' 
+            END f_stock_opname,
             mp.category_id,
             mp.merk_id,
             mp.outlet_id
@@ -106,6 +109,7 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
             product_name ILIKE %(search)s OR
             descriptions_product ILIKE %(search)s OR
             alternative_part_number ILIKE %(search)s OR
+            CAST (f_stock_opname AS TEXT) ILIKE %(search)s OR
             CAST(barcode AS TEXT) ILIKE %(search)s)
             AND merk_name ILIKE %(category)s
             AND category_name ILIKE %(merk)s
@@ -138,7 +142,10 @@ def get_data_product_filter(search, category, merk, vehicle, filter):
             qty as "Qty",
             satuan as "Satuan",
             harga_beli as "Harga Beli",
-            harga_jual as "Harga Jual"
+            harga_jual as "Harga Jual",
+            case when f_stock_opname is true Then 'Valid'
+            when f_stock_opname is false THEN 'Invalid' 
+            END as "Stock Opname"
         FROM
             ms_product mp
             INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
@@ -150,6 +157,7 @@ def get_data_product_filter(search, category, merk, vehicle, filter):
             part_number ILIKE %(search)s OR
             alternative_part_number ILIKE %(search)s OR
             descriptions_product ILIKE %(search)s OR
+            CAST (f_stock_opname AS TEXT) ILIKE %(search)s OR
             product_name ILIKE %(search)s OR
             CAST(barcode AS TEXT) ILIKE %(search)s)
             AND merk_name ILIKE %(category)s
@@ -206,7 +214,8 @@ def update_data_product(data):
             harga_beli = %(harga_beli)s,
             harga_jual = %(harga_jual)s,
             barcode = %(barcode)s,
-            f_print_vehicle = %(f_print_vehicle)s
+            f_print_vehicle = %(f_print_vehicle)s,
+            f_stock_opname = %(f_stock_opname)s
         WHERE
             sku = %(sku)s
     """
@@ -235,9 +244,9 @@ def add_data_product(data):
         query = """
             INSERT INTO 
                 ms_product 
-                    (sku, part_number, alternative_part_number, descriptions_product, product_name, vehicle, merk_id, category_id, outlet_id, qty, satuan, harga_beli, harga_jual, barcode, f_print_vehicle) 
+                    (sku, part_number, alternative_part_number, descriptions_product, product_name, vehicle, merk_id, category_id, outlet_id, qty, satuan, harga_beli, harga_jual, barcode, f_print_vehicle, f_stock_opname) 
             VALUES 
-                    (%(sku)s, %(part_number)s, %(alternative_part_number)s, %(descriptions_product)s, %(product_name)s, %(vehicle)s, %(merk_id)s, %(category_id)s, %(outlet_id)s, %(qty)s, %(satuan)s, %(harga_beli)s, %(harga_jual)s, %(barcode)s, %(f_print_vehicle)s);
+                    (%(sku)s, %(part_number)s, %(alternative_part_number)s, %(descriptions_product)s, %(product_name)s, %(vehicle)s, %(merk_id)s, %(category_id)s, %(outlet_id)s, %(qty)s, %(satuan)s, %(harga_beli)s, %(harga_jual)s, %(barcode)s, %(f_print_vehicle)s, %(f_stock_opname)s);
         """
         param = data
 
@@ -318,20 +327,20 @@ def get_all_product():
     db = PostgresDatabase()
     query = f"""
         SELECT
-            sku SKU,
-            part_number Part_Number,
-            alternative_part_number Alternative_Part_Number,
-            descriptions_product Descriptions_Product,
-            product_name Nama_Produk,
-            barcode Barcode,
-            vehicle Kendaraan,
+            sku as SKU,
+            part_number as Part_Number,
+            alternative_part_number as Alternative_Part_Number,
+            descriptions_product as Descriptions_Product,
+            product_name as Nama_Produk,
+            barcode as Barcode,
+            vehicle as Kendaraan,
             merk_name as Kategori,
             category_name as Merk,
-            outlet_name Nama_Outlet,
-            qty,
-            satuan,
-            harga_beli Beli,
-            harga_jual Jual
+            outlet_name as Nama_Outlet,
+            qty as Qty,
+            satuan as Satuan,
+            harga_beli as Beli,
+            harga_jual as Jual
         FROM
             ms_product mp
             INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id

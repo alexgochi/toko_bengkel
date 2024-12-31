@@ -75,14 +75,14 @@ def add_member():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah data Member"})
 
-@app.route('/member/downloadAllMemberPdf', methods=['GET'])
-@login_required
-def download_all_member_pdf():
-    db_res = get_all_member()
-    data = db_res.result
-    if len(data) > 0:
-        return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
-    return jsonify({"status": False, "message": "Tidak Ada Data"})
+# @app.route('/member/downloadAllMemberPdf', methods=['GET'])
+# @login_required
+# def download_all_member_pdf():
+#     db_res = get_all_member()
+#     data = db_res.result
+#     if len(data) > 0:
+#         return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data)})
+#     return jsonify({"status": False, "message": "Tidak Ada Data"})
 
 @app.route('/member/downloadAllMember', methods=['GET'])
 @login_required

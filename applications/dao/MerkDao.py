@@ -148,7 +148,6 @@ def add_data_merk(data):
         return jsonify({"status": res.status, "message": str(res.pgerror)})
     return jsonify({"status": True, "message": "Berhasil Tambah data"})
 
-
 def get_all_category():
     db = PostgresDatabase()
     query = """

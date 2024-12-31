@@ -93,14 +93,14 @@ def add_product():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Tambah data"})
 
-@app.route('/product/downloadAllProductPdf', methods=['GET'])
-@login_required
-def download_all_product_pdf():
-    db_res = productDao.get_all_product()
-    data = db_res.result
-    if len(data) > 0:
-        return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data, 'landscape')})
-    return jsonify({"status": False, "message": "Tidak Ada Data"})
+# @app.route('/product/downloadAllProductPdf', methods=['GET'])
+# @login_required
+# def download_all_product_pdf():
+#     db_res = productDao.get_all_product()
+#     data = db_res.result
+#     if len(data) > 0:
+#         return jsonify({"status": True, "message": "Berhasil Get Data", "data":generate_pdf(data, 'landscape')})
+#     return jsonify({"status": False, "message": "Tidak Ada Data"})
 
 @app.route('/product/downloadAllProduct', methods=['GET'])
 @login_required

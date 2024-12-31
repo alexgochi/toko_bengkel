@@ -58,6 +58,7 @@
             <th class="text-center">Satuan</th>
             <th class="text-center">Harga Beli</th>
             <th class="text-center">Harga Jual</th>
+            <th class="text-center">Stock Opname</th>
             <th class="text-center">Kategori ID</th>
             <th class="text-center">Merk ID</th>
             <th class="text-center">&nbsp;</th>
@@ -78,7 +79,6 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
                 <div class="modal-body">
                     <div class="form-row">
                         <div class="form-group col-md-3">
@@ -162,6 +162,13 @@
                         <div class="form-group col-md-4">
                             <label for="hjualProductEdit">Harga Jual</label>
                             <input type="number" class="form-control data-edit" id="hjualProductEdit" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="statusProductEdit">Stock Opname</label>
+                            <select class="form-control" id="statusProductEdit">
+                                <option value="1">Valid</option>
+                                <option value="0">Invalid</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -271,6 +278,13 @@
                             <label for="hjualProductAdd">Harga Jual</label>
                             <input type="number" class="form-control data-add" id="hjualProductAdd" required>
                         </div>
+                        <div class="form-group">
+                            <label for="statusProductAdd">Stock Opname</label>
+                            <select class="form-control" id="statusProductAdd">
+                                <option value="1">Valid</option>
+                                <option value="0">Invalid</option>
+                            </select>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -344,7 +358,7 @@
                 }
             }, */
             fixedColumns: {
-                leftColumns: 3,
+                leftColumns: 4,
                 rightColumns: 1
             },
             scrollX: true,
@@ -371,6 +385,7 @@
                 { data: "satuan", className: 'text-center' },
                 { data: "harga_beli" },
                 { data: "harga_jual" },
+                { data: "f_stock_opname" },
                 { data: "category_id", searchable: false, visible: false },
                 { data: "merk_id", searchable: false, visible: false },
                 { data: "outlet_id", searchable: false, visible: false },
@@ -432,6 +447,12 @@
         $('#satuanProductEdit').val(rowData['satuan'])
         $('#hbeliProductEdit').val(rowData['harga_beli'])
         $('#hjualProductEdit').val(rowData['harga_jual'])
+
+        if (rowData['f_stock_opname'] == 'Valid') {
+            $('#statusProductEdit').val('1')
+        } else {
+            $('#statusProductEdit').val('0')
+        }
     })
 
     $("#btnSaveEditModal").on('click', e => {
@@ -460,13 +481,14 @@
             var satuan = $('#satuanProductEdit').val()
             var hbeli = $('#hbeliProductEdit').val()
             var hjual = $('#hjualProductEdit').val()
+            var status_product = $('#statusProductEdit').val()
 
             var data = {
                 sku: sku, product_name: nama, part_number: part_number, alternative_part_number: alternative_part_number, 
                 descriptions_product: descriptions_product, barcode: barcode,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
                 qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
-                satuan: satuan, f_print_vehicle: flag
+                satuan: satuan, f_print_vehicle: flag, f_stock_opname: status_product
             }
             edit(data)
         }
@@ -656,13 +678,14 @@
             var satuan = $('#satuanProductAdd').val()
             var hbeli = $('#hbeliProductAdd').val()
             var hjual = $('#hjualProductAdd').val()
+            var status_product = $('#statusProductAdd').val()
 
             var data = {
                 sku: sku, product_name: nama, part_number: part_number, alternative_part_number: alternative_part_number, 
                 descriptions_product: descriptions_product, satuan: satuan,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
                 qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
-                f_print_vehicle: flag
+                f_print_vehicle: flag, f_stock_opname: status_product
             }
 
             addProduct(data)
