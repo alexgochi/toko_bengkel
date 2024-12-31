@@ -121,7 +121,7 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
     param = {
         "search": f"%{search}%",
         "stock_opname": f"{search}%",
-        "category": f"%{category}%",
+        "category": f"{category}%",
         "merk": f"%{merk}%",
         "vehicle": f"%{vehicle}%",
         "offset": offset
@@ -173,7 +173,7 @@ def get_data_product_filter(search, category, merk, vehicle, filter):
     param = {
         "search": f"%{search}%",
         "stock_opname": f"{search}%",
-        "category": f"%{category}%",
+        "category": f"{category}%",
         "merk": f"%{merk}%",
         "vehicle": f"%{vehicle}%"
     }
