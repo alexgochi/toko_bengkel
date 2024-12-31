@@ -109,7 +109,9 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
             product_name ILIKE %(search)s OR
             descriptions_product ILIKE %(search)s OR
             alternative_part_number ILIKE %(search)s OR
-            CAST (f_stock_opname AS TEXT) ILIKE %(search)s OR
+            case when f_stock_opname is true Then 'Valid'
+            when f_stock_opname is false THEN 'Invalid' 
+            END ILIKE %(stock_opname)s OR
             CAST(barcode AS TEXT) ILIKE %(search)s)
             AND merk_name ILIKE %(category)s
             AND category_name ILIKE %(merk)s
@@ -118,6 +120,7 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
     """
     param = {
         "search": f"%{search}%",
+        "stock_opname": f"{search}%",
         "category": f"%{category}%",
         "merk": f"%{merk}%",
         "vehicle": f"%{vehicle}%",
@@ -157,7 +160,9 @@ def get_data_product_filter(search, category, merk, vehicle, filter):
             part_number ILIKE %(search)s OR
             alternative_part_number ILIKE %(search)s OR
             descriptions_product ILIKE %(search)s OR
-            CAST (f_stock_opname AS TEXT) ILIKE %(search)s OR
+            case when f_stock_opname is true Then 'Valid'
+            when f_stock_opname is false THEN 'Invalid' 
+            END ILIKE (stock_opname)s% OR
             product_name ILIKE %(search)s OR
             CAST(barcode AS TEXT) ILIKE %(search)s)
             AND merk_name ILIKE %(category)s
@@ -167,6 +172,7 @@ def get_data_product_filter(search, category, merk, vehicle, filter):
     """
     param = {
         "search": f"%{search}%",
+        "stock_opname": f"{search}%",
         "category": f"%{category}%",
         "merk": f"%{merk}%",
         "vehicle": f"%{vehicle}%"
