@@ -31,6 +31,6 @@ def create_app():
             LoginController, ErrorController, MemberController,\
             RekeningController, MerkController, CategoryController,\
             OutletController, ProductController, DashboardController,\
-            BarcodeController, TransaksiController, AuditController, ReceiptController
+            BarcodeController, TransaksiController, ReceiptController
 
     return app
