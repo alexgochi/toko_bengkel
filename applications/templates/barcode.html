@@ -79,7 +79,7 @@
                             <th class="text-center">Part Number</th>
                             <th class="text-center">Nama Product</th>
                             <th class="text-center">Merk</th>
-                            <th class="text-center">Qty</th>
+                            <th class="text-center">Outlet</th>
                         </thead>
                         <tbody></tbody>
                     </table>
@@ -291,7 +291,7 @@
                 { data: "part_number" },
                 { data: "product_name" },
                 { data: "category_name" },
-                { data: "qty" }
+                { data: "outlet_name" }
             ]
         }
         const ajax_options = {
@@ -349,7 +349,7 @@
         var size = $("#paper-size").val()
         if (rowData.length > 0) {
             dataBarcode = []
-
+            
             for (var i = 0; i < rowData.length; i++) {
                 var barcode = {}
                 barcode['sku'] = rowData[i][0]
@@ -365,6 +365,7 @@
                 barcode['img_barcode'] = textToBase64Barcode(rowData[i][4])
                 dataBarcode.push(barcode)
             }
+
             $.ajax
                 ({
                     type: "POST",
@@ -396,5 +397,7 @@
             });
         }
     }
+
 </script>
+
 {% endblock %}

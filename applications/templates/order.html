@@ -547,6 +547,7 @@
                                 <th class="text-center">Part Number</th>
                                 <th class="text-center">Nama Produk</th>
                                 <th class="text-center">Merk</th>
+                                <th class="text-center">Outlet</th>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -753,7 +754,6 @@
         })
 
         // ================================ LOV ================================
-
         /*const tableLov = new DataTable('#table_lov_product', {
             scrollCollapse: true,
             scrollY: '50vh',
@@ -779,7 +779,8 @@
                     { data: "sku" },
                     { data: "part_number" },
                     { data: "product_name" },
-                    { data: "category_name" }
+                    { data: "category_name" },
+                    { data: "outlet_name" }
                 ]
             }
             const ajax_options = {

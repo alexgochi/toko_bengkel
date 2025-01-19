@@ -53,7 +53,6 @@ def addReceipt():
     outlet = dashboardDao.getDataOutlet().result
     return render_template("receipt-add.html", data_outlet=outlet)
 
-
 @app.route('/receipt/save', methods=['POST'])
 @login_required
 def saveReceipt():

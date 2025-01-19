@@ -16,7 +16,6 @@ from flask import request, render_template, make_response, jsonify, redirect, Bl
 from applications.dao import BarcodeDao as barcodeDao
 from applications.lib import dataTableError
 
-
 @app.route('/barcode/', methods=['GET'])
 @login_required
 def barcode():
@@ -31,20 +30,17 @@ def getProductBySkuBarcode():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Get Data", "data":db_res.result})
 
-
 @app.route('/barcode/printBarcode2', methods=['POST'])
 @login_required
 def printBarcode2():
     data = request.get_json()
     return jsonify({"status": True, "message": "Berhasil Get Data", "data":render_template('barcode-print40x20.html',data=data)})
 
-
 @app.route('/barcode/printBarcode1', methods=['POST'])
 @login_required
 def printBarcode1():
     data = request.get_json()
     return jsonify({"status": True, "message": "Berhasil Get Data", "data":render_template('barcode-print60x40.html',data=data)})
-
 
 @app.route('/barcode/printBarcode3', methods=['POST'])
 @login_required

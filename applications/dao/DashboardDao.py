@@ -107,13 +107,16 @@ def dt_lovProduct(search, offset):
             merk_name,
             category_name,
             part_number,
-            qty
+            qty,
+            outlet_name
         FROM
             ms_product mp
         INNER JOIN 
                 ms_merk mm on mm.merk_id = mp.merk_id
         INNER JOIN 
                 ms_category mc on mm.category_id = mc.category_id
+        INNER JOIN
+                ms_outlet mo on mo.outlet_id = mp.outlet_id
         WHERE
             CAST(sku AS TEXT) ILIKE %(search)s OR
             product_name ILIKE %(search)s OR

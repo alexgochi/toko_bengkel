@@ -196,7 +196,6 @@
         dt_server(idTabel, ajax_options, dt_options);
     }
 
-
     function addDataRec(data) {
         for (var i = 0; i < data.length; i++) {
             var item = [
@@ -212,6 +211,7 @@
             $(rowNode).find('td').eq(4).addClass('text-center');
         }
     }
+    
     function getDataReceipt() {
         table.clear().draw();
         $.ajax
