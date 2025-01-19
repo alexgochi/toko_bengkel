@@ -643,16 +643,16 @@
                                 if (!checkSkuExist(e.data[0]['sku'])) {
                                     addProductRow(e.data[0])
                                     $("#inputSkuBarcode").val('')
-                                    /*if (e.data[0]['qty'] > 0) {
-                                        addProductRow(e.data[0])
-                                        $("#inputSkuBarcode").val('')
-                                    } else {
-                                        Swal.fire({
-                                            title: "Gagal",
-                                            text: "QTY untuk SKU " + input + " kurang dari atau sama dengan 0",
-                                            icon: "error"
-                                        });
-                                    }*/
+                                    // if (e.data[0]['qty'] > 0) {
+                                    //     addProductRow(e.data[0])
+                                    //     $("#inputSkuBarcode").val('')
+                                    // } else {
+                                    //     Swal.fire({
+                                    //         title: "Gagal",
+                                    //         text: "QTY untuk SKU " + input + " kurang dari atau sama dengan 0",
+                                    //         icon: "error"
+                                    //     });
+                                    // }
                                 } else {
                                     Swal.fire({
                                         title: "Gagal",
@@ -696,20 +696,21 @@
             let td = getTr(e).querySelector(".qtytot");
             let hjual_raw = getTr(e).querySelector(".hjual_product");
             let qty_raw = getTr(e).querySelector(".qty_product");
-            let qty_maks = $(getTr(e).querySelector(".qty_maks")).val();
+            // let qty_maks = $(getTr(e).querySelector(".qty_maks")).val();
 
             let hjual = $(hjual_raw).val()
             let qty = $(qty_raw).val()
-            /*if (parseFloat(qty) > parseInt(qty_maks)) {
-                Swal.fire({
-                    title: "Stock Tidak cukup",
-                    text: "Stock saat ini = " + qty_maks,
-                    icon: "error"
-                })
-                $(qty_raw).val(qty_maks)
-                qty = qty_maks
-            }*/
+            // if (parseFloat(qty) > parseInt(qty_maks)) {
+            //     Swal.fire({
+            //         title: "Stock Tidak cukup",
+            //         text: "Stock saat ini = " + qty_maks,
+            //         icon: "error"
+            //     })
+            //     $(qty_raw).val(qty_maks)
+            //     qty = qty_maks
+            // }
             $(td).text(numberWithCommas(parseInt(hjual) * parseFloat(qty)))
+
             getSubTotal()
         }
 
@@ -754,14 +755,14 @@
         })
 
         // ================================ LOV ================================
-        /*const tableLov = new DataTable('#table_lov_product', {
-            scrollCollapse: true,
-            scrollY: '50vh',
-            dom: 'r<"top right mb-2"f>t<"bottom left"i><"bottom right"p><"clear">',
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": true
-        })*/
+        // const tableLov = new DataTable('#table_lov_product', {
+        //     scrollCollapse: true,
+        //     scrollY: '50vh',
+        //     dom: 'r<"top right mb-2"f>t<"bottom left"i><"bottom right"p><"clear">',
+        //     "bPaginate": false,
+        //     "bLengthChange": false,
+        //     "bFilter": true
+        // })
 
         dt_search("search_table_lov", fill_table_lov_product);
         $('#lovModal').on('shown.bs.modal', function (e) {
@@ -999,7 +1000,6 @@
                 $('#hideJatuhTempo').show();
 
                 $('#hideMethodPay').hide();
-
             } else {
                 $('#hideJatuhTempo').hide();
 
