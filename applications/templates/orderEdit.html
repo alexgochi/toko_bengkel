@@ -700,8 +700,7 @@
                     data['part_number'],
                     data['product_name'],
                     data['category_name'],
-                    `<input type="number" min="1" class="form-control font-order qty_product" value="` + qty + `" onfocus="autoSelect(this)">
-                    <input type="number" min="1" class="form-control font-order qty_maks" value="` + parseInt(data['qty']) + `" hidden>`,
+                    `<input type="number" min="1" class="form-control font-order qty_product" value="` + qty + `" onfocus="autoSelect(this)">`,
                     `<input type="number" min="1" class="form-control font-order hjual_product" onfocus="autoSelect(this)" value="` + parseInt(data['harga_jual']) + `"> `,
                     numberWithCommas(qty * parseInt(data['harga_jual'])),
                     `<button class="btn btn-delete btn-danger"><i class="fa fa-trash"></i></button>`
@@ -711,9 +710,8 @@
                     data['sku'],
                     data['part_number'],
                     data['product_name'],
-                    data['category_name'],
-                    `<input type="number" min="1" class="form-control font-order qty_product" value="` + qty + `" onfocus="autoSelect(this)">
-                    <input type="number" min="1" class="form-control font-order qty_maks" value="` + parseInt(data['qty']) + `" hidden>`,
+                    data['merk_name'],
+                    `<input type="number" min="1" class="form-control font-order qty_product" value="` + qty + `" onfocus="autoSelect(this)">`,
                     `<input type="number" min="1" class="form-control font-order hjual_product" onfocus="autoSelect(this)" value="` + parseInt(data['harga_jual']) + `"> `,
                     numberWithCommas(qty * parseInt(data['harga_jual'])),
                     `<button class="btn btn-delete btn-danger"><i class="fa fa-trash"></i></button>`
@@ -756,7 +754,7 @@
                                 } else {
                                     Swal.fire({
                                         title: "Gagal",
-                                        text: "SKU " + e.data[0]['sku'] + " sudah ada",
+                                        text: "SKU " + input + " sudah ada",
                                         icon: "error"
                                     });
                                 }
@@ -796,19 +794,9 @@
             let td = getTr(e).querySelector(".qtytot");
             let hjual_raw = getTr(e).querySelector(".hjual_product");
             let qty_raw = getTr(e).querySelector(".qty_product");
-            // let qty_maks = $(getTr(e).querySelector(".qty_maks")).val();
 
             let hjual = $(hjual_raw).val()
             let qty = $(qty_raw).val()
-            // if (parseFloat(qty) > parseInt(qty_maks)) {
-            //     Swal.fire({
-            //         title: "Stock Tidak cukup",
-            //         text: "Stock saat ini = " + qty_maks,
-            //         icon: "error"
-            //     })
-            //     $(qty_raw).val(qty_maks)
-            //     qty = qty_maks
-            // }
 
             $(td).text(numberWithCommas(parseInt(hjual) * parseFloat(qty)))
 
@@ -1171,8 +1159,8 @@
                     success: (e) => {
                         if (e.status) {
                             console.log(e.result)
-                            $("#addressMember").val(e.result[0]['address'])
-                            $("#phoneMember").val(e.result[0]['phone'])
+                            $("#addressMember").val(e.result[0]['member_address'])
+                            $("#phoneMember").val(e.result[0]['member_phone'])
                         }
                         else {
                             Swal.fire({
