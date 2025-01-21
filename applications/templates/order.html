@@ -696,7 +696,7 @@
             let td = getTr(e).querySelector(".qtytot");
             let hjual_raw = getTr(e).querySelector(".hjual_product");
             let qty_raw = getTr(e).querySelector(".qty_product");
-            let qty_maks = $(getTr(e).querySelector(".qty_maks")).val();
+            // let qty_maks = $(getTr(e).querySelector(".qty_maks")).val();
 
             let hjual = $(hjual_raw).val()
             let qty = $(qty_raw).val()
@@ -709,6 +709,7 @@
             //     $(qty_raw).val(qty_maks)
             //     qty = qty_maks
             // }
+
             $(td).text(numberWithCommas(parseInt(hjual) * parseFloat(qty)))
 
             getSubTotal()
@@ -870,12 +871,13 @@
         function getFormDataAddOrder() {
             var dataSave = {}
             var jenisFaktur = $("input[type='radio'][name='jenisFaktur']:checked").val()
+            var poMember = $("input[type='radio'][name='poMember']:checked").val()
             //Detail Invoice
             dataSave['outletId'] = $('#outletInvoice').val()
             dataSave['tanggal'] = $('#tanggalInvoice').val()
             dataSave['jenisFaktur'] = jenisFaktur
             dataSave['jatuhTempo'] = $('#jatuhTempo').val()
-            dataSave['radMember'] = $("input[type='radio'][name='poMember']:checked").val()
+            dataSave['radMember'] = poMember
             dataSave['memberId'] = $('#memberInvoice').val()
             //Informasi Produk
             dataSave['ongkir'] = $('#biayaOngkir').val()
@@ -884,6 +886,12 @@
             dataSave['payment_id'] = $("#typePaymentInvoice").val();
             dataSave['payment_info'] = $("#rekInvoice").val();
             dataSave['diskon'] = $("#diskon").val();
+            if (poMember == '0') {
+                dataSave['memberId'] = 0
+            } else {
+                dataSave['memberId'] = $('#memberInvoice').val()
+            }
+
             if (jenisFaktur == '0') {
                 dataSave['jatuhTempo'] = null
             } else if (jenisFaktur == '1') {
@@ -1007,6 +1015,7 @@
                 $('#hideMethodPay').show();
             }
         })
+
         $("input[type='radio'][name='poMember']").on('change', e => {
             var selected = $("input[type='radio'][name='poMember']:checked").val();
             if (selected > 0) {
