@@ -6,8 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %}</title>
-    <link rel="shortcut icon" type="image/png"
-        href="{{ url_for('static', filename='assets/images/icon/favicon.ico') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='assets/images/icon/favicon.ico') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/font-awesome.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/themify-icons.css') }}" />
@@ -29,21 +28,19 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/buttons.dataTables.css') }}">
     <!-- SweetAlert 2 -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/sweetalert2.min.css') }}">
-
     <!-- jquery latest version -->
     <script src="{{ url_for('static', filename='assets/js/vendor/jquery-2.2.4.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/tambahanCdr.js') }}"></script>
-
     <!-- printJS -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/print.min.css') }}">
     <script src="{{ url_for('static', filename='assets/js/print.min.js') }}"></script>
-
     <!-- JS Barcode -->
     <script src="{{ url_for('static', filename='assets/js/jsBarcode.all.min.js') }}"></script>
-
     <!-- Select2 -->
     <script src="{{ url_for('static', filename='assets/js/select2.min.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/css/select2.min.css') }}">
+    <!--Awesome Font-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
         .input-container input {
@@ -116,7 +113,6 @@
                             <li id="sidebar-dashboard">
                                 <a href="/"><i class="ti-dashboard"></i><span>Dashboard</span></a>
                             </li>
-
                             {% if current_user.level|int >= 3 %}
                             <li id="sidebar-pelanggan">
                                 <a href="/member/"><i class="ti-user"></i><span>Daftar Pelanggan</span></a>
@@ -150,7 +146,6 @@
                                 <a href="/outlet/"><i class="ti-home"></i><span>Outlet</span></a>
                             </li>
                             {% endif %}
-
                         </ul>
                     </nav>
                 </div>

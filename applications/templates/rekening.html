@@ -54,7 +54,7 @@
                     </div>
                     <div class="form-group">
                         <label for="noRekEdit">No Rekening</label>
-                        <input type="number" class="form-control" id="noRekEdit">
+                        <input type="text" class="form-control" id="noRekEdit">
                     </div>
                     <div class="form-group">
                         <label for="namaRekEdit">Nama Rekening</label>
@@ -290,6 +290,7 @@
                             text: e.message,
                             icon: "success"
                         });
+                        clearForm()
                     }
                     fill_table_rek()
                 },

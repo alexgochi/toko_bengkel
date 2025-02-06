@@ -26,7 +26,7 @@ def dt_data_trans(search, member, offset, filter):
             AND coalesce(member_name,'Bukan Pelanggan') ILIKE %(member)s 
             {filter}
         ORDER BY
-            faktur desc, date_tx desc, time_tx desc;
+            date_tx desc, time_tx desc;
     """
     param = {
         "search": f"%{search}%",
@@ -69,7 +69,8 @@ def getAllDataTransaksi():
         LEFT JOIN ms_payment_type mpt on mpt.type_id = tt.payment_id
         LEFT JOIN ms_member mm on mm.member_id = tt.member_id
         WHERE status = true
-        ORDER BY faktur desc, date_tx desc, time_tx desc;
+        ORDER BY 
+            date_tx desc, time_tx desc;
     """
     return db.execute(query)
 
@@ -101,7 +102,8 @@ def getDataTransByFaktur(faktur):
             LEFT JOIN ms_member mm on mm.member_id = tt.member_id
         WHERE status = true
         AND faktur = %(faktur)s
-        ORDER BY faktur desc, date_tx desc, time_tx desc;
+        ORDER BY 
+            date_tx desc, time_tx desc;
     """
     param = {
         "faktur" : faktur
