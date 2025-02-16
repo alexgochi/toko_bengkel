@@ -18,7 +18,7 @@ def dt_data_receipt(search, storeBuy, offset, filter):
             AND store_buy ILIKE %(storeBuy)s
             {filter}
         ORDER BY
-            date_tx desc;
+            date_tx::DATE desc;
     """
     param = {
         "search": f"%{search}%",
@@ -51,7 +51,7 @@ def getAllDataReceipt():
             total_faktur + other_fee - discount as total_faktur
         FROM tx_receipt
         ORDER BY 
-            date_tx desc;
+            date_tx::DATE desc;
     """
     return db.execute(query)
 
