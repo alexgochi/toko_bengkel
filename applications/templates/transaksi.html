@@ -35,7 +35,7 @@
             <option value="" selected disabled>Status</option>
             <option value="all">Semua</option>
             <option value="overdue">Overdue</option>
-            <option value="bon">Bon</option>
+            <option value="bon">BON</option>
             <option value="done">Done</option>
         </select>
     </div>
@@ -248,7 +248,7 @@
         } else if (date == 'weekly') {
             query += "AND date_tx >= current_date - 7 "
         } else if (date == 'monthly') {
-            query += "AND date_tx >= current_date - 30 "
+            query += "AND EXTRACT (MONTH FROM date_tx) = EXTRACT (MONTH FROM current_date) "
         } else {
             query = ''
         }
@@ -259,7 +259,7 @@
 
         if (status == 'overdue') {
             query += "AND tt.payment_id is null AND current_date > due_date::int + date_tx "
-        } else if (status == 'bon') {
+        } else if (status == 'BON') {
             query += "AND tt.payment_id is null AND current_date <= due_date::int + date_tx "
         } else if (status == 'done') {
             query += "AND tt.payment_id is not null "
@@ -285,7 +285,7 @@
                 { data: "payment_info" },
                 {
                     "render": function (data, type, row) {
-                        if (row.type_name.toLowerCase() == 'bon') {
+                        if (row.type_name == 'BON') {
                             return `
                             <div class="d-flex align-items-center justify-content-start" style="gap: 10px;">
                                 <button class="btn btn-detail btn-secondary" data-toggle="modal" data-target="#detailModal"><i class="fa fa-eye" data-placement="bottom" title="Detail" data-toggle="tooltip"></i></button>

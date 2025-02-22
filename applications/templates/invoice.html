@@ -88,9 +88,32 @@
         <div class="column">
             <table class="fs12" style="width: 400px; margin-bottom: 10px;">
                 <tr>
-                    <!-- <td>&nbsp;</td> -->
                     <td>
-                        <h3 style="margin-bottom: 5px;">Tanggal: {{ data['date_tx'] }}</h3>
+                        {% if data['member_name'] == 'Perum Damri Cab. Banjarmasin' %}
+                        <td>&nbsp;</td>
+                        {% elif data['member_name'] == 'Perum Damri Cab. Cilacap' %}
+                        <td>&nbsp;</td>
+                        {% elif data['member_name'] == 'Perum Damri Cab. Kaltara' %}
+                        <td>&nbsp;</td>
+                        {% elif data['member_name'] == 'Perum Damri Cab. Palangkaraya' %}
+                        <td>&nbsp;</td>
+                        {% elif data['member_name'] == 'Perum Damri Cab. Pontianak' %}
+                        <td>&nbsp;</td>
+                        {% elif data['member_name'] == 'Perum Damri Cab. Purwokerto' %}
+                        <td>&nbsp;</td>
+                        {% elif data['member_name'] == 'Perum Damri Cab. Samarinda' %}
+                        <td>&nbsp;</td>
+                        {% elif data['member_name'] == 'Perum Damri Cab. Yogyakarta' %}
+                        <td>&nbsp;</td>
+                        {% elif data['member_name'] == 'Perum Damri Cab. Tanjung Selor' %}
+                        <td>&nbsp;</td>
+                        {% elif data['member_name'] == 'Perum Damri Cab. Denpasar' %}
+                        <td>&nbsp;</td>
+                        {% elif data['member_name'] == 'Perum Damri Cab. Bandung' %}
+                        <td>&nbsp;</td>
+                        {% else %}
+                         <h3 style="margin-bottom: 5px;">Tanggal: {{ data['date_tx'] }}</h3>
+                        {% endif %}
                     </td>
                 </tr>
 
@@ -120,12 +143,10 @@
                     <td>
                         {% if data['member_name'] != 'Bukan Pelanggan' %}
                         <h3 style="margin-bottom: 0px; font-size: 16px;">{{ data['member_name'] }}</h3>
-                        <div style="margin-top: 5px;">
-                            {{ data['member_address'] }}
-                        </div>
+                        <div style="margin-top: 5px;">{{ data['member_address'] }}</div>
+                        {% endif %}
                         {% if data['member_phone'] != '' %}
                         {{ data['member_phone'] }}
-                        {% endif %}
                         {% endif %}
                     </td>
                 </tr>
@@ -182,21 +203,17 @@
                     <td><h3>{{ data['total_faktur'] }}</h3></td>
                 </tr>
 
-                <!-- <div class="left">
+                <div class="left">
                     <tr>
                         <td colspan="5">
                             <p style="margin-top: 1px;" class="fs12">Pembayaran <br /> 
                                 {% if data['due_date'] != ''%}
-                                    <b>{{ data['type_name'] }} {{data['payment_info'] }}</b>
-                                        {% if data['due_date'] %}
-                                        <p style="margin-top: 5px;margin-bottom: 10px;" class="fs12">Jatuh Tempo<br /> 
-                                        <b>{{ data['due_date'] }}</b></p>
-                                    {% endif %}
+                                <b>{{ data['type_name'] }} {{data['payment_info'] }}</b>
                                 {% endif %}
                             </p>
                         </td>
                     </tr>
-                </div> -->
+                </div>
             </tbody>
         </table>
 

@@ -327,7 +327,7 @@
                                         <input class="form-check-input" type="radio" name="jenisFaktur" id="gridRadios2"
                                             value="1" disabled>
                                         <label class="form-check-label" for="gridRadios2">
-                                            Bon
+                                            BON
                                         </label>
                                     </div>
                                 </div>
@@ -897,7 +897,7 @@
                     return [false, "Harap pilih metode pembayaran"]
                 } else if (jenisFaktur == '1') {
                     if (!jatuhTempo) {
-                        return [false, "Harap Pilih Jumlah Hari Jatuh Jempo Bon"]
+                        return [false, "Harap Pilih Jumlah Tempo Hari"]
                     }
                 }
             } else {
@@ -965,7 +965,8 @@
             dataSave['payment_id'] = $("#typePaymentInvoice").val();
             dataSave['payment_info'] = $("#rekInvoice").val();
             if (jenisFaktur == '1') {
-                dataSave['payment_info'] = 'BON - ' + $('#jatuhTempo').val() + ' Hari'
+                // dataSave['payment_info'] = 'BON - ' + $('#jatuhTempo').val() + ' Hari'
+                dataSave['payment_info'] = 'BON'
             }
             var dataProduct = []
             var product = document.getElementsByClassName('data-product')
