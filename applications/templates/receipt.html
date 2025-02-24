@@ -8,8 +8,7 @@
 <script src="{{ url_for('static', filename='assets/js/datatables.min.js') }}"></script>
 
 <div class="row mt-5 mr-5 mb-2">
-    <button class="btn btn-primary pl-2 col-2 m-auto text-center"><a href="/addReceipt/" style="color: white;">+ Tambah
-            Terima Barang</a></button>
+    <button class="btn btn-primary pl-2 col-2 m-auto text-center"><a href="/addReceipt/" style="color: white;"><i class="fa fa-plus"></i> Tambah Terima Barang</a></button>
     <select id="filterDate" class="form-control form-control-lg col-3 m-auto filterTable">
         <option value="" selected disabled>Tanggal Transaksi</option>
         <option value="all">Semua</option>
@@ -18,9 +17,9 @@
         <option value="monthly">Bulan ini</option>
     </select>
 
-    <input type="text" class="form-control col-3 m-auto" id="filterStoreBuy" placeholder="Cari Toko Beli..">
+    <input type="text" class="form-control col-3 m-auto" id="filterStoreBuy" placeholder="Cari pembelian..">
     <div class="input-group mb-3 col-3 m-auto">
-        <input type="text" class="form-control" placeholder="cari transaksi..." id="search_table_receipt">
+        <input type="text" class="form-control" placeholder="Cari terima barang..." id="search_table_receipt">
         <div class="input-group-append">
             <span class="input-group-text" id="basic-addon2">
                 <i class="fa fa-search"></i>
@@ -34,8 +33,8 @@
         <thead class="thead-dark">
             <th class="text-center">No. Faktur</th>
             <th class="text-center">Tanggal Terima Barang</th>
-            <th class="text-center">Toko Beli</th>
-            <th class="text-center">Total Pembelian</th>
+            <th class="text-center">Pembelian</th>
+            <th class="text-center">Total Belanja</th>
             <th class="text-center">&nbsp;</th>
         </thead>
         <tbody></tbody>
@@ -64,7 +63,7 @@
                     <input type="text" class="form-control" id="tanggalDetail" readonly>
                 </div>
                 <div class="form-group col-4">
-                    <label for="storeBuyDetail">Toko Beli</label>
+                    <label for="storeBuyDetail">Pembelian</label>
                     <input type="text" class="form-control" id="storeBuyDetail" readonly>
                 </div>
 
@@ -116,7 +115,6 @@
                     <input type="text" class="form-control" id="otherNoteDetail" readonly>
                 </div>
             </div>
-
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
