@@ -132,7 +132,7 @@ def get_data_product_filter(search, category, merk, vehicle, filter):
     db = PostgresDatabase()
     query = f"""
         SELECT
-            sku "SKU",
+            sku as "SKU",
             part_number as "Part Number",
             alternative_part_number as "Alternatif Part Number",
             descriptions_product as "Deskripsi Produk",
@@ -162,7 +162,7 @@ def get_data_product_filter(search, category, merk, vehicle, filter):
             descriptions_product ILIKE %(search)s OR
             case when f_stock_opname is true Then 'Valid'
             when f_stock_opname is false THEN 'Invalid' 
-            END ILIKE (stock_opname)s% OR
+            END ILIKE %(stock_opname)s OR
             product_name ILIKE %(search)s OR
             CAST(barcode AS TEXT) ILIKE %(search)s)
             AND merk_name ILIKE %(category)s
