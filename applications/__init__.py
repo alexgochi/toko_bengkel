@@ -1,17 +1,14 @@
 from flask import Flask
 from flask_cors import CORS
-from flask_login import LoginManager, UserMixin,\
-    login_required, login_user, logout_user, AnonymousUserMixin
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, AnonymousUserMixin
 from flask import sessions
 
 # db = SQLAlchemy()
 login_manager = LoginManager()
 
-
 class Anonymous(AnonymousUserMixin):
     def __init__(self):
         self.absen = 'Guest'
-
 
 def create_app():
     """Construct the core application."""

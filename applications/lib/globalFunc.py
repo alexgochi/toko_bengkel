@@ -5,7 +5,9 @@ def generate_faktur(head):
     db = PostgresDatabase()
     ordinal_num = 0
     query = """
-        SELECT * 
+        SELECT
+            head_fak,
+            ordinal_number
         FROM 
             tx_ofaktur
         WHERE 
@@ -15,13 +17,13 @@ def generate_faktur(head):
 
     res = db.execute(query, param).result
     if res:
-        ordinal_num = int(res[0]['ordinal_number']) + 1
+        ordinal_num = res[0]['ordinal_number'] + 1
     else : 
         query = """
             INSERT INTO 
                 tx_ofaktur (head_fak, ordinal_number) 
             VALUES 
-                (%(head_fak)s, '1');
+                (%(head_fak)s, 1);
             """
         param = {'head_fak': head}
         db.execute(query, param)
@@ -37,16 +39,15 @@ def update_faktur(faktur,conn):
             INSERT INTO
                 tx_ofaktur (head_fak, ordinal_number)
             VALUES
-                (%(head_fak)s, '1')
+                (%(head_fak)s, 1)
             ON CONFLICT
                 (head_fak)
             DO UPDATE
             SET
                 ordinal_number = %(ordinal_number)s;
             """
-    param = {'head_fak': head,'ordinal_number': str(ordinal)}
+    param = {'head_fak': head,'ordinal_number': ordinal}
     return conn.execute_preserve(query, param)
-
 
 def to_date(string):
     date = datetime.strptime(string,'%Y-%m-%d')
