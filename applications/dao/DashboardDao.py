@@ -312,7 +312,7 @@ def save_order(data,type = 'draft'):
         param = { "faktur": data['faktur']}
         hasil = db.execute_preserve(query,param)
         if hasil.is_error:
-            return hasil
+           return hasil
 
         # insert detail
         trans_detail = data['trans_detail']
@@ -339,10 +339,11 @@ def save_order(data,type = 'draft'):
                     return hasil
                 
         hasil = update_faktur(data['faktur'], db)
+            
         if hasil.is_error:
             return hasil
         
-        return db.commit(),faktur
+        return (db.commit(), faktur)
     finally:
         db.release_connection()
 

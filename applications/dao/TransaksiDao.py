@@ -103,7 +103,7 @@ def getDataTransByFaktur(faktur):
         WHERE status = true
         AND faktur = %(faktur)s
         ORDER BY 
-            date_tx::DATE desc, time_tx::TIME desc;
+           date_tx::DATE desc, time_tx::TIME desc;
     """
     param = {
         "faktur" : faktur
@@ -125,8 +125,7 @@ def getDataTransByFaktur(faktur):
         FROM tx_trans_detail tt
             INNER JOIN ms_product mp on tt.sku::integer = mp.sku::integer
             INNER JOIN ms_category mc on mc.category_id = mp.category_id
-        WHERE faktur = %(faktur)s
-        ORDER BY faktur;
+        WHERE faktur = %(faktur)s;
     """
     param = {
         "faktur" : faktur

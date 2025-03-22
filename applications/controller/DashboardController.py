@@ -84,7 +84,6 @@ def detailOrder(Faktur):
     rekening = dashboardDao.getRekening().result
     return render_template("orderDetail.html", faktur=Faktur, data_outlet=outlet, data_member=member,data_type=paymentType,data_rek=rekening)
 
-
 @app.route('/getDataFaktur/', methods=['GET'])
 @login_required
 def getDataFaktur():
@@ -116,7 +115,7 @@ def saveDraft():
     db_res,faktur = dashboardDao.save_order(data)
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
-    return jsonify({"status": db_res.status, "message": "Berhasil Simpan Data Draft"})
+    return jsonify({"status": db_res.status, "message": "Berhasil Simpan Data Draft", "faktur": faktur})
 
 @app.route('/dashboard/saveInvoice', methods=['POST'])
 @login_required
@@ -137,7 +136,6 @@ def edit_dashboard():
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Update data"})
 
-
 @app.route('/dashboard/delete', methods=['POST'])
 @login_required
 def delete_dashboard():
@@ -146,7 +144,6 @@ def delete_dashboard():
     if db_res.is_error:
         return jsonify({"status": db_res.status, "message": str(db_res.pgerror)})
     return jsonify({"status": db_res.status, "message": "Berhasil Hapus data"})
-
 
 @app.route('/dashboard/add', methods=['POST'])
 @login_required
