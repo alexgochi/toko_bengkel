@@ -25,7 +25,7 @@ def dt_data_outlet(search, offset):
         "offset": offset
     }
 
-    return db.execute_dt(query, param, limit=25)
+    return db.execute_dt(query, param, limit=50)
 
 def get_data_outlet_filter(search):
     db = PostgresDatabase()

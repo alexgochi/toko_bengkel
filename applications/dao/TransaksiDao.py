@@ -34,7 +34,7 @@ def dt_data_trans(search, member, offset, filter):
         "offset": offset
     }
 
-    return db.execute_dt(query, param, limit=25)
+    return db.execute_dt(query, param, limit=50)
 
 def get_data_distinct():
     db = PostgresDatabase()

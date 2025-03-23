@@ -20,7 +20,7 @@ def dt_data_user(search, offset):
         "offset": offset
     }
 
-    return db.execute_dt(query, param, limit=25)
+    return db.execute_dt(query, param, limit=50)
 
 def findUser():
     data = select_req("select user_id,name,level from ms_user")

@@ -43,7 +43,7 @@ def dt_data_merk(search, offset, orderBy):
         "offset": offset
     }
 
-    return db.execute_dt(query, param, limit=25)
+    return db.execute_dt(query, param, limit=50)
 
 def get_data_merk_filter(search, orderBy):
     db = PostgresDatabase()

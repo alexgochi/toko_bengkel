@@ -23,12 +23,14 @@
 <div class="table-responsive">
     <table id="table_member" class="table table-hover table-bordered table-striped w-100 mb-2"
         style="white-space: nowrap;">
-        <thead class="thead-dark">
+        <thead class="thead-light">
             <th class="text-center">ID</th>
             <th>Nama</th>
             <th>Telepon</th>
             <th>Alamat</th>
             <th>Catatan</th>
+            <th>Perusahaan</th>
+            <th>Kontak Person</th>
             <th>&nbsp;</th>
         </thead>
         <tbody></tbody>
@@ -67,6 +69,14 @@
                     <div class="form-group">
                         <label for="catatanMemberEdit">Catatan</label>
                         <input type="text" class="form-control" id="catatanMemberEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="perusahaanMemberEdit">Perusahaan</label>
+                        <input type="text" class="form-control" id="perusahaanMemberEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="kontakPersonMemberEdit">Kontak Person</label>
+                        <input type="text" class="form-control" id="kontakPersonMemberEdit">
                     </div>
                 </form>
             </div>
@@ -112,6 +122,14 @@
                         <label for="catatanMemberAdd">Catatan</label>
                         <input type="text" class="form-control" id="catatanMemberAdd">
                     </div>
+                    <div class="form-group">
+                        <label for="perusahaanMemberAdd">Perusahaan</label>
+                        <input type="text" class="form-control" id="catatanMemberAdd">
+                    </div>
+                    <div class="form-group">
+                        <label for="kontakPersonMemberAdd">Kontak Person</label>
+                        <input type="text" class="form-control" id="kontakPersonMemberAdd">
+                    </div>
                 </form>
             </div>
 
@@ -143,13 +161,31 @@
         const idTabel = "table_member";
         const dt_options = {
             scrollY: '50vh',
-            pageLength: 25,
+            /* layout: {
+                bottomStart: {
+                    buttons: [{
+                        extend: 'excel',
+                        footer: false,
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }]
+                }
+            }, */
+            fixedColumns: {
+                leftColumns: 2,
+                rightColumns: 1
+            },
+            scrollX: true,
+            scrollCollapse: true,
             columns: [
                 { data: "member_id" },
                 { data: "member_name" },
                 { data: "member_phone" },
                 { data: "member_address" },
                 { data: "member_notes" },
+                { data: "member_alternative" },
+                { data: "member_contact_person" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -187,6 +223,8 @@
         $('#phoneMemberEdit').val(rowData['member_phone'])
         $('#alamatMemberEdit').val(rowData['member_address'])
         $('#catatanMemberEdit').val(rowData['member_notes'])
+        $('#perusahaanMemberEdit').val(rowData['member_alternative'])
+        $('#kontakPersonMemberEdit').val(rowData['member_contact_person'])
     })
 
     $("#btnSaveEditModal").on('click', e => {
@@ -195,7 +233,9 @@
         var member_phone = $('#phoneMemberEdit').val()
         var member_address = $('#alamatMemberEdit').val()
         var member_notes = $('#catatanMemberEdit').val()
-        var data = { member_id: member_id, member_name: member_name, member_phone: member_phone, member_address: member_address, member_notes: member_notes }
+        var member_alternative = $('#perusahaanMemberEdit').val()
+        var member_contact_person = $('#kontakPersonMemberEdit').val()
+        var data = { member_id: member_id, member_name: member_name, member_phone: member_phone, member_address: member_address, member_notes: member_notes, member_alternative: member_alternative, member_contact_person: member_contact_person }
         edit(data)
     })
 
@@ -263,6 +303,8 @@
         $('#phoneMemberAdd').val('')
         $('#alamatMemberAdd').val('')
         $('#catatanMemberAdd').val('')
+        $('#perusahaanMemberAdd').val('')
+        $('#kontakPersonMemberAdd').val('')
     });
 
     $("#btnSaveAddModal").on('click', e => {
@@ -270,7 +312,9 @@
         var member_phone = $('#phoneMemberAdd').val()
         var member_address = $('#alamatMemberAdd').val()
         var member_notes = $('#catatanMemberAdd').val()
-        var data = { member_name: member_name, member_phone: member_phone, member_address: member_address, member_notes: member_notes }
+        var member_alternative = $('#perusahaanMemberAdd').val()
+        var member_contact_person = $('#kontakPersonMemberAdd').val()
+        var data = { member_name: member_name, member_phone: member_phone, member_address: member_address, member_notes: member_notes, member_alternative: member_alternative, member_contact_person: member_contact_person }
 
         addMember(data)
     })

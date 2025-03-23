@@ -36,7 +36,7 @@ def dt_data_category(search, offset, orderBy):
         "offset": offset,
     }
 
-    return db.execute_dt(query, param, limit=25)
+    return db.execute_dt(query, param, limit=50)
 
 def get_data_category_filter(search, orderBy):
     db = PostgresDatabase()

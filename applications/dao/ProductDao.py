@@ -126,7 +126,7 @@ def dt_data_product(search, category, merk, vehicle, offset, filter):
         "vehicle": f"%{vehicle}%",
         "offset": offset
     }
-    return db.execute_dt(query, param, limit=25)
+    return db.execute_dt(query, param, limit=50)
 
 def get_data_product_filter(search, category, merk, vehicle, filter):
     db = PostgresDatabase()

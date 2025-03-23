@@ -131,7 +131,7 @@ def dt_lovProduct(search, offset):
         "offset": offset
     }
     
-    return db.execute_dt(query, param, limit=25)
+    return db.execute_dt(query, param, limit=50)
 
 def getDataBySkuBarcode(search):
     db = PostgresDatabase()
@@ -189,8 +189,7 @@ def dt_data_dashboard(search, offset, orderBy):
         "offset": offset,
     }
 
-    return db.execute_dt(query, param, limit=25)
-
+    return db.execute_dt(query, param, limit=50)
 
 def update_data_category(data):
     db = PostgresDatabase()
