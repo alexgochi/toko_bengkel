@@ -34,11 +34,11 @@
 <div class="table-responsive">
     <table id="table_category" class="table table-hover table-bordered table-striped w-100 mb-2"
         style="white-space: nowrap;">
-        <thead class="thead-dark">
+        <thead class="thead-light">
             <th class="text-center">ID</th>
             <th class="text-center">Merk</th>
             <th class="text-center">Jumlah Kategori</th>
-            <th class="text-center">&nbsp;</th>
+            <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -160,6 +160,12 @@
         var order = $('#orderByAsc').val() || 'asc'
         const dt_options = {
             scrollY: '50vh',
+            fixedColumns: {
+                leftColumns: 1,
+                rightColumns: 1
+            },
+            scrollX: true,
+            scrollCollapse: true,
             columns: [
                 { data: "category_id" },
                 { data: "category_name" },

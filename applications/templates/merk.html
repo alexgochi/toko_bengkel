@@ -35,12 +35,12 @@
 <div class="table-responsive">
     <table id="table_merk" class="table table-hover table-bordered table-striped w-100 mb-2"
         style="white-space: nowrap;">
-        <thead class="thead-dark">
+        <thead class="thead-light">
             <th class="text-center">ID</th>
             <th class="text-center">Kategori</th>
             <th class="text-center">Merk</th>
             <th class="text-center">Jumlah Produk</th>
-            <th class="text-center">&nbsp;</th>
+            <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -153,12 +153,17 @@
         const idTabel = "table_merk";
         const dt_options = {
             scrollY: '50vh',
+            fixedColumns: {
+                leftColumns: 1,
+                rightColumns: 1
+            },
+            scrollX: true,
+            scrollCollapse: true,
             columns: [
                 { data: "merk_id" },
                 { data: "merk_name" },
                 { data: "category_name" },
                 { data: "jumlah_product" },
-                { data: "category_id" },
                 {
                     className: 'text-center',
                     render: data => {
@@ -169,7 +174,8 @@
                         </div>
                         `;
                     }
-                }
+                },
+                { data: "category_id" },
             ],
             columnDefs: [
                 {
@@ -178,12 +184,12 @@
                     searchable: false
                 },
                 {
-                    target: 3,
+                    target: 4,
                     searchable: false,
                     className: 'text-center'
                 },
                 {
-                    target: 4,
+                    target: 5,
                     visible: false,
                     searchable: false
                 }

@@ -106,7 +106,7 @@ def add_data_member(data):
     query = """
         INSERT INTO 
             ms_member 
-                (member_name, member_phone, member_address, member_note, member_alternative, member_contact_person) 
+                (member_name, member_phone, member_address, member_notes, member_alternative, member_contact_person) 
         VALUES 
                 (%(member_name)s, %(member_phone)s, %(member_address)s, %(member_notes)s, %(member_alternative)s, %(member_contact_person)s);
     """

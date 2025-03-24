@@ -24,13 +24,13 @@
 <div class="table-responsive">
     <table id="table_outlet" class="table table-hover table-bordered table-striped w-100 mb-2"
         style="white-space: nowrap;">
-        <thead class="thead-dark">
+        <thead class="thead-light">
             <th class="text-center">ID</th>
             <th class="text-center">Nama Outlet</th>
             <th class="text-center">Alamat</th>
             <th class="text-center">Telepon</th>
             <th class="text-center">Status</th>
-            <th class="text-center">&nbsp;</th>
+            <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -150,6 +150,12 @@
         const idTabel = "table_outlet";
         const dt_options = {
             scrollY: '50vh',
+            fixedColumns: {
+                leftColumns: 2,
+                rightColumns: 1
+            },
+            scrollX: true,
+            scrollCollapse: true,
             columns: [
                 { data: "outlet_id" },
                 { data: "outlet_name" },

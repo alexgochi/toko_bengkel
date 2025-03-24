@@ -23,13 +23,13 @@
 <div class="table-responsive">
     <table id="table_rek" class="table table-hover table-bordered table-striped w-100 mb-2"
         style="white-space: nowrap;">
-        <thead class="thead-dark">
+        <thead class="thead-light">
             <th class="text-center">ID</th>
             <th class="text-center">No Rekening</th>
             <th class="text-center">Bank</th>
             <th class="text-center">Nama Rekening</th>
             <th class="text-center">Status</th>
-            <th class="text-center">&nbsp;</th>
+            <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -147,6 +147,12 @@
         const idTabel = "table_rek";
         const dt_options = {
             scrollY: '50vh',
+            fixedColumns: {
+                leftColumns: 2,
+                rightColumns: 1
+            },
+            scrollX: true,
+            scrollCollapse: true,
             columns: [
                 { data: "rekening_id" },
                 { data: "rekening_no" },

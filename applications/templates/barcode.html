@@ -29,7 +29,7 @@
 <div class="table-responsive text-dark mt-2">
     <table id="table_barcode" class="table table-hover table-bordered table-striped w-100 mb-2"
         style="white-space: nowrap;">
-        <thead class="thead-dark">
+        <thead class="thead-light">
             <th class="text-center">SKU</th>
             <th class="text-center">Nama Product</th>
             <th class="text-center">Part Number</th>
@@ -39,7 +39,7 @@
             <th class="text-center">Kendaraan</th>
             <th class="text-center">Merk</th>
             <th class="text-center">Outlet Name</th>
-            <th class="text-center">&nbsp;</th>
+            <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -72,7 +72,7 @@
                     <table id="table_lov_product"
                         class="table table-hover table-bordered table-striped w-100 h-100 mb-2 font-order text-dark"
                         style="white-space: nowrap;">
-                        <thead class="thead-dark">
+                        <thead class="thead-light">
                             <th class="text-center">SKU</th>
                             <th class="text-center">Part Number</th>
                             <th class="text-center">Nama Product</th>
@@ -284,6 +284,12 @@
         const idTabel = "table_lov_product";
         const dt_options = {
             scrollY: '50vh',
+            fixedColumns: {
+                leftColumns: 2,
+                rightColumns: 1
+            },
+            scrollX: true,
+            scrollCollapse: true,
             columns: [
                 { data: "sku" },
                 { data: "part_number" },

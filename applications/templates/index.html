@@ -41,7 +41,7 @@
             <th class="text-center">Pelanggan</th>
             <th class="text-center">Total Pembelian</th>
             <th class="text-center">Status</th>
-            <th class="text-center">&nbsp;</th>
+            <th class="text-center">Action</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -64,6 +64,10 @@
         var order = $('#orderByAsc').val() || 'asc'
         const dt_options = {
             scrollY: '50vh',
+            fixedColumns: {
+                leftColumns: 2,
+                rightColumns: 1
+            },
             scrollX: true,
             scrollCollapse: true,
             columns: [

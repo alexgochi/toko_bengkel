@@ -361,7 +361,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div id="hideMember" hidden>
                                 <div class="form-group row font-form">
                                     <label for="memberInvoice" class="col-sm-2 col-form-label">Nama Pelanggan</label>
@@ -420,7 +420,7 @@
                                     <th class="text-center">Qty</th>
                                     <th class="text-center">Harga Satuan</th>
                                     <th class="text-center">Total</th>
-                                    <th class="text-center">&nbsp;</th>
+                                    <th class="text-center">Action</th>
                                 </thead>
                                 <tbody class="font-order"></tbody>
                             </table>
@@ -489,7 +489,8 @@
                                                 {% for x in data_rek %}
                                                 <option
                                                     value="{{ x['rekening_bank'] }} - {{ x['rekening_no'] }} - {{ x['rekening_name'] }}">
-                                                    {{ x['rekening_bank'] }} - {{ x['rekening_no'] }} - {{ x['rekening_name'] }}
+                                                    {{ x['rekening_bank'] }} - {{ x['rekening_no'] }} - {{
+                                                    x['rekening_name'] }}
                                                 </option>
                                                 {% endfor %}
                                             </select>
@@ -511,7 +512,6 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -776,6 +776,12 @@
             const idTabel = "table_lov_product";
             const dt_options = {
                 scrollY: '50vh',
+                fixedColumns: {
+                    leftColumns: 2,
+                    rightColumns: 1
+                },
+                scrollX: true,
+                scrollCollapse: true,
                 columns: [
                     { data: "sku" },
                     { data: "part_number" },

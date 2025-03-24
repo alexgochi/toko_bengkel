@@ -59,9 +59,9 @@
             <th class="text-center">Harga Beli</th>
             <th class="text-center">Harga Jual</th>
             <th class="text-center">Stock Opname</th>
+            <th class="text-center">Action</th>
             <th class="text-center">Kategori ID</th>
             <th class="text-center">Merk ID</th>
-            <th class="text-center">&nbsp;</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -346,17 +346,6 @@
         var filter = getFormFilter()
         const dt_options = {
             scrollY: '50vh',
-            /* layout: {
-                bottomStart: {
-                    buttons: [{
-                        extend: 'excel',
-                        footer: false,
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    }]
-                }
-            }, */
             fixedColumns: {
                 leftColumns: 3,
                 rightColumns: 1
@@ -386,9 +375,6 @@
                 { data: "harga_beli" },
                 { data: "harga_jual" },
                 { data: "f_stock_opname" },
-                { data: "category_id", searchable: false, visible: false },
-                { data: "merk_id", searchable: false, visible: false },
-                { data: "outlet_id", searchable: false, visible: false },
                 {
                     className: 'text-center',
                     render: data => {
@@ -399,7 +385,10 @@
                         </div>
                         `;
                     }
-                }
+                },
+                { data: "category_id", searchable: false, visible: false },
+                { data: "merk_id", searchable: false, visible: false },
+                { data: "outlet_id", searchable: false, visible: false },
             ],
             columnDefs: [
                 {
