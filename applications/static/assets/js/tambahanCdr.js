@@ -433,7 +433,7 @@ function dt_server(id_tabel, ajax_options, dt_options) {
     language: {
       processing: `
                 <img
-                    src="/static/assets/image/loading/double_ring.gif"
+                    src="/static/assets/images/loading/double_ring.gif"
                     alt="Loading.."
                     width="100%"
                     height="100%" style="opacity: .8; border-radius:100px;"

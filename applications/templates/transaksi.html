@@ -289,6 +289,12 @@
         var filter = getFormFilter()
         const dt_options = {
             scrollY: '50vh',
+            fixedColumns: {
+                leftColumns: 2,
+                rightColumns: 1
+            },
+            scrollX: true,
+            scrollCollapse: true,
             columns: [
                 { data: "faktur" },
                 { data: "date_tx" },

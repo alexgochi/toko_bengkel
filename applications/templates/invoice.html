@@ -151,7 +151,7 @@
                 <th><b>Merk</b></th>
                 <th><b>Part Number</b></th>
                 <th><b>Nama Produk</b></th>
-                <th><b>Harga Satuan</b></th>
+                <th><b>Harga</b></th>
                 <th><b>Subtotal</b></th>
             </thead>
 
@@ -161,9 +161,9 @@
                     <th class="center" style="width: 8%;">{{ x['qty'] }} {{ x['satuan'] }}</th>
                     <th class="center" style="width: 15%;">{{ x['merk_name'] }}</th>
                     <th class="center" style="width: 15%;">{{ x['part_number'] }}</th>
-                    <th>{{ x['product_name'] }}</th>
-                    <th class="right" style="width: 15%;">{{ x['price'] }}</th>
-                    <th class="right" style="width: 15%;">{{ x['subtotal'] }}</th>
+                    <th class="left" >{{ x['product_name'] }}</th>
+                    <th class="right" style="width: 10%;">{{ x['price'] }}</th>
+                    <th class="right" style="width: 10%;">{{ x['subtotal'] }}</th>
                 </tr>
                 {% endfor %}
 
@@ -206,7 +206,12 @@
                         <td colspan="5">
                             <p style="margin-top: 1px;" class="fs12">Pembayaran <br />
                                 {% if data['due_date'] != ''%}
-                                <b>{{ data['type_name'] }} {{data['payment_info'] }}</b>
+                                    <b>{{ data['type_name'] }}</b>
+                                    {% if data['payment_info'] != ''%}
+                                        {% set parts = data['payment_info'].split('-') %}
+                                        <b>{{ parts[0] }}</b>
+                                        <h3>{{ parts[2] }}<br />{{ parts[1] }}</h3>
+                                    {% endif %}
                                 {% endif %}
                             </p>
                         </td>
