@@ -837,7 +837,7 @@ ul.breadcrumbs {
 }
 
 .header-title {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 18px;
     font-weight: 600;
     letter-spacing: 0;
@@ -1691,7 +1691,7 @@ table.dbkit-table tr td {
 
 .accordion-s3 .card-header a:before {
     content: "\e622";
-    font-family: 'themify';
+    font-family: 'Poppins', sans-serif;
     position: absolute;
     right: 13px;
     color: #444;
@@ -1897,7 +1897,7 @@ p.card-text {
 }
 
 .pagination li a {
-    font-family: 'lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 /*-------------------- END Pagination ------------------- */
@@ -1995,7 +1995,7 @@ label {
     color: #444;
     margin: 9px 0;
     display: inline-block;
-    font-family: 'lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 .fw-icons a:hover {
@@ -2044,7 +2044,7 @@ label {
     color: #444;
     margin: 9px 0;
     display: inline-block;
-    font-family: 'lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
     -webkit-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
 }
@@ -2282,7 +2282,7 @@ table.dataTable thead td {
     padding: 12px 19px;
     border-radius: 3px;
     text-transform: capitalize;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     letter-spacing: 0.03em;
     margin-left: 6px;
@@ -2559,7 +2559,7 @@ table.dataTable thead td {
     color: #fff;
     padding: 28px;
     letter-spacing: 0;
-    font-family: 'lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 500;
 }
 
@@ -2630,7 +2630,7 @@ table.dataTable thead td {
     color: #686cdc;
     margin-bottom: 28px;
     text-shadow: -3px -3px 0 #ffffff, 3px -3px 0 #ffffff, -3px 3px 0 #ffffff, 3px 3px 0 #ffffff, 4px 4px 0 #6569dc, 5px 5px 0 #6569dc, 6px 6px 0 #6569dc, 7px 7px 0 #6569dc;
-    font-family: 'lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 .error-content img {
@@ -2708,7 +2708,7 @@ table.dataTable thead td {
     font-size: 16px;
     color: #444;
     font-weight: 600;
-    font-family: 'lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
     position: relative;
     padding-bottom: 15px;
 }
@@ -2751,7 +2751,7 @@ table.dataTable thead td {
 }
 
 .offset-settings h4 {
-    font-family: 'lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 18px;
     letter-spacing: 0;
     font-weight: 700;

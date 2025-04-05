@@ -21,7 +21,7 @@
 
         body {
             padding: 10px;
-            font-family: 'Arial';
+            font-family: 'Poppins', sans-serif;
         }
 
         .container {
@@ -61,7 +61,13 @@
         }
 
         .right {
+            padding-right: 5px;
             text-align: right;
+        }
+
+        .left {
+            padding-left: 5px;
+            text-align: left;
         }
 
         .center {
@@ -161,7 +167,7 @@
                     <th class="center" style="width: 8%;">{{ x['qty'] }} {{ x['satuan'] }}</th>
                     <th class="center" style="width: 15%;">{{ x['merk_name'] }}</th>
                     <th class="center" style="width: 15%;">{{ x['part_number'] }}</th>
-                    <th class="left" >{{ x['product_name'] }}</th>
+                    <th class="left">{{ x['product_name'] }}</th>
                     <th class="right" style="width: 10%;">{{ x['price'] }}</th>
                     <th class="right" style="width: 10%;">{{ x['subtotal'] }}</th>
                 </tr>
@@ -206,13 +212,13 @@
                         <td colspan="5">
                             <p style="margin-top: 1px;" class="fs12">Pembayaran <br />
                                 {% if data['due_date'] != ''%}
-                                    <b>{{ data['type_name'] }}</b>
-                                    {% if data['payment_info'] != ''%}
-                                        {% set parts = data['payment_info'].split('-') %}
-                                        <b>{{ parts[0] }}</b>
-                                        <h3>{{ parts[2] }}<br />{{ parts[1] }}</h3>
-                                    {% endif %}
-                                {% endif %}
+                                <b>{{ data['type_name'] }}</b>
+                                {% if data['payment_info'] != ''%}
+                                {% set parts = data['payment_info'].split('-') %}
+                                <b>{{ parts[0] }}</b>
+                            <h3>{{ parts[2] }}<br />{{ parts[1] }}</h3>
+                            {% endif %}
+                            {% endif %}
                             </p>
                         </td>
                         {% endif %}
@@ -225,9 +231,9 @@
             <div class="column center fs12">
                 <p style="margin-bottom: 40px;">Diterima Oleh,</p>
                 {% if data['member_name'] != 'Bukan Pelanggan' %}
-                <p>({{ data['member_name'] }})</p>
+                <p><b>({{ data['member_name'] }})</b></p>
                 {% else %}
-                <p>(. . . . . . . . . . . . . . . . . .)</p>
+                <p><b>(. . . . . . . . . . . . . . . . . .)</b></p>
                 {% endif %}
             </div>
             <!-- <div class="column center fs12">

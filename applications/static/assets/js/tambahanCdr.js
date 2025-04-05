@@ -432,12 +432,9 @@ function dt_server(id_tabel, ajax_options, dt_options) {
     info: false,
     language: {
       processing: `
-                <img
-                    src="/static/assets/images/loading/double_ring.gif"
-                    alt="Loading.."
-                    width="100%"
-                    height="100%" style="opacity: .8; border-radius:100px;"
-                >
+                <div class="center">
+                    <p>Loading..</p>
+                </div>
             `,
       emptyTable: `
                 <div class="card-404 d-flex align-items-center m-auto">

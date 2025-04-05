@@ -15,7 +15,7 @@ Table Of Contents
 
 body {
     font-size: 14px;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 h1,
@@ -28,7 +28,7 @@ h6 {
     font-family: 'Poppins', sans-serif;
 }
 p{
-    font-family: 'Lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 15px;
     line-height: 26px;
     color: #444;
@@ -135,7 +135,7 @@ blockquote{
 }
 blockquote:before{
     content: '\f10d';
-    font-family: fontawesome;
+    font-family: 'Poppins', sans-serif;
     color: #fff;
     font-size: 32px;
     position: absolute;
