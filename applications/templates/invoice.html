@@ -89,61 +89,57 @@
         <button style="background-color: red; color: white;" class="fs14" onclick="print()"><b>Cetak</b></button>
     </div>
 
+    {% set excluded_members = [
+    'Perum Damri Cab. Banjarmasin',
+    'Perum Damri Cab. Cilacap',
+    'Perum Damri Cab. Palangkaraya',
+    'Perum Damri Cab. Pontianak',
+    'Perum Damri Cab. Purwokerto',
+    'Perum Damri Cab. Samarinda',
+    'Perum Damri Cab. Yogyakarta',
+    'Perum Damri Cab. Tanjung Selor',
+    'Perum Damri Cab. Denpasar',
+    'Perum Damri Cab. Bandung'
+    ] %}
+
     <div class="container" id="invoice">
         <!-- Header -->
-        <div class="column">
-            <table class="fs12" style="width: 400px; margin-bottom: 10px;">
-                <tr>
-                    <td> {% set excluded_members = [
-                        'Perum Damri Cab. Banjarmasin',
-                        'Perum Damri Cab. Cilacap',
-                        'Perum Damri Cab. Palangkaraya',
-                        'Perum Damri Cab. Pontianak',
-                        'Perum Damri Cab. Purwokerto',
-                        'Perum Damri Cab. Samarinda',
-                        'Perum Damri Cab. Yogyakarta',
-                        'Perum Damri Cab. Tanjung Selor',
-                        'Perum Damri Cab. Denpasar',
-                        'Perum Damri Cab. Bandung'
-                        ] %}
-                        {% if data['member_name'] in excluded_members %}
-                    <td>&nbsp;</td>
-                    {% else %}
-                    <h3 style="margin-bottom: 5px;">Tanggal: {{ data['date_tx'] }}</h3>
-                    {% endif %}
-                    </td>
-                </tr>
-
+        <div class="column" style="margin-bottom: 10px;">
+            <table style="width: 300px;">
                 <tr>
                     <td>
                         {% if data['outlet']['outlet_name'] != 'Nota Polos' %}
-                        <h3 style="margin-bottom: 0px; font-size: 16px;">{{ data['outlet']['outlet_name'] }}</h3>
-                        <div style="margin-top: 5px;">
-                            {{ data['outlet']['outlet_address'] }}
+                        <h2 style="margin-bottom: 5px;">{{ data['outlet']['outlet_name'] }}</h2>
+                        <div class="fs12">
+                            {{ data['outlet']['outlet_address'] }} <br />
+                            {{ data['outlet']['outlet_phone'] }}
                         </div>
-                        {{ data['outlet']['outlet_phone'] }}
                         {% endif %}
                     </td>
                 </tr>
             </table>
         </div>
 
-        <div class="column">
-            <table class="fs12" style="width: 400px; margin-bottom: 10px;">
+        <div class="column" style="margin-bottom: 10px;">
+            <table class="fs12" style="width: 500px;">
                 <tr>
-                    <td>
+                    <td style="vertical-align:top; width: 300px;">
                         <h3 style="margin-bottom: 5px;">No. Faktur: {{ data['faktur'] }}</h3>
-                    </td>
-                </tr>
 
-                <tr>
-                    <td>
                         {% if data['member_name'] != 'Bukan Pelanggan' %}
-                        <h3 style="margin-bottom: 0px; font-size: 16px;">{{ data['member_name'] }}</h3>
-                        <div style="margin-top: 5px;">{{ data['member_address'] }}</div>
+                        <h3 style="margin-bottom: 5px; font-size: 16px;">{{ data['member_name'] }}</h3>
+                        <div>{{ data['member_address'] }}</div>
                         {% endif %}
                         {% if data['member_phone'] != '' %}
                         {{ data['member_phone'] }}
+                        {% endif %}
+                    </td>
+
+                    <td style="vertical-align:top; width: 200px; padding-right: 10px;">
+                        {% if data['member_name'] in excluded_members %}
+                        &nbsp;
+                        {% else %}
+                        <h3>Tanggal: {{ data['date_tx'] }}</h3>
                         {% endif %}
                     </td>
                 </tr>
