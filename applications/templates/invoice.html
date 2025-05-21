@@ -19,6 +19,14 @@
             }
         }
 
+        .a4-page {
+            width: 241.3mm;
+            height: 139.7mm;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border: 1px solid gray;
+        }
+
         body {
             padding: 10px;
             font-family: 'Poppins', sans-serif;
@@ -26,6 +34,7 @@
 
         .container {
             padding-left: 10px;
+            padding-right: 10px;
             margin-top: 10px;
         }
 
@@ -81,12 +90,17 @@
         .fs14 {
             font-size: 14px;
         }
+
+        .fs16 {
+            font-size: 16px;
+        }
     </style>
 </head>
 
-<body>
+<body class="a4-page">
     <div class="right">
-        <button style="background-color: red; color: white;" class="fs14" onclick="print()"><b>Cetak</b></button>
+        <button style="background-color: red; color: white; padding: 10px; word-spacing: 5px;" class="fs14"
+            onclick="print()">CETAK  INVOICE</button>
     </div>
 
     {% set excluded_members = [
@@ -102,10 +116,17 @@
     'Perum Damri Cab. Bandung'
     ] %}
 
+    {% set whitelist_category = [
+    'Fan-Belt',
+    'Filter Solar',
+    'Filter Oli',
+    'Filter Udara'
+    ] %}
+
     <div class="container" id="invoice">
         <!-- Header -->
         <div class="column" style="margin-bottom: 10px;">
-            <table style="width: 300px;">
+            <table class="row left" style="width: 350px;">
                 <tr>
                     <td>
                         {% if data['outlet']['outlet_name'] != 'Nota Polos' %}
@@ -121,13 +142,13 @@
         </div>
 
         <div class="column" style="margin-bottom: 10px;">
-            <table class="fs12" style="width: 500px;">
+            <table class="row right fs12" style="width: 420px">
                 <tr>
-                    <td style="vertical-align:top; width: 300px;">
+                    <td style="vertical-align:top; width: 220px;">
                         <h3 style="margin-bottom: 5px;">No. Faktur: {{ data['faktur'] }}</h3>
 
                         {% if data['member_name'] != 'Bukan Pelanggan' %}
-                        <h3 style="margin-bottom: 5px; font-size: 16px;">{{ data['member_name'] }}</h3>
+                        <h3 style="margin-bottom: 5px;">{{ data['member_name'] }}</h3>
                         <div>{{ data['member_address'] }}</div>
                         {% endif %}
                         {% if data['member_phone'] != '' %}
@@ -135,7 +156,7 @@
                         {% endif %}
                     </td>
 
-                    <td style="vertical-align:top; width: 200px; padding-right: 10px;">
+                    <td style="vertical-align:top; width: 200px;">
                         {% if data['member_name'] in excluded_members %}
                         &nbsp;
                         {% else %}
@@ -155,6 +176,7 @@
                 <th><b>Nama Produk</b></th>
                 <th><b>Harga</b></th>
                 <th><b>Subtotal</b></th>
+                <th><b>Keterangan</b></th>
             </thead>
 
             <tbody>
@@ -162,84 +184,115 @@
                 <tr>
                     <th class="center" style="width: 8%;">{{ x['qty'] }} {{ x['satuan'] }}</th>
                     <th class="center" style="width: 15%;">{{ x['merk_name'] }}</th>
+
+                    {% if x['category_name'] in whitelist_category %}
                     <th class="center" style="width: 15%;">{{ x['part_number'] }}</th>
+                    {% else %}
+                    <th class="center" style="width: 15%;">-</th>
+                    {% endif %}
+
                     <th class="left">{{ x['product_name'] }}</th>
                     <th class="right" style="width: 10%;">{{ x['price'] }}</th>
                     <th class="right" style="width: 10%;">{{ x['subtotal'] }}</th>
+
+                    {% if x['notes'] is not none %}
+                    <th class="left" style="width: 10%;">{{ x['notes'] }}</th>
+                    {% else %}
+                    <th class="left" style="width: 10%;"></th>
+                    {% endif %}
                 </tr>
                 {% endfor %}
 
-                <tr>
-                    <td>&nbsp;</td>
-                </tr>
+                <div class="row" style="margin-top: 10px;">
+                    <table class="column left fs12">
+                        <tr>
+                            <td style="vertical-align:top;">
+                                <i>*Barang yang sudah dibeli tidak dapat dikembalikan</i>
+                            </td>
+                        </tr>
 
-                <tr class="right">
-                    {% if data['other_fee'] != '0' %}
-                    <td colspan="5"><b>Biaya Ongkir</b></td>
-                    <td>{{ data['other_fee'] }}</td>
-                    {% endif %}
-                </tr>
-
-                <tr class="right">
-                    <td colspan="5" style="text-align: left;">
-                        <i class="fs12">*Barang yang sudah dibeli tidak dapat dikembalikan</i>
-                    </td>
-
-                    {% if data['diskon'] != '0' %}
-                    <td colspan="5"><b>Diskon</b></td>
-                    <td>{{ data['diskon'] }}</td>
-                    {% endif %}
-                </tr>
-
-                <tr class="right">
-                    <td colspan="5">
-                        <h3>Total</h3>
-                    </td>
-                    <td>
-                        <h3>{{ data['total_faktur'] }}</h3>
-                    </td>
-                </tr>
-
-                <div class="left">
-                    <tr>
-                        {% if data['member_name'] in excluded_members %}
-                        <td>&nbsp;</td>
-                        {% else %}
-                        <td colspan="5">
-                            <p style="margin-top: 1px;" class="fs12">Pembayaran <br />
-                                {% if data['due_date'] != ''%}
-                                <b>{{ data['type_name'] }}</b>
-                                {% if data['payment_info'] != ''%}
-                                {% set parts = data['payment_info'].split('-') %}
-                                <b>{{ parts[0] }}</b>
-                            <h3>{{ parts[2] }}<br />{{ parts[1] }}</h3>
+                        <tr>
+                            {% if data['member_name'] in excluded_members %}
+                            <td>&nbsp;</td>
+                            {% else %}
+                            <td>
+                                <p style="margin-top: 1px;">Pembayaran <br />
+                                    {% if data['due_date'] != ''%}
+                                    <b>{{ data['type_name'] }}</b>
+                                    {% if data['payment_info'] != ''%}
+                                    {% set parts = data['payment_info'].split('-') %}
+                                    <b>{{ parts[0] }}</b>
+                                <h3>{{ parts[2] }}<br />{{ parts[1] }}</h3>
+                                {% endif %}
+                                {% endif %}
+                                </p>
+                            </td>
                             {% endif %}
-                            {% endif %}
-                            </p>
-                        </td>
-                        {% endif %}
-                    </tr>
+                        </tr>
+                    </table>
                 </div>
+
+                <div class="row" style="margin-top: 10px; text-align: end;">
+                    <table class="column right fs12">
+                        <tr>
+                            <td style="vertical-align:top;">
+                                <div>
+                                    <p>
+                                        {% if data['other_fee'] != '0' %}
+                                        <b>Biaya Pengiriman</b> &nbsp; &nbsp;
+                                        {{ data['other_fee'] }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p>
+                                        {% if data['diskon'] != '0' %}
+                                        <b>Diskon</b> &nbsp; &nbsp;
+                                        {{ data['diskon'] }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+
+                                <div class="fs16" style="margin-top: 20px;">
+                                    <p>
+                                        <b>Total</b> &nbsp; &nbsp;
+                                        {{ data['total_faktur'] }}
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
             </tbody>
         </table>
 
         <div class="row" style="margin-top: 10px;">
-            <div class="column center fs12">
-                <p style="margin-bottom: 40px;">Diterima Oleh,</p>
-                {% if data['member_name'] != 'Bukan Pelanggan' %}
-                <p><b>({{ data['member_name'] }})</b></p>
-                {% else %}
-                <p><b>(. . . . . . . . . . . . . . . . . .)</b></p>
-                {% endif %}
-            </div>
-            <!-- <div class="column center fs12">
-                <p style="margin-bottom: 40px;">Hormat Kami,</p>
-                {% if data['outlet']['outlet_name'] != 'Nota Polos' %}
-                <p>({{ data['outlet']['outlet_name'] }})</p>
-                {% else %}
-                <p>(. . . . . . . . . . . . . . . . . .)</p>
-                {% endif %}
-            </div> -->
+            <table class="column center fs12">
+                <tr>
+                    <td>
+                        <p style="margin-bottom: 40px;">Diterima oleh,</p>
+                        {% if data['member_name'] != 'Bukan Pelanggan' %}
+                        <p><b>({{ data['member_name'] }})</b></p>
+                        {% else %}
+                        <p><b>(. . . . . . . . . . . . . . . . . .)</b></p>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+            <!-- <table class="column center fs12">
+                <tr>
+                    <td>
+                        <p style="margin-bottom: 40px;">Hormat Kami,</p>
+                        {% if data['outlet']['outlet_name'] != 'Nota Polos' %}
+                        <p>({{ data['outlet']['outlet_name'] }})</p>
+                        {% else %}
+                        <p>(. . . . . . . . . . . . . . . . . .)</p>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table> -->
         </div>
     </div>
 
