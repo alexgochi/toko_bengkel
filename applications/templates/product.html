@@ -238,6 +238,7 @@
                         <div class="form-group col-md-4">
                             <label for="categoryProductAdd">Merk</label>
                             <select class="form-control data-add" id="categoryProductAdd">
+                                <option value="" disabled selected> -- Pilih Merk</option>
                                 {% for x in data_cat %}
                                 <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
                                 {% endfor %}
@@ -246,11 +247,13 @@
                         <div class="form-group col-md-4">
                             <label for="merkProductAdd">Kategori</label>
                             <select class="form-control data-add" id="merkProductAdd">
+                                <option value="" disabled selected> -- Pilih Kategori</option>
                             </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="outletProductAdd">Outlet</label>
                             <select class="form-control data-add" id="outletProductAdd">
+                                <option value="" disabled selected> -- Pilih Outlet</option>
                                 {% for x in data_outlet %}
                                 <option value="{{ x['outlet_id'] }}"> {{ x['outlet_name'] }}</option>
                                 {% endfor %}
@@ -281,6 +284,7 @@
                         <div class="form-group">
                             <label for="statusProductAdd">Stock Opname</label>
                             <select class="form-control" id="statusProductAdd">
+                                <option value="" disabled selected> -- Pilih Status</option>
                                 <option value="1">Valid</option>
                                 <option value="0">Invalid</option>
                             </select>
@@ -534,7 +538,7 @@
                 async: false,
                 success: (e) => {
                     if (e.status) {
-                        $el.empty(); // remove old options
+                        // $el.empty(); // remove old options
                         for (var i = 0; i < e.result.length; i++) {
                             $el.append($("<option></option>")
                                 .attr("value", e.result[i].merk_id).text(e.result[i].merk_name));
@@ -609,7 +613,7 @@
 
     $('#addModal').on("shown.bs.modal", function () {
         generateSKU()
-        getMerkByCategory($('#categoryProductAdd').val(), $('#merkProductAdd'))
+        // getMerkByCategory($('#categoryProductAdd').val(), $('#merkProductAdd'))
     });
 
     function generateSKU() {

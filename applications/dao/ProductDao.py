@@ -12,6 +12,7 @@ def get_data_merk(category_id):
             ms_merk
         WHERE
             category_id = %(category_id)s
+        ORDER by merk_name ASC    
     """
     param = {
         "category_id" : category_id
@@ -58,6 +59,7 @@ def get_data_category():
             category_name
         FROM
             ms_category
+        ORDER BY category_name ASC
     """
     return db.execute(query)
 

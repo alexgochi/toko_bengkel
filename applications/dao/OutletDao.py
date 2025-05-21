@@ -17,8 +17,6 @@ def dt_data_outlet(search, offset):
             outlet_phone ILIKE %(search)s OR
             outlet_name ILIKE %(search)s OR
             outlet_address ILIKE %(search)s
-        ORDER BY
-            outlet_status asc;    
     """
     param = {
         "search": f"%{search}%",
