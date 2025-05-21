@@ -412,10 +412,12 @@
                                     <th class="text-center">SKU</th>
                                     <th class="text-center">Part Number</th>
                                     <th class="text-center">Nama Produk</th>
+                                    <th class="text-center">Merk</th>
                                     <th class="text-center">Kategori</th>
                                     <th class="text-center">Qty</th>
                                     <th class="text-center">Harga Satuan</th>
                                     <th class="text-center">Total</th>
+                                    <th class="text-center">Keterangan</th>
                                 </thead>
                                 <tbody class="font-order"></tbody>
                             </table>
@@ -650,14 +652,16 @@
                 data['part_number'],
                 data['product_name'],
                 data['category_name'],
+                data['merk_name'],
                 `<input type="number" min="1" class="form-control font-order qty_product" value="` + qty + `" onfocus="autoSelect(this)">
                 <input type="number" min="1" class="form-control font-order qty_maks" value="` + parseInt(data['qty']) + `" hidden>`,
                 `<input type="number" min="1" class="form-control font-order hjual_product" onfocus="autoSelect(this)" value="` + parseInt(data['harga_jual']) + `"> `,
-                numberWithCommas(qty * parseInt(data['harga_jual']))
+                numberWithCommas(qty * parseInt(data['harga_jual'])),
+                `<input type="text" class="form-control font-order notes_product" onfocus="autoSelect(this)" value=""> `,
             ]
             var rowNode = table.row.add(item).draw().node()
             $(rowNode).find('td').addClass('align-middle');
-            $(rowNode).find('td').eq(6).addClass('qtytot');
+            $(rowNode).find('td').eq(7).addClass('qtytot');
             $(rowNode).addClass('data-product')
 
             getSubTotal()
@@ -975,10 +979,10 @@
                 item['part_number'] = $(product[i]).find('td').eq(1).text();
                 item['product_name'] = $(product[i]).find('td').eq(2).text();
                 item['merk_name'] = $(product[i]).find('td').eq(3).text();
+                item['category_name'] = $(product[i]).find('td').eq(4).text();
                 item['qty'] = $(product[i]).find('.qty_product').val();
                 item['price'] = $(product[i]).find('.hjual_product').val();
-                item['category_name'] = $(product[i]).find('td').eq(4).text();
-                item['notes'] = $(product[i]).find('td').eq(5).text();
+                item['notes'] = $(product[i]).find('.notes_product').val();
                 dataProduct.push(item)
             }
             dataSave['trans_detail'] = dataProduct

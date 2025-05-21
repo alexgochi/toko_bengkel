@@ -393,7 +393,7 @@ def getTransDraftData(faktur):
 
     query = """
         SELECT
-            faktur, sku, part_number, product_name, merk_name, qty, price as harga_jual
+            faktur, sku, part_number, product_name, merk_name, qty, price as harga_jual, category_name, notes
         FROM
             tx_trans_detail
         WHERE   
