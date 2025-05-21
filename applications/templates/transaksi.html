@@ -123,10 +123,12 @@
                             <th class="text-center sku-detail">SKU</th>
                             <th class="text-center">Part Number</th>
                             <th class="text-center">Nama Produk</th>
+                            <th class="text-center">Merk</th>
                             <th class="text-center">Kategori</th>
                             <th class="text-center">Qty</th>
                             <th class="text-center">Harga Beli</th>
                             <th class="text-center">Sub Total</th>
+                            <th class="text-center">Keterangan</th>
                         </thead>
                     </table>
 
@@ -337,7 +339,6 @@
         dt_server(idTabel, ajax_options, dt_options);
     }
 
-
     $("#table_transaksi > tbody").on('click', '.btn-print', e => {
         const rowData = $('#table_transaksi').DataTable().row(getTr(e)).data();
         getDataTransByFaktur(rowData['faktur'])
@@ -494,9 +495,11 @@
                 product[i]['part_number'],
                 product[i]['product_name'],
                 product[i]['merk_name'],
+                product[i]['category_name'],
                 numberWithCommas(product[i]['qty']),
                 numberWithCommas(product[i]['price']),
                 numberWithCommas(product[i]['subtotal']),
+                product[i]['notes'],
             ]
             var rowNode = table_product.row.add(item).draw().node()
             $(rowNode).find('td').addClass('align-middle');

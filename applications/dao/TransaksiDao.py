@@ -118,13 +118,16 @@ def getDataTransByFaktur(faktur):
             mp.part_number,
             tt.product_name,
             mc.category_name  merk_name,
+            mm.merk_name category_name,
             coalesce(mp.satuan,'') satuan,
             tt.qty,
             price,
-            tt.qty * price as subtotal
+            tt.qty * price as subtotal,
+            tt.notes
         FROM tx_trans_detail tt
             INNER JOIN ms_product mp on tt.sku::integer = mp.sku::integer
             INNER JOIN ms_category mc on mc.category_id = mp.category_id
+            INNER JOIN ms_merk mm on mm.merk_id = mp.merk_id
         WHERE faktur = %(faktur)s;
     """
     param = {

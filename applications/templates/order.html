@@ -911,8 +911,10 @@
                 item['part_number'] = $(product[i]).find('td').eq(1).text();
                 item['product_name'] = $(product[i]).find('td').eq(2).text();
                 item['merk_name'] = $(product[i]).find('td').eq(3).text();
+                item['category_name'] = $(product[i]).find('td').eq(4).text();
                 item['qty'] = $(product[i]).find('.qty_product').val();
                 item['price'] = $(product[i]).find('.hjual_product').val();
+                item['notes'] = $(product[i]).find('td').eq(5).text();
                 dataProduct.push(item)
             }
             dataSave['trans_detail'] = dataProduct
