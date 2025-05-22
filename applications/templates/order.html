@@ -421,7 +421,6 @@
                                     <th class="text-center">Qty</th>
                                     <th class="text-center">Harga Satuan</th>
                                     <th class="text-center">Total</th>
-                                    <th class="text-center">Keterangan</th>
                                     <th class="text-center">Action</th>
                                 </thead>
                                 <tbody class="font-order"></tbody>
@@ -621,7 +620,6 @@
                 <input type="number" min="1" class="form-control font-order qty_maks" value="` + parseInt(data['qty']) + `" hidden>`,
                 `<input type="number" min="1" class="form-control font-order hjual_product" onfocus="autoSelect(this)" value="` + parseInt(data['harga_jual']) + `"> `,
                 numberWithCommas(parseInt(data['harga_jual'])),
-                `<input type="text" class="form-control font-order notes_product" onfocus="autoSelect(this)" value=""> `,
                 `<button class="btn btn-delete btn-danger"><i class="fa fa-trash"></i></button>`
             ]
             var rowNode = table.row.add(item).draw().node()
@@ -918,7 +916,6 @@
                 item['category_name'] = $(product[i]).find('td').eq(4).text();
                 item['qty'] = $(product[i]).find('.qty_product').val();
                 item['price'] = $(product[i]).find('.hjual_product').val();
-                item['notes'] = $(product[i]).find('.notes_product').val();
                 dataProduct.push(item)
             }
             dataSave['trans_detail'] = dataProduct

@@ -318,14 +318,14 @@ def save_order(data,type = 'draft'):
         for i in trans_detail:
             query = """
                 INSERT INTO
-                    tx_trans_detail (faktur, sku, part_number, product_name, merk_name, qty, price, category_name, notes)
+                    tx_trans_detail (faktur, sku, part_number, product_name, merk_name, qty, price, category_name)
                 VALUES
-                    (%(faktur)s, %(sku)s, %(part_number)s, %(product_name)s, %(merk_name)s, %(qty)s, %(price)s, %(category_name)s, %(notes)s)
+                    (%(faktur)s, %(sku)s, %(part_number)s, %(product_name)s, %(merk_name)s, %(qty)s, %(price)s, %(category_name)s)
             """
             param = {
                     "faktur": data['faktur'], "sku":  i['sku'], "part_number":  i['part_number'],
                     "product_name":  i['product_name'], "merk_name":  i['merk_name'], "qty":  i['qty'],
-                    "price":  i['price'],  "category_name":  i['category_name'],  "notes":  i['notes']
+                    "price":  i['price'],  "category_name":  i['category_name']
                 }
             hasil = db.execute_preserve(query,param)
             if hasil.is_error:
@@ -393,7 +393,7 @@ def getTransDraftData(faktur):
 
     query = """
         SELECT
-            faktur, sku, part_number, product_name, merk_name, qty, price as harga_jual, category_name, notes
+            faktur, sku, part_number, product_name, merk_name, qty, price as harga_jual, category_name
         FROM
             tx_trans_detail
         WHERE   

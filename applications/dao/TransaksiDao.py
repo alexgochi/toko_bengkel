@@ -122,8 +122,7 @@ def getDataTransByFaktur(faktur):
             coalesce(mp.satuan,'') satuan,
             tt.qty,
             price,
-            tt.qty * price as subtotal,
-            tt.notes
+            tt.qty * price as subtotal
         FROM tx_trans_detail tt
             INNER JOIN ms_product mp on tt.sku::integer = mp.sku::integer
             INNER JOIN ms_category mc on mc.category_id = mp.category_id

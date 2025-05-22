@@ -499,7 +499,6 @@
                 numberWithCommas(product[i]['qty']),
                 numberWithCommas(product[i]['price']),
                 numberWithCommas(product[i]['subtotal']),
-                product[i]['notes'],
             ]
             var rowNode = table_product.row.add(item).draw().node()
             $(rowNode).find('td').addClass('align-middle');

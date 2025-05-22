@@ -82,15 +82,15 @@
         }
 
         .fs12 {
-            font-size: 10px;
+            font-size: 11px;
         }
 
         .fs14 {
-            font-size: 12px;
+            font-size: 13px;
         }
 
         .fs16 {
-            font-size: 14px;
+            font-size: 15px;
         }
     </style>
 </head>
@@ -128,7 +128,7 @@
     <div class="container" id="invoice">
         <!-- Header -->
         <div class="column" style="margin-bottom: 10px;">
-            <table class="row left" style="width: 350px;">
+            <table class="row left fs16" style="width: 350px;">
                 <tr>
                     <td>
                         {% if data['outlet']['outlet_name'] != 'Nota Polos' %}
@@ -144,17 +144,17 @@
         </div>
 
         <div class="column" style="margin-bottom: 10px;">
-            <table class="row left fs12" style="width: 400px;">
+            <table class="row left fs14" style="width: 400px;">
                 <tr>
                     <td style="vertical-align:top; width: 200px;">
                         <h3 style="margin-bottom: 5px;">No. Faktur: {{ data['faktur'] }}</h3>
 
                         {% if data['member_name'] != 'Bukan Pelanggan' %}
                         <h3 style="margin-bottom: 5px;">{{ data['member_name'] }}</h3>
-                        <div>{{ data['member_address'] }}</div>
+                        <div class="fs12">{{ data['member_address'] }}</div>
                         {% endif %}
                         {% if data['member_phone'] != '' %}
-                        {{ data['member_phone'] }}
+                        <div class="fs12">{{ data['member_phone'] }}</div>
                         {% endif %}
                     </td>
 
@@ -232,7 +232,7 @@
                     <table class="column right fs12">
                         <tr>
                             <td style="vertical-align:top;">
-                                <div>
+                                <div class="fs12">
                                     <p>
                                         {% if data['other_fee'] != '0' %}
                                         <b>Biaya Pengiriman</b> &nbsp; &nbsp;
@@ -241,7 +241,7 @@
                                     </p>
                                 </div>
 
-                                <div>
+                                <div class="fs12">
                                     <p>
                                         {% if data['diskon'] != '0' %}
                                         <b>Diskon</b> &nbsp; &nbsp;
