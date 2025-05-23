@@ -9,6 +9,8 @@ def get_data_merk():
             merk_name
         FROM
             ms_merk
+        ORDER BY 
+            merk_name ASC
     """
     return db.execute(query)
 
@@ -68,7 +70,7 @@ def update_data_category(data):
     query = """
         SELECT category_name
         FROM ms_category
-        where category_name) = %(category_name)s;
+        where LOWER(category_name) = LOWER(%(category_name)s);
     """
     param = data
     
@@ -111,7 +113,7 @@ def add_data_category(data):
     query = """
         SELECT category_name
         FROM ms_category
-        where category_name = %(category_name)s;
+        where LOWER(category_name) = LOWER(%(category_name)s);
     """
     param = data
     

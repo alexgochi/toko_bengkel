@@ -108,6 +108,7 @@
                     <div class="form-group">
                         <label for="categoryMerkAdd">Merk</label>
                         <select class="form-control" id="categoryMerkAdd">
+                            <option value="" disabled selected> -- Pilih Kategori</option>
                             {% for x in data_cat %}
                             <option value="{{ x['category_id'] }}"> {{ x['category_name'] }}</option>
                             {% endfor %}
@@ -313,7 +314,6 @@
         var data = { merk_name: name, category_id: cat }
 
         addMerk(data)
-
     })
 
     function addMerk(data) {
@@ -355,7 +355,6 @@
         $('#namaMerkAdd').val('')
         $('#categoryMerkAdd').val('')
     }
-
 
 </script>
 {% endblock %}
