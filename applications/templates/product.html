@@ -11,7 +11,8 @@
 
 <div class="mt-5 mr-5">
     <div class="p-2">
-        <button class="btn btn-primary m-auto text-center" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus" style="color: white;"></i> Tambah Produk</button>
+        <button class="btn btn-primary m-auto text-center" data-toggle="modal" data-target="#addModal"><i
+                class="fa fa-plus" style="color: white;"></i> Tambah Produk</button>
         <button class="btn btn-danger" id="btnDownloadProduct"><i class="fa fa-download"></i> Download</button>
     </div>
     <div class="p-2 row">
@@ -97,7 +98,8 @@
                         </div>
                         <div class="form-group col-md-8">
                             <label for="alternativePartNumberProductEdit">Alternative Part Number</label>
-                            <input type="text" class="form-control data-edit" id="alternativePartNumberProductEdit" required>
+                            <input type="text" class="form-control data-edit" id="alternativePartNumberProductEdit"
+                                required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -212,7 +214,8 @@
                         </div>
                         <div class="form-group col-md-8">
                             <label for="alternativePartNumberProductAdd">Alternative Part Number</label>
-                            <input type="text" class="form-control data-add" id="alternativePartNumberProductAdd" required>
+                            <input type="text" class="form-control data-add" id="alternativePartNumberProductAdd"
+                                required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -477,7 +480,7 @@
             var status_product = $('#statusProductEdit').val()
 
             var data = {
-                sku: sku, product_name: nama, part_number: part_number, alternative_part_number: alternative_part_number, 
+                sku: sku, product_name: nama, part_number: part_number, alternative_part_number: alternative_part_number,
                 descriptions_product: descriptions_product, barcode: barcode,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
                 qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
@@ -525,7 +528,9 @@
         var merkSelect = $('#merkProductEdit')
         if (this.id == 'categoryProductAdd') {
             merkSelect = $('#merkProductAdd')
+            getMerkByCategory($('#categoryProductAdd').val(), $('#merkProductAdd'))
         }
+
         getMerkByCategory(this.value, merkSelect);
     });
 
@@ -538,7 +543,7 @@
                 async: false,
                 success: (e) => {
                     if (e.status) {
-                        // $el.empty(); // remove old options
+                        $el.empty(); // remove old options
                         for (var i = 0; i < e.result.length; i++) {
                             $el.append($("<option></option>")
                                 .attr("value", e.result[i].merk_id).text(e.result[i].merk_name));
@@ -674,7 +679,7 @@
             var status_product = $('#statusProductAdd').val()
 
             var data = {
-                sku: sku, product_name: nama, part_number: part_number, alternative_part_number: alternative_part_number, 
+                sku: sku, product_name: nama, part_number: part_number, alternative_part_number: alternative_part_number,
                 descriptions_product: descriptions_product, satuan: satuan,
                 vehicle: vehicle, merk_id: merk, category_id: category, outlet_id: outlet,
                 qty: parseFloat(qty), harga_beli: parseInt(hbeli), harga_jual: parseInt(hjual),
