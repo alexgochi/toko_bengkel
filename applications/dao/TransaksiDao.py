@@ -19,7 +19,7 @@ def dt_data_trans(search, member, offset, filter):
             STATUS = true 
             AND (
                 faktur ILIKE %(search)s OR
-                CAST(date_tx AS TEXT) ILIKE %(search)s OR
+                to_char(date_tx, 'dd-mm-yyyy') ILIKE %(search)s OR
                 payment_info ILIKE %(search)s OR
                 type_name ILIKE %(search)s 
             )
